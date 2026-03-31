@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Verplaatslijst – Middelwatering Bouw</title>
+<meta name="theme-color" content="#1a2a55">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<style>
+:root {
+  --blauw:       #1a2a55;
+  --blauw-hover: #243570;
+  --wit:         #ffffff;
+  --grijs-bg:    #f0f2f5;
+  --grijs-rand:  #dde1e9;
+  --grijs-licht: #eef1f7;
+  --tekst:       #1a2a55;
+  --tekst-zacht: #5c6a88;
+  --succes:      #2ecc71;
+  --schaduw:     0 2px 12px rgba(26,42,85,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: var(--grijs-bg); color: var(--tekst); min-height: 100vh; }
+
+/* ─── HEADER ─────────────────────────────────── */
+header {
+  background: var(--blauw);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+header img { height: 36px; object-fit: contain; }
+header h1  { color: #fff; font-size: 17px; font-weight: bold; line-height: 1.2; }
+header h1 small { display: block; font-size: 11px; font-weight: normal; opacity: .75; }
+
+/* ─── CONTAINER ──────────────────────────────── */
+.container { padding: 16px; max-width: 720px; margin: 0 auto; padding-bottom: 120px; }
+
+/* ─── CARD ───────────────────────────────────── */
+.card {
+  background: var(--wit);
+  border-radius: 12px;
+  margin-bottom: 14px;
+  box-shadow: var(--schaduw);
+  border: 1px solid var(--grijs-rand);
+  overflow: hidden;
+}
+.card-header {
+  background: var(--blauw);
+  color: #fff;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+.card-header .chevron { transition: transform .25s; font-size: 14px; }
+.card-header.open .chevron { transform: rotate(180deg); }
+.card-body { padding: 14px 16px; }
+.card-body.collapsed { display: none; }
+
+/* ─── VELD ───────────────────────────────────── */
+.field { margin-bottom: 12px; }
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--tekst-zacht);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-bottom: 5px;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--grijs-rand);
+  border-radius: 7px;
+  font-size: 14px;
+  color: var(--tekst);
+  background: var(--grijs-licht);
+  transition: border-color .2s, background .2s;
+  -webkit-appearance: none;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--blauw);
+  background: #fff;
+}
+
+/* ─── GRID ───────────────────────────────────── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* ─── SECTIE SCHEIDER ────────────────────────── */
+.sectie-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--tekst-zacht);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--grijs-rand);
+  margin-bottom: 10px;
+}
+.sectie-label:first-of-type { padding-top: 0; }
+
+/* ─── ONDERDEEL ROW ──────────────────────────── */
+.onderdeel {
+  border: 1px solid var(--grijs-rand);
+  border-radius: 9px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.onderdeel-title {
+  background: var(--grijs-licht);
+  padding: 10px 12px;
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--blauw);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+}
+.onderdeel-title .badge {
+  font-size: 11px;
+  background: var(--blauw);
+  color: #fff;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-weight: normal;
+  min-width: 28px;
+  text-align: center;
+}
+.onderdeel-title .badge.leeg { background: var(--grijs-rand); color: var(--tekst-zacht); }
+.onderdeel-detail {
+  padding: 12px;
+  display: none;
+  border-top: 1px solid var(--grijs-rand);
+  background: #fff;
+}
+.onderdeel-detail.open { display: block; }
+.onderdeel-detail .g2 { margin-bottom: 8px; }
+.onderdeel-detail input {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--grijs-rand);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--tekst);
+  background: var(--grijs-licht);
+  transition: border-color .2s;
+}
+.onderdeel-detail input:focus {
+  outline: none;
+  border-color: var(--blauw);
+  background: #fff;
+}
+.onderdeel-detail .field-label {
+  font-size: 10px;
+  font-weight: bold;
+  color: var(--tekst-zacht);
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  margin-bottom: 4px;
+  display: block;
+}
+.input-group { }
+
+/* ─── FOTO PREVIEW ───────────────────────────── */
+.foto-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.foto-grid img {
+  width: 76px; height: 76px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--grijs-rand);
+}
+
+/* ─── KNOPPEN ────────────────────────────────── */
+.btn-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--wit);
+  padding: 12px 16px;
+  border-top: 1px solid var(--grijs-rand);
+  display: flex;
+  gap: 10px;
+  z-index: 40;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+}
+.btn {
+  flex: 1;
+  padding: 14px 10px;
+  border: none;
+  border-radius: 9px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background .2s, transform .1s;
+  -webkit-appearance: none;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary   { background: var(--blauw); color: #fff; }
+.btn-primary:hover { background: var(--blauw-hover); }
+.btn-secondary { background: var(--grijs-licht); color: var(--blauw); border: 2px solid var(--grijs-rand); }
+.btn-secondary:hover { background: #dde4f0; }
+
+/* ─── TOAST ──────────────────────────────────── */
+.toast {
+  position: fixed;
+  top: 70px; left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--blauw);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity .3s, transform .3s;
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ─── DIVIDER ────────────────────────────────── */
+hr.divider { border: none; border-top: 1px solid var(--grijs-rand); margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-wit-2018.png"
+       alt="Middelwatering Bouw"
+       onerror="this.style.display='none'">
+  <h1>Verplaatslijst <small>Middelwatering Bouw</small></h1>
+</header>
+
+<div class="container">
+
+  <!-- ── ALGEMEEN ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Algemene informatie <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="g2">
+        <div class="field">
+          <label>Datum</label>
+          <input type="date" id="datum">
+        </div>
+        <div class="field">
+          <label>Ingevuld door</label>
+          <input type="text" id="naam" placeholder="Naam">
+        </div>
+      </div>
+      <div class="field">
+        <label>Bouwplaats</label>
+        <input type="text" id="bouwplaats" placeholder="Naam / adres bouwplaats">
+      </div>
+      <div class="g2">
+        <div class="field">
+          <label>Werknr. (van)</label>
+          <input type="text" id="glob_van" placeholder="Van werknr.">
+        </div>
+        <div class="field">
+          <label>Werknr. (naar)</label>
+          <input type="text" id="glob_naar" placeholder="Naar werknr.">
+        </div>
+      </div>
+      <div class="field">
+        <label>Opslag / zaak</label>
+        <input type="text" id="glob_opslag" placeholder="Opslaglocatie">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AANSLUITINGEN ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Aansluitingen <span class="chevron">▾</span>
+    </div>
+    <div class="card-body" id="sec-aansluitingen">
+      <!-- items rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ── KETEN ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Keten <span class="chevron">▾</span>
+    </div>
+    <div class="card-body" id="sec-keten">
+    </div>
+  </div>
+
+  <!-- ── CONTAINERS ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Materiaalcontainers <span class="chevron">▾</span>
+    </div>
+    <div class="card-body" id="sec-containers">
+    </div>
+  </div>
+
+  <!-- ── LICHTMASTEN ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Lichtmasten <span class="chevron">▾</span>
+    </div>
+    <div class="card-body" id="sec-lichtmasten">
+    </div>
+  </div>
+
+  <!-- ── BOUWHEKKEN ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Bouwhekken &amp; Rijplaten <span class="chevron">▾</span>
+    </div>
+    <div class="card-body" id="sec-hekken">
+    </div>
+  </div>
+
+  <!-- ── FOTO'S ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Foto's <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <label>Foto's toevoegen (max 5)</label>
+        <input type="file" id="fotos" multiple accept="image/*" capture="environment">
+      </div>
+      <div class="foto-grid" id="foto-preview"></div>
+    </div>
+  </div>
+
+  <!-- ── OPMERKINGEN ── -->
+  <div class="card">
+    <div class="card-header open" onclick="toggleCard(this)">
+      Algemene opmerkingen <span class="chevron">▾</span>
+    </div>
+    <div class="card-body">
+      <div class="field">
+        <textarea id="algemeen_opmerking" rows="3" placeholder="Eventuele opmerkingen..." style="resize:vertical;"></textarea>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ── BUTTON BAR ── -->
+<div class="btn-bar">
+  <button class="btn btn-secondary" onclick="saveOffline()">💾 Opslaan</button>
+  <button class="btn btn-primary"   onclick="versturen()">✉️ Versturen</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════
+   ITEM DEFINITIE
+══════════════════════════════════════════════ */
+const SECTIES = {
+  'sec-aansluitingen': [
+    { id: 'bouwmeterkast', naam: 'Bouwmeterkast (35A / 63A / 125A)' },
+    { id: 'waterput',      naam: 'Waterput' },
+    { id: 'waterkraan',    naam: 'Waterkraan / standvink' },
+  ],
+  'sec-keten': [
+    { id: 'pipokeet',          naam: 'Pipokeet' },
+    { id: 'schaftkeet_1',      naam: 'Schaftkeet 1' },
+    { id: 'schaftkeet_2',      naam: 'Schaftkeet 2' },
+    { id: 'schaftkeet_3',      naam: 'Schaftkeet 3' },
+    { id: 'schaftkeet_4',      naam: 'Schaftkeet 4' },
+    { id: 'uitvoerderskeet_1', naam: 'Uitvoerderskeet 1' },
+    { id: 'uitvoerderskeet_2', naam: 'Uitvoerderskeet 2' },
+    { id: 'uitvoerderskeet_3', naam: 'Uitvoerderskeet 3' },
+    { id: 'uitvoerderskeet_4', naam: 'Uitvoerderskeet 4' },
+    { id: 'keettrap',          naam: 'Keettrap (Set)' },
+  ],
+  'sec-containers': [
+    { id: 'container_1', naam: 'Materiaalcontainer 1' },
+    { id: 'container_2', naam: 'Materiaalcontainer 2' },
+  ],
+  'sec-lichtmasten': [
+    { id: 'lichtmast_1', naam: 'Lichtmast 1' },
+    { id: 'lichtmast_2', naam: 'Lichtmast 2' },
+    { id: 'lichtmast_3', naam: 'Lichtmast 3' },
+    { id: 'lichtmast_4', naam: 'Lichtmast 4' },
+    { id: 'lichtmast_5', naam: 'Lichtmast 5' },
+    { id: 'lichtmast_6', naam: 'Lichtmast 6' },
+  ],
+  'sec-hekken': [
+    { id: 'bouwhekken',        naam: 'Bouwhekken' },
+    { id: 'bouwhek_voeten',    naam: 'Bouwhek voeten' },
+    { id: 'hekklemmen',        naam: 'Hekklemmen' },
+    { id: 'hekwielen',         naam: 'Hekwielen' },
+    { id: 'hek_schoren',       naam: 'Hek schoren' },
+    { id: 'kunststof_rijplaten', naam: 'Kunststof rijplaten' },
+  ]
+};
+
+/* ══════════════════════════════════════════════
+   RENDER ITEMS
+══════════════════════════════════════════════ */
+function renderItems() {
+  for (const [sectieId, items] of Object.entries(SECTIES)) {
+    const container = document.getElementById(sectieId);
+    if (!container) continue;
+    container.innerHTML = '';
+    items.forEach(item => {
+      container.insertAdjacentHTML('beforeend', `
+        <div class="onderdeel" id="o_${item.id}">
+          <div class="onderdeel-title" onclick="toggleItem('${item.id}')">
+            <span>${item.naam}</span>
+            <span class="badge leeg" id="badge_${item.id}">—</span>
+          </div>
+          <div class="onderdeel-detail" id="detail_${item.id}">
+            <div class="g3" style="margin-bottom:8px">
+              <div class="input-group">
+                <span class="field-label">Aantal</span>
+                <input type="number" id="${item.id}_aantal" placeholder="0" min="0"
+                       oninput="updateBadge('${item.id}')">
+              </div>
+              <div class="input-group">
+                <span class="field-label">Nummer</span>
+                <input type="text" id="${item.id}_nummer" placeholder="Nr.">
+              </div>
+              <div class="input-group">
+                <span class="field-label">Opmerking</span>
+                <input type="text" id="${item.id}_opmerking" placeholder="...">
+              </div>
+            </div>
+            <div class="g2">
+              <div class="input-group">
+                <span class="field-label">Werknr. (van)</span>
+                <input type="text" id="${item.id}_van" placeholder="Van">
+              </div>
+              <div class="input-group">
+                <span class="field-label">Werknr. (naar)</span>
+                <input type="text" id="${item.id}_naar" placeholder="Naar">
+              </div>
+            </div>
+            <div style="margin-top:8px">
+              <div class="input-group">
+                <span class="field-label">Opslag / zaak</span>
+                <input type="text" id="${item.id}_opslag" placeholder="Opslaglocatie">
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+    });
+  }
+}
+
+/* ══════════════════════════════════════════════
+   TOGGLE ACCORDION
+══════════════════════════════════════════════ */
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const isOpen = !body.classList.contains('collapsed');
+  body.classList.toggle('collapsed', isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+function toggleItem(id) {
+  const detail = document.getElementById('detail_' + id);
+  detail.classList.toggle('open');
+
+  // Pre-fill Van/Naar/Opslag uit globale velden als leeg
+  const globVan    = document.getElementById('glob_van').value;
+  const globNaar   = document.getElementById('glob_naar').value;
+  const globOpslag = document.getElementById('glob_opslag').value;
+
+  const vanField    = document.getElementById(id + '_van');
+  const naarField   = document.getElementById(id + '_naar');
+  const opslagField = document.getElementById(id + '_opslag');
+
+  if (detail.classList.contains('open')) {
+    if (!vanField.value    && globVan)    vanField.value    = globVan;
+    if (!naarField.value   && globNaar)   naarField.value   = globNaar;
+    if (!opslagField.value && globOpslag) opslagField.value = globOpslag;
+  }
+}
+
+function updateBadge(id) {
+  const val   = document.getElementById(id + '_aantal').value;
+  const badge = document.getElementById('badge_' + id);
+  if (val && parseInt(val) > 0) {
+    badge.textContent = val;
+    badge.classList.remove('leeg');
+  } else {
+    badge.textContent = '—';
+    badge.classList.add('leeg');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ALLE ITEMS (plat)
+══════════════════════════════════════════════ */
+function alleItems() {
+  const items = [];
+  for (const lijst of Object.values(SECTIES)) {
+    items.push(...lijst);
+  }
+  return items;
+}
+
+/* ══════════════════════════════════════════════
+   DATA VERZAMELEN
+══════════════════════════════════════════════ */
+function collectData() {
+  const data = {
+    datum:          document.getElementById('datum').value,
+    naam:           document.getElementById('naam').value,
+    bouwplaats:     document.getElementById('bouwplaats').value,
+    glob_van:       document.getElementById('glob_van').value,
+    glob_naar:      document.getElementById('glob_naar').value,
+    glob_opslag:    document.getElementById('glob_opslag').value,
+    algemeen_opmerking: document.getElementById('algemeen_opmerking').value,
+    onderdelen: {}
+  };
+
+  alleItems().forEach(item => {
+    const aantal = document.getElementById(item.id + '_aantal')?.value;
+    const nummer = document.getElementById(item.id + '_nummer')?.value;
+    const van    = document.getElementById(item.id + '_van')?.value;
+    const naar   = document.getElementById(item.id + '_naar')?.value;
+    const opslag = document.getElementById(item.id + '_opslag')?.value;
+    const opm    = document.getElementById(item.id + '_opmerking')?.value;
+
+    data.onderdelen[item.id] = { naam: item.naam, aantal, nummer, van, naar, opslag, opm };
+  });
+
+  return data;
+}
+
+/* ══════════════════════════════════════════════
+   OFFLINE OPSLAAN
+══════════════════════════════════════════════ */
+function saveOffline() {
+  const data = collectData();
+  localStorage.setItem('mwb_verplaatslijst', JSON.stringify(data));
+  showToast('Opgeslagen ✓');
+}
+
+/* ══════════════════════════════════════════════
+   OPGESLAGEN DATA LADEN
+══════════════════════════════════════════════ */
+function loadSaved() {
+  const raw = localStorage.getItem('mwb_verplaatslijst');
+  if (!raw) return;
+  const data = JSON.parse(raw);
+
+  if (data.datum)       document.getElementById('datum').value          = data.datum;
+  if (data.naam)        document.getElementById('naam').value           = data.naam;
+  if (data.bouwplaats)  document.getElementById('bouwplaats').value     = data.bouwplaats;
+  if (data.glob_van)    document.getElementById('glob_van').value       = data.glob_van;
+  if (data.glob_naar)   document.getElementById('glob_naar').value      = data.glob_naar;
+  if (data.glob_opslag) document.getElementById('glob_opslag').value    = data.glob_opslag;
+  if (data.algemeen_opmerking) document.getElementById('algemeen_opmerking').value = data.algemeen_opmerking;
+
+  if (data.onderdelen) {
+    for (const [id, velden] of Object.entries(data.onderdelen)) {
+      const el = (suffix) => document.getElementById(id + '_' + suffix);
+      if (el('aantal'))    { el('aantal').value    = velden.aantal  || ''; updateBadge(id); }
+      if (el('nummer'))      el('nummer').value    = velden.nummer  || '';
+      if (el('van'))         el('van').value        = velden.van     || '';
+      if (el('naar'))        el('naar').value       = velden.naar    || '';
+      if (el('opslag'))      el('opslag').value     = velden.opslag  || '';
+      if (el('opmerking'))   el('opmerking').value  = velden.opm     || '';
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════
+   MAIL BODY OPBOUWEN
+══════════════════════════════════════════════ */
+function buildMailBody(data) {
+  let lines = [];
+  lines.push('VERPLAATSLIJST MIDDELWATERING BOUW');
+  lines.push('===================================');
+  lines.push('');
+  lines.push(`Datum:       ${data.datum}`);
+  lines.push(`Ingevuld:    ${data.naam}`);
+  lines.push(`Bouwplaats:  ${data.bouwplaats}`);
+  lines.push(`Van werknr.: ${data.glob_van}`);
+  lines.push(`Naar werknr.:${data.glob_naar}`);
+  lines.push(`Opslag/zaak: ${data.glob_opslag}`);
+  lines.push('');
+
+  // Groepeer per sectie
+  const sectieNamen = {
+    'sec-aansluitingen': 'AANSLUITINGEN',
+    'sec-keten':         'KETEN',
+    'sec-containers':    'MATERIAALCONTAINERS',
+    'sec-lichtmasten':   'LICHTMASTEN',
+    'sec-hekken':        'BOUWHEKKEN & RIJPLATEN'
+  };
+
+  for (const [sectieId, items] of Object.entries(SECTIES)) {
+    const heeftInhoud = items.some(i => {
+      const v = data.onderdelen[i.id];
+      return v && (v.aantal || v.nummer || v.opm);
+    });
+    if (!heeftInhoud) continue;
+
+    lines.push(sectieNamen[sectieId] || sectieId.toUpperCase());
+    lines.push('---');
+
+    items.forEach(item => {
+      const v = data.onderdelen[item.id];
+      if (!v || (!v.aantal && !v.nummer && !v.opm)) return;
+
+      lines.push(`${item.naam}`);
+      if (v.aantal)  lines.push(`  Aantal:    ${v.aantal}`);
+      if (v.nummer)  lines.push(`  Nummer:    ${v.nummer}`);
+      if (v.van)     lines.push(`  Van:       ${v.van}`);
+      if (v.naar)    lines.push(`  Naar:      ${v.naar}`);
+      if (v.opslag)  lines.push(`  Opslag:    ${v.opslag}`);
+      if (v.opm)     lines.push(`  Opmerking: ${v.opm}`);
+    });
+    lines.push('');
+  }
+
+  if (data.algemeen_opmerking) {
+    lines.push('OPMERKINGEN');
+    lines.push('---');
+    lines.push(data.algemeen_opmerking);
+    lines.push('');
+  }
+
+  lines.push('---');
+  lines.push('Verstuurd via Verplaatslijst-app MWB');
+
+  return lines.join('\n');
+}
+
+/* ══════════════════════════════════════════════
+   VERSTUREN
+══════════════════════════════════════════════ */
+function versturen() {
+  const data = collectData();
+
+  if (!data.datum || !data.bouwplaats) {
+    showToast('⚠️ Vul datum en bouwplaats in');
+    return;
+  }
+
+  saveOffline(); // altijd ook lokaal opslaan
+
+  const onderwerp = `Verplaatslijst – ${data.bouwplaats} – ${data.datum}`;
+  const body      = buildMailBody(data);
+
+  window.location.href =
+    `mailto:materieel@middelwateringbouw.nl` +
+    `?subject=${encodeURIComponent(onderwerp)}` +
+    `&body=${encodeURIComponent(body)}`;
+}
+
+/* ══════════════════════════════════════════════
+   FOTO PREVIEW
+══════════════════════════════════════════════ */
+document.getElementById('fotos').addEventListener('change', function(e) {
+  const preview = document.getElementById('foto-preview');
+  preview.innerHTML = '';
+  const files = Array.from(e.target.files).slice(0, 5);
+  files.forEach(file => {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
+});
+
+/* ══════════════════════════════════════════════
+   TOAST NOTIFICATION
+══════════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+/* ══════════════════════════════════════════════
+   STANDAARD DATUM
+══════════════════════════════════════════════ */
+function setDefaultDatum() {
+  const el = document.getElementById('datum');
+  if (!el.value) {
+    const now = new Date();
+    el.value = now.toISOString().split('T')[0];
+  }
+}
+
+/* ══════════════════════════════════════════════
+   SERVICE WORKER
+══════════════════════════════════════════════ */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+renderItems();
+setDefaultDatum();
+loadSaved();
+</script>
+</body>
+</html>

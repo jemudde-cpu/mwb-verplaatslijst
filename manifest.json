@@ -1,0 +1,21 @@
+{
+  "name": "Verplaatslijst MWB",
+  "short_name": "MWB Lijst",
+  "description": "Verplaatslijst voor Middelwatering Bouw",
+  "start_url": "./verplaatslijst.html",
+  "display": "standalone",
+  "background_color": "#1a2a55",
+  "theme_color": "#1a2a55",
+  "icons": [
+    {
+      "src": "https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-2018@2x.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-2018@2x.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
