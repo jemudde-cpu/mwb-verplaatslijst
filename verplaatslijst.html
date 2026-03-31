@@ -220,6 +220,8 @@ header h1 small { display: block; font-size: 11px; font-weight: normal; opacity:
 .btn-primary:hover { background: var(--blauw-hover); }
 .btn-secondary { background: var(--grijs-licht); color: var(--blauw); border: 2px solid var(--grijs-rand); }
 .btn-secondary:hover { background: #dde4f0; }
+.btn-notion { background: #000; color: #fff; }
+.btn-notion:hover { background: #333; }
 
 /* ─── TOAST ──────────────────────────────────── */
 .toast {
@@ -369,7 +371,8 @@ hr.divider { border: none; border-top: 1px solid var(--grijs-rand); margin: 12px
 <!-- ── BUTTON BAR ── -->
 <div class="btn-bar">
   <button class="btn btn-secondary" onclick="saveOffline()">💾 Opslaan</button>
-  <button class="btn btn-primary"   onclick="versturen()">✉️ Versturen</button>
+  <button class="btn btn-notion"    onclick="stuurNaarNotion()">📋 Notion</button>
+  <button class="btn btn-primary"   onclick="versturen()">✉️ Mail</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -589,6 +592,46 @@ function loadSaved() {
       if (el('opslag'))      el('opslag').value     = velden.opslag  || '';
       if (el('opmerking'))   el('opmerking').value  = velden.opm     || '';
     }
+  }
+}
+
+/* ══════════════════════════════════════════════
+   NOTION VERSTUREN
+══════════════════════════════════════════════ */
+
+// Vul hier de Cloudflare Worker URL in na het deployen:
+const WORKER_URL = '';
+
+async function stuurNaarNotion() {
+  if (!WORKER_URL) {
+    showToast('⚠️ Worker URL nog niet ingesteld');
+    return;
+  }
+
+  const data = collectData();
+  if (!data.datum || !data.bouwplaats) {
+    showToast('⚠️ Vul datum en bouwplaats in');
+    return;
+  }
+
+  saveOffline();
+  showToast('⏳ Versturen naar Notion...');
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const json = await res.json();
+    if (json.ok) {
+      showToast('✅ Opgeslagen in Notion!');
+    } else {
+      showToast('❌ Fout: ' + (json.error || 'onbekend'));
+    }
+  } catch (e) {
+    showToast('❌ Verbindingsfout');
   }
 }
 
