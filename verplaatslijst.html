@@ -411,9 +411,7 @@ hr.divider { border: none; border-top: 1px solid rgba(255,255,255,0.10); margin:
 
 <!-- ── BUTTON BAR ── -->
 <div class="btn-bar">
-  <button class="btn btn-secondary" onclick="saveOffline()">💾 Opslaan</button>
-  <button class="btn btn-notion"    onclick="stuurNaarNotion()">📋 Notion</button>
-  <button class="btn btn-primary"   onclick="versturen()">✉️ Mail</button>
+  <button class="btn btn-primary" onclick="verstuurAlles()">Verstuur</button>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -634,6 +632,48 @@ function loadSaved() {
       if (el('opmerking'))   el('opmerking').value  = velden.opm     || '';
     }
   }
+}
+
+/* ══════════════════════════════════════════════
+   ALLES VERSTUREN (Notion + Mail)
+══════════════════════════════════════════════ */
+async function verstuurAlles() {
+  const data = collectData();
+
+  if (!data.datum || !data.bouwplaats) {
+    showToast('⚠️ Vul datum en bouwplaats in');
+    return;
+  }
+
+  saveOffline();
+  showToast('⏳ Versturen...');
+
+  // Eerst naar Notion
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    if (json.ok) {
+      showToast('✅ Opgeslagen in Notion!');
+    } else {
+      showToast('⚠️ Notion mislukt, mail wordt geopend');
+    }
+  } catch (e) {
+    showToast('⚠️ Notion mislukt, mail wordt geopend');
+  }
+
+  // Dan ook mail openen
+  setTimeout(() => {
+    const onderwerp = `Verplaatslijst – ${data.bouwplaats} – ${data.datum}`;
+    const body = buildMailBody(data);
+    window.location.href =
+      `mailto:materieel@middelwateringbouw.nl` +
+      `?subject=${encodeURIComponent(onderwerp)}` +
+      `&body=${encodeURIComponent(body)}`;
+  }, 1200);
 }
 
 /* ══════════════════════════════════════════════
