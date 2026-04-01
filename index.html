@@ -676,8 +676,30 @@ function loadSaved() {
 async function verstuurAlles() {
   const data = collectData();
 
-  if (!data.datum || !data.bouwplaats) {
-    showToast('⚠️ Vul datum en bouwplaats in');
+  const ontbrekend = [];
+  if (!data.datum)       ontbrekend.push('Datum');
+  if (!data.naam)        ontbrekend.push('Naam');
+  if (!data.bouwplaats)  ontbrekend.push('Bouwplaats');
+  if (!data.glob_van)    ontbrekend.push('Werknr. van');
+  if (!data.glob_naar)   ontbrekend.push('Werknr. naar');
+  if (!data.glob_opslag) ontbrekend.push('Opslag / zaak');
+
+  if (ontbrekend.length > 0) {
+    showToast('⚠️ Vul in: ' + ontbrekend.join(', '));
+    // Scroll naar boven zodat gebruiker de velden ziet
+    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+    // Markeer lege velden rood
+    ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) {
+        el.style.borderColor = 'rgba(239,68,68,0.80)';
+        el.style.boxShadow  = '0 0 0 3px rgba(239,68,68,0.20)';
+        el.addEventListener('input', () => {
+          el.style.borderColor = '';
+          el.style.boxShadow   = '';
+        }, { once: true });
+      }
+    });
     return;
   }
 
@@ -726,8 +748,30 @@ async function stuurNaarNotion() {
   }
 
   const data = collectData();
-  if (!data.datum || !data.bouwplaats) {
-    showToast('⚠️ Vul datum en bouwplaats in');
+  const ontbrekend = [];
+  if (!data.datum)       ontbrekend.push('Datum');
+  if (!data.naam)        ontbrekend.push('Naam');
+  if (!data.bouwplaats)  ontbrekend.push('Bouwplaats');
+  if (!data.glob_van)    ontbrekend.push('Werknr. van');
+  if (!data.glob_naar)   ontbrekend.push('Werknr. naar');
+  if (!data.glob_opslag) ontbrekend.push('Opslag / zaak');
+
+  if (ontbrekend.length > 0) {
+    showToast('⚠️ Vul in: ' + ontbrekend.join(', '));
+    // Scroll naar boven zodat gebruiker de velden ziet
+    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+    // Markeer lege velden rood
+    ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) {
+        el.style.borderColor = 'rgba(239,68,68,0.80)';
+        el.style.boxShadow  = '0 0 0 3px rgba(239,68,68,0.20)';
+        el.addEventListener('input', () => {
+          el.style.borderColor = '';
+          el.style.boxShadow   = '';
+        }, { once: true });
+      }
+    });
     return;
   }
 
@@ -821,8 +865,30 @@ function buildMailBody(data) {
 function versturen() {
   const data = collectData();
 
-  if (!data.datum || !data.bouwplaats) {
-    showToast('⚠️ Vul datum en bouwplaats in');
+  const ontbrekend = [];
+  if (!data.datum)       ontbrekend.push('Datum');
+  if (!data.naam)        ontbrekend.push('Naam');
+  if (!data.bouwplaats)  ontbrekend.push('Bouwplaats');
+  if (!data.glob_van)    ontbrekend.push('Werknr. van');
+  if (!data.glob_naar)   ontbrekend.push('Werknr. naar');
+  if (!data.glob_opslag) ontbrekend.push('Opslag / zaak');
+
+  if (ontbrekend.length > 0) {
+    showToast('⚠️ Vul in: ' + ontbrekend.join(', '));
+    // Scroll naar boven zodat gebruiker de velden ziet
+    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
+    // Markeer lege velden rood
+    ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) {
+        el.style.borderColor = 'rgba(239,68,68,0.80)';
+        el.style.boxShadow  = '0 0 0 3px rgba(239,68,68,0.20)';
+        el.addEventListener('input', () => {
+          el.style.borderColor = '';
+          el.style.boxShadow   = '';
+        }, { once: true });
+      }
+    });
     return;
   }
 
