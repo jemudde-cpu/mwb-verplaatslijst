@@ -8,834 +8,822 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 :root {
-  --accent:    #4d7cfe;
-  --oranje:    #f97316;
-  --oranje-zacht: rgba(249,115,22,0.18);
-  --tekst:     rgba(255,255,255,0.95);
-  --zacht:     rgba(255,255,255,0.50);
-  --placeholder: rgba(255,255,255,0.28);
-  --glas-rand: rgba(255,255,255,0.18);
-  --radius:    22px;
-  --radius-sm: 14px;
+  --oranje:     #f97316;
+  --oranje-dim: rgba(249,115,22,0.18);
+  --blauw:      #4d7cfe;
+  --rood:       #ef4444;
+  --groen:      #22c55e;
+  --tekst:      rgba(255,255,255,0.95);
+  --zacht:      rgba(255,255,255,0.50);
+  --dim:        rgba(255,255,255,0.28);
+  --glas-rand:  rgba(255,255,255,0.16);
+  --glas-bg:    rgba(255,255,255,0.07);
+  --input-bg:   rgba(255,255,255,0.06);
+  --radius-lg:  22px;
+  --radius:     14px;
+  --radius-sm:  10px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #050d1a;
+  background: #060e1c;
   color: var(--tekst);
   min-height: 100vh;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
-/* ─── ACHTERGROND ORBS ───────────────────────── */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 0;
-}
-.orb-1 {
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, #1a3a9f 0%, #0d1f5a 60%, transparent 100%);
-  top: -200px; left: -150px;
-  animation: drift1 22s ease-in-out infinite alternate;
-}
-.orb-2 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, #2d5be3 0%, #0a1f6e 60%, transparent 100%);
-  bottom: -150px; right: -100px;
-  animation: drift2 28s ease-in-out infinite alternate;
-}
-.orb-3 {
-  width: 350px; height: 350px;
-  background: radial-gradient(circle, #1a4acc 0%, #071540 60%, transparent 100%);
-  top: 40%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation: drift3 18s ease-in-out infinite alternate;
-}
-.orb-4 {
-  width: 280px; height: 280px;
-  background: radial-gradient(circle, rgba(249,115,22,0.55) 0%, rgba(234,88,12,0.20) 50%, transparent 100%);
-  top: 20%; right: -80px;
-  animation: drift2 24s ease-in-out infinite alternate;
-}
-.orb-5 {
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(249,115,22,0.40) 0%, rgba(234,88,12,0.12) 50%, transparent 100%);
-  bottom: 25%; left: -60px;
-  animation: drift1 30s ease-in-out infinite alternate;
-}
-@keyframes drift1 {
-  from { transform: translate(0,0) scale(1); }
-  to   { transform: translate(60px, 80px) scale(1.1); }
-}
-@keyframes drift2 {
-  from { transform: translate(0,0) scale(1.05); }
-  to   { transform: translate(-50px,-60px) scale(0.95); }
-}
-@keyframes drift3 {
-  from { transform: translate(-50%,-50%) scale(1); }
-  to   { transform: translate(-50%,-50%) scale(1.15); }
-}
+/* ── ORBS ───────────────────────────────────────── */
+.orb { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
+.orb-1 { width:580px;height:580px; background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent); top:-180px;left:-120px; animation:d1 22s ease-in-out infinite alternate; }
+.orb-2 { width:460px;height:460px; background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent); bottom:-120px;right:-80px; animation:d2 28s ease-in-out infinite alternate; }
+.orb-3 { width:320px;height:320px; background:radial-gradient(circle,#1a4acc,#071540 60%,transparent); top:40%;left:50%;transform:translate(-50%,-50%); animation:d3 18s ease-in-out infinite alternate; }
+.orb-4 { width:260px;height:260px; background:radial-gradient(circle,rgba(249,115,22,.50),rgba(234,88,12,.15) 55%,transparent); top:18%;right:-70px; animation:d2 24s ease-in-out infinite alternate; }
+.orb-5 { width:190px;height:190px; background:radial-gradient(circle,rgba(249,115,22,.35),rgba(234,88,12,.10) 55%,transparent); bottom:22%;left:-50px; animation:d1 30s ease-in-out infinite alternate; }
+@keyframes d1 { from{transform:translate(0,0) scale(1)} to{transform:translate(60px,80px) scale(1.1)} }
+@keyframes d2 { from{transform:translate(0,0) scale(1.05)} to{transform:translate(-50px,-60px) scale(.95)} }
+@keyframes d3 { from{transform:translate(-50%,-50%) scale(1)} to{transform:translate(-50%,-50%) scale(1.15)} }
 
-/* ─── LAYOUT ─────────────────────────────────── */
-.container { position: relative; z-index: 1; padding: 16px; max-width: 680px; margin: 0 auto; padding-bottom: 110px; }
-header, .btn-bar, .toast { position: relative; z-index: 2; }
+/* ── HEADER ──────────────────────────────────────── */
+header {
+  position: sticky; top: 0; z-index: 60;
+  background: rgba(6,14,28,.75);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border-bottom: 1px solid rgba(255,255,255,.09);
+  padding: 12px 18px 0;
+  box-shadow: 0 4px 24px rgba(0,0,0,.35);
+}
+.header-top { display:flex; align-items:center; gap:12px; padding-bottom:12px; }
+header img  { height:32px; object-fit:contain; }
+.header-top h1 { color:#fff; font-size:15px; font-weight:700; line-height:1.2; letter-spacing:-.2px; flex:1; }
+.header-top h1 small { display:block; font-size:10px; font-weight:400; opacity:.50; }
 
-/* ─── LIQUID GLASS MIXIN ─────────────────────── */
-.glass {
-  background: rgba(255,255,255,0.07);
+/* ── PROGRESS BAR ────────────────────────────────── */
+.progress {
+  display: flex; align-items: center; gap: 0;
+  padding: 0 4px 12px;
+}
+.progress-step {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  flex: 1; cursor: pointer;
+}
+.progress-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  background: rgba(255,255,255,.10);
+  border: 1.5px solid rgba(255,255,255,.15);
+  color: var(--zacht);
+  transition: all .3s;
+}
+.progress-step.active   .progress-dot { background: var(--oranje); border-color: var(--oranje); color: #fff; box-shadow: 0 0 12px rgba(249,115,22,.50); }
+.progress-step.done     .progress-dot { background: rgba(34,197,94,.25); border-color: var(--groen); color: var(--groen); }
+.progress-label { font-size: 9px; font-weight: 600; color: var(--dim); text-transform: uppercase; letter-spacing: .4px; transition: color .3s; }
+.progress-step.active .progress-label { color: var(--oranje); }
+.progress-step.done   .progress-label { color: var(--groen); }
+.progress-line { flex: 1; height: 1.5px; background: rgba(255,255,255,.10); margin-bottom: 16px; transition: background .3s; }
+.progress-line.done { background: rgba(34,197,94,.40); }
+
+/* ── WIZARD ──────────────────────────────────────── */
+.wizard { position: relative; z-index: 1; }
+.step { display: none; padding: 16px 16px 110px; max-width: 680px; margin: 0 auto; animation: fadeIn .3s ease; }
+.step.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── GLASS CARD ──────────────────────────────────── */
+.card {
+  background: var(--glas-bg);
   -webkit-backdrop-filter: brightness(1.08) blur(28px) saturate(160%) url(#liquid);
   backdrop-filter: brightness(1.08) blur(28px) saturate(160%) url(#liquid);
   border: 1px solid var(--glas-rand);
+  border-radius: var(--radius-lg);
+  margin-bottom: 14px;
+  overflow: hidden;
+  filter: drop-shadow(-3px -5px 24px rgba(0,0,0,.28));
   position: relative;
 }
-.glass::before {
-  content: '';
-  position: absolute; inset: 0;
-  border-radius: inherit;
-  box-shadow:
-    inset 6px 6px 0px -6px rgba(255,255,255,0.65),
-    inset 0 0 10px 1px rgba(255,255,255,0.12);
-  pointer-events: none; z-index: 1;
+.card::before {
+  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:1;
+  box-shadow: inset 6px 6px 0 -6px rgba(255,255,255,.60), inset 0 0 10px 1px rgba(255,255,255,.10);
+}
+.card-title {
+  font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+  color: var(--zacht); padding: 16px 18px 0; margin-bottom: 14px;
+  border-left: 3px solid var(--oranje); padding-left: 14px;
 }
 
-/* ─── HEADER ─────────────────────────────────── */
-header {
-  background: rgba(5,13,26,0.70);
-  -webkit-backdrop-filter: brightness(1.05) blur(30px) saturate(160%);
-  backdrop-filter: brightness(1.05) blur(30px) saturate(160%);
-  border-bottom: 1px solid rgba(255,255,255,0.10);
-  padding: 14px 20px;
-  display: flex; align-items: center; gap: 14px;
-  position: sticky; top: 0; z-index: 50;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.40);
-}
-header img { height: 34px; object-fit: contain; }
-header h1  { color: #fff; font-size: 16px; font-weight: 700; line-height: 1.2; letter-spacing: -.2px; }
-header h1 small { display: block; font-size: 11px; font-weight: 400; opacity: .50; letter-spacing: .1px; }
-
-/* ─── CARD ───────────────────────────────────── */
-.card {
-  border-radius: var(--radius);
-  margin-bottom: 16px;
-  overflow: hidden;
-  filter: drop-shadow(-4px -6px 30px rgba(0,0,0,0.30));
-}
-.card-header {
-  background: rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  border-left: 3px solid var(--oranje);
-  color: rgba(255,255,255,0.90);
-  padding: 14px 18px;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: .8px; text-transform: uppercase;
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; user-select: none;
-  transition: background .2s;
-}
-.card-header:hover { background: rgba(255,255,255,0.10); }
-.card-header .chevron { transition: transform .3s cubic-bezier(.34,1.56,.64,1); font-size: 12px; opacity: .55; }
-.card-header.open .chevron { transform: rotate(180deg); }
-.card-body { padding: 16px 18px; }
-.card-body.collapsed { display: none; }
-
-/* ─── VELD ───────────────────────────────────── */
+/* ── FIELDS ──────────────────────────────────────── */
+.card-body { padding: 0 18px 18px; }
 .field { margin-bottom: 14px; }
-.field label {
-  display: block;
-  font-size: 10px; font-weight: 700;
-  color: var(--zacht);
-  text-transform: uppercase; letter-spacing: .6px;
-  margin-bottom: 6px;
-}
-.field input,
-.field textarea,
-.field select {
-  width: 100%; padding: 12px 14px;
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: var(--radius-sm);
-  font-family: inherit; font-size: 14px; font-weight: 500;
-  color: var(--tekst);
-  background: rgba(255,255,255,0.06);
+.field label { display:block; font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px; }
+.field input, .field textarea, .field select {
+  width:100%; padding:12px 14px;
+  border:1px solid rgba(255,255,255,.13); border-radius:var(--radius);
+  font-family:inherit; font-size:14px; font-weight:500; color:var(--tekst);
+  background:var(--input-bg);
   transition: border-color .2s, background .2s, box-shadow .25s;
+  -webkit-appearance:none;
+}
+.field input::placeholder, .field textarea::placeholder { color:var(--dim); }
+.field input:focus, .field textarea:focus {
+  outline:none; border-color:rgba(249,115,22,.60);
+  background:rgba(255,255,255,.10); box-shadow:0 0 0 3px rgba(249,115,22,.15);
+}
+.field input[type="date"] { color-scheme:dark; }
+.field.error input { border-color:rgba(239,68,68,.80); box-shadow:0 0 0 3px rgba(239,68,68,.18); }
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* ── STEP TITLE ──────────────────────────────────── */
+.step-title { font-size:22px; font-weight:800; margin-bottom:6px; letter-spacing:-.4px; }
+.step-sub   { font-size:14px; color:var(--zacht); margin-bottom:20px; }
+
+/* ── TAB BAR ─────────────────────────────────────── */
+.tab-bar {
+  display: flex; gap: 6px; overflow-x: auto; padding: 0 0 12px;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex-shrink: 0; padding: 8px 14px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 30px; font-family: inherit; font-size: 12px; font-weight: 600;
+  color: var(--zacht); cursor: pointer; transition: all .2s; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.tab-btn.active { background: var(--oranje); border-color: var(--oranje); color: #fff; box-shadow: 0 3px 14px rgba(249,115,22,.40); }
+.tab-badge {
+  background: rgba(255,255,255,.25); color: #fff;
+  font-size: 10px; font-weight: 700;
+  border-radius: 10px; padding: 1px 6px; min-width: 18px; text-align: center;
+}
+.tab-btn.active .tab-badge { background: rgba(255,255,255,.30); }
+
+/* ── ITEM ROWS ───────────────────────────────────── */
+.item-list { display: flex; flex-direction: column; gap: 6px; }
+.item-row {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--radius); padding: 12px 14px;
+  transition: border-color .2s, background .2s; gap: 10px;
+}
+.item-row:hover { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.07); }
+.item-row.has-value { border-color: rgba(249,115,22,.35); background: rgba(249,115,22,.06); }
+.item-naam { flex: 1; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.88); }
+.item-detail-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
+  color: var(--zacht); font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; flex-shrink: 0;
+}
+.item-detail-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+.item-detail-btn.has-detail { border-color: var(--oranje); color: var(--oranje); }
+
+/* ── STEPPER ─────────────────────────────────────── */
+.stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+.stepper-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.15);
+  color: #fff; font-size: 18px; font-weight: 300; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; line-height: 1; flex-shrink: 0;
   -webkit-appearance: none;
 }
-.field input::placeholder, .field textarea::placeholder { color: var(--placeholder); }
-.field input:focus, .field textarea:focus, .field select:focus {
-  outline: none;
-  border-color: rgba(77,124,254,0.65);
-  background: rgba(255,255,255,0.10);
-  box-shadow: 0 0 0 3px rgba(77,124,254,0.18);
+.stepper-btn:active { transform: scale(.88); }
+.stepper-btn.plus { background: rgba(249,115,22,.25); border-color: rgba(249,115,22,.40); }
+.stepper-btn.plus:hover { background: rgba(249,115,22,.45); }
+.stepper-val {
+  width: 36px; text-align: center; font-size: 16px; font-weight: 700;
+  color: var(--tekst); padding: 0 2px;
 }
-.field input[type="date"] { color-scheme: dark; }
-.field textarea { resize: vertical; }
+.stepper-val.nonzero { color: var(--oranje); }
 
-/* ─── GRID ───────────────────────────────────── */
-.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+/* ── BOTTOM SHEET ────────────────────────────────── */
+.sheet-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  z-index: 80; opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.sheet-overlay.open { opacity: 1; pointer-events: all; }
+.bottom-sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  background: rgba(12,22,44,.96);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  backdrop-filter: blur(32px) saturate(180%);
+  border-top: 1px solid rgba(255,255,255,.14);
+  border-radius: 24px 24px 0 0;
+  padding: 12px 20px 40px;
+  transform: translateY(100%); transition: transform .35s cubic-bezier(.32,1,.32,1);
+  max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 -8px 40px rgba(0,0,0,.50);
+}
+.bottom-sheet.open { transform: translateY(0); }
+.sheet-handle {
+  width: 40px; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,.20); margin: 0 auto 16px;
+}
+.sheet-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #fff; }
+.sheet-field { margin-bottom: 12px; }
+.sheet-field label { display:block; font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
+.sheet-field input {
+  width:100%; padding:11px 13px;
+  border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-sm);
+  font-family:inherit; font-size:14px; font-weight:500; color:var(--tekst);
+  background:rgba(255,255,255,.07);
+  transition:border-color .2s,box-shadow .2s; -webkit-appearance:none;
+}
+.sheet-field input::placeholder { color:var(--dim); }
+.sheet-field input:focus { outline:none; border-color:rgba(249,115,22,.55); background:rgba(255,255,255,.10); box-shadow:0 0 0 3px rgba(249,115,22,.14); }
+.sheet-save {
+  width:100%; padding:15px; border:none; border-radius:14px; margin-top:8px;
+  font-family:inherit; font-size:15px; font-weight:700; color:#fff; cursor:pointer;
+  background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));
+  box-shadow:0 4px 20px rgba(249,115,22,.35);
+  transition:all .2s; -webkit-appearance:none;
+}
+.sheet-save:active { transform:scale(.97); }
 
-/* ─── SECTIE SCHEIDER ────────────────────────── */
-.sectie-label {
-  font-size: 10px; font-weight: 700; color: var(--zacht);
-  text-transform: uppercase; letter-spacing: .6px;
-  padding: 10px 0 7px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  margin-bottom: 10px;
+/* ── FOTO GRID ───────────────────────────────────── */
+.foto-upload-area {
+  border: 2px dashed rgba(255,255,255,.15); border-radius: var(--radius);
+  padding: 28px 20px; text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s; margin-bottom: 12px;
 }
+.foto-upload-area:hover { border-color: var(--oranje); background: rgba(249,115,22,.05); }
+.foto-upload-area input { display: none; }
+.foto-upload-icon { font-size: 32px; margin-bottom: 8px; }
+.foto-upload-text { font-size: 14px; color: var(--zacht); font-weight: 500; }
+.foto-upload-text span { color: var(--oranje); font-weight: 700; }
+.foto-grid { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.foto-grid img { width:78px;height:78px; object-fit:cover; border-radius:10px; border:1.5px solid rgba(255,255,255,.15); box-shadow:0 4px 14px rgba(0,0,0,.35); }
 
-/* ─── ONDERDEEL ROW ──────────────────────────── */
-.onderdeel {
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: var(--radius-sm);
-  margin-bottom: 8px; overflow: hidden;
-  background: rgba(255,255,255,0.03);
-  transition: border-color .2s, background .2s;
-}
-.onderdeel:hover { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
-.onderdeel-title {
-  padding: 12px 14px;
-  font-weight: 600; font-size: 14px;
-  color: rgba(255,255,255,0.88);
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; user-select: none;
-}
-.onderdeel-title .badge {
-  font-size: 11px; font-weight: 700;
-  background: var(--oranje); color: #fff;
-  border-radius: 20px; padding: 2px 9px;
-  min-width: 28px; text-align: center;
-  box-shadow: 0 2px 10px rgba(249,115,22,0.45);
-}
-.onderdeel-title .badge.leeg {
-  background: rgba(255,255,255,0.09); color: var(--zacht);
-  font-weight: 500; box-shadow: none;
-}
-.onderdeel-detail {
-  padding: 12px 14px; display: none;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  background: rgba(0,0,0,0.15);
-}
-.onderdeel-detail.open { display: block; }
-.onderdeel-detail .g2 { margin-bottom: 8px; }
-.onderdeel-detail input {
-  width: 100%; padding: 9px 11px;
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 10px; font-family: inherit;
-  font-size: 13px; font-weight: 500;
-  color: rgba(255,255,255,0.88);
-  background: rgba(255,255,255,0.06);
-  transition: border-color .2s, box-shadow .2s;
-  -webkit-appearance: none;
-}
-.onderdeel-detail input::placeholder { color: rgba(255,255,255,0.25); }
-.onderdeel-detail input:focus {
-  outline: none;
-  border-color: rgba(77,124,254,0.60);
-  background: rgba(255,255,255,0.10);
-  box-shadow: 0 0 0 3px rgba(77,124,254,0.14);
-}
-.onderdeel-detail .field-label {
-  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.38);
-  text-transform: uppercase; letter-spacing: .5px;
-  margin-bottom: 5px; display: block;
-}
+/* ── SAMENVATTING ────────────────────────────────── */
+.summary-info { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.summary-field { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:var(--radius-sm); padding:10px 12px; }
+.summary-field .sf-label { font-size:9px; font-weight:700; color:var(--dim); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+.summary-field .sf-val   { font-size:13px; font-weight:600; color:var(--tekst); }
+.summary-item-row { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; border-radius:var(--radius-sm); background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); margin-bottom:6px; }
+.summary-item-naam { font-size:13px; font-weight:600; }
+.summary-item-aantal { font-size:14px; font-weight:800; color:var(--oranje); min-width:28px; text-align:right; }
+.summary-item-nummer { font-size:11px; color:var(--zacht); }
+.summary-cat-title { font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.6px; padding:10px 0 6px; border-bottom:1px solid rgba(255,255,255,.07); margin-bottom:8px; }
+.empty-state { text-align:center; padding:30px; color:var(--dim); font-size:14px; }
 
-/* ─── FOTO PREVIEW ───────────────────────────── */
-.foto-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.foto-grid img {
-  width: 78px; height: 78px; object-fit: cover;
-  border-radius: 12px;
-  border: 1.5px solid rgba(255,255,255,0.16);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.40);
+/* ── NAV BUTTONS ─────────────────────────────────── */
+.nav-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  background: rgba(6,14,28,.85);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  backdrop-filter: blur(28px) saturate(160%);
+  border-top: 1px solid rgba(255,255,255,.09);
+  padding: 12px 16px 22px;
+  display: flex; gap: 10px;
+  box-shadow: 0 -6px 28px rgba(0,0,0,.30);
 }
+.btn-nav {
+  flex:1; padding:15px; border-radius:14px;
+  font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1); -webkit-appearance:none;
+}
+.btn-nav:active { transform:scale(.96); }
+.btn-back {
+  background:rgba(255,255,255,.08); color:rgba(255,255,255,.75);
+  border:1px solid rgba(255,255,255,.14); flex:0 0 80px;
+}
+.btn-back:hover { background:rgba(255,255,255,.14); }
+.btn-next {
+  background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));
+  color:#fff; border:1px solid rgba(249,115,22,.40);
+  box-shadow:0 4px 22px rgba(249,115,22,.35), inset 0 1px 0 rgba(255,255,255,.20);
+}
+.btn-next:hover { box-shadow:0 6px 28px rgba(249,115,22,.55), inset 0 1px 0 rgba(255,255,255,.25); }
+.btn-verstuur {
+  background:linear-gradient(135deg,rgba(34,197,94,.80),rgba(22,163,74,.85));
+  color:#fff; border:1px solid rgba(34,197,94,.35);
+  box-shadow:0 4px 22px rgba(34,197,94,.30), inset 0 1px 0 rgba(255,255,255,.20);
+}
+.btn-verstuur:hover { box-shadow:0 6px 28px rgba(34,197,94,.50); }
 
-/* ─── KNOP BAR ───────────────────────────────── */
-.btn-bar {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(5,13,26,0.80);
-  -webkit-backdrop-filter: blur(30px) saturate(160%);
-  backdrop-filter: blur(30px) saturate(160%);
-  padding: 14px 20px 20px;
-  border-top: 1px solid rgba(255,255,255,0.09);
-  z-index: 40;
-  box-shadow: 0 -8px 30px rgba(0,0,0,0.35);
-}
-.btn {
-  width: 100%; padding: 16px;
-  border: 1px solid rgba(249,115,22,0.45);
-  border-radius: 16px;
-  font-family: inherit; font-size: 16px; font-weight: 700;
-  cursor: pointer; letter-spacing: .2px;
-  transition: all .2s cubic-bezier(.34,1.56,.64,1);
-  -webkit-appearance: none;
-  background: linear-gradient(135deg, rgba(249,115,22,0.80) 0%, rgba(234,88,12,0.85) 100%);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  color: #fff;
-  box-shadow: 0 4px 24px rgba(249,115,22,0.35), inset 0 1px 0 rgba(255,255,255,0.22);
-}
-.btn:hover {
-  background: linear-gradient(135deg, rgba(249,115,22,1) 0%, rgba(234,88,12,1) 100%);
-  box-shadow: 0 6px 32px rgba(249,115,22,0.55), inset 0 1px 0 rgba(255,255,255,0.28);
-}
-.btn:active { transform: scale(.97); }
-
-/* ─── TOAST ──────────────────────────────────── */
+/* ── TOAST ───────────────────────────────────────── */
 .toast {
-  position: fixed; top: 72px; left: 50%;
-  transform: translateX(-50%) translateY(-16px);
-  background: rgba(15,26,50,0.90);
-  -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(255,255,255,0.16);
-  color: #fff; padding: 12px 22px;
-  border-radius: 30px; font-size: 14px; font-weight: 600;
-  opacity: 0; transition: opacity .3s, transform .3s;
-  z-index: 100; pointer-events: none; white-space: nowrap;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  position:fixed; top:74px; left:50%;
+  transform:translateX(-50%) translateY(-14px);
+  background:rgba(14,26,50,.92); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.16); color:#fff;
+  padding:11px 20px; border-radius:28px; font-size:13px; font-weight:600;
+  opacity:0; transition:opacity .3s,transform .3s; z-index:200;
+  pointer-events:none; white-space:nowrap; box-shadow:0 8px 28px rgba(0,0,0,.30);
 }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* ─── DIVIDER ────────────────────────────────── */
-hr.divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 12px 0; }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- SVG Liquid displacement filter -->
+<!-- SVG liquid filter -->
 <svg style="position:absolute;width:0;height:0;overflow:hidden;">
   <filter id="liquid">
-    <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="2" result="turbulence" seed="5"/>
-    <feDisplacementMap in="SourceGraphic" in2="turbulence" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+    <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="2" result="t" seed="5"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="16" xChannelSelector="R" yChannelSelector="G"/>
   </filter>
 </svg>
 
-<!-- Achtergrond orbs -->
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-<div class="orb orb-4"></div>
-<div class="orb orb-5"></div>
+<!-- Orbs -->
+<div class="orb orb-1"></div><div class="orb orb-2"></div>
+<div class="orb orb-3"></div><div class="orb orb-4"></div><div class="orb orb-5"></div>
 
+<!-- Header -->
 <header>
-  <img src="https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-wit-2018.png"
-       alt="Middelwatering Bouw"
-       onerror="this.style.display='none'">
-  <h1>Verplaatslijst <small>Middelwatering Bouw</small></h1>
+  <div class="header-top">
+    <img src="https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-wit-2018.png" alt="MWB" onerror="this.style.display='none'">
+    <h1>Verplaatslijst <small>Middelwatering Bouw</small></h1>
+  </div>
+  <div class="progress">
+    <div class="progress-step active" id="ps-1" onclick="goToStep(1)">
+      <div class="progress-dot">1</div>
+      <div class="progress-label">Algemeen</div>
+    </div>
+    <div class="progress-line" id="pl-1"></div>
+    <div class="progress-step" id="ps-2" onclick="goToStep(2)">
+      <div class="progress-dot">2</div>
+      <div class="progress-label">Materieel</div>
+    </div>
+    <div class="progress-line" id="pl-2"></div>
+    <div class="progress-step" id="ps-3" onclick="goToStep(3)">
+      <div class="progress-dot">3</div>
+      <div class="progress-label">Foto's</div>
+    </div>
+    <div class="progress-line" id="pl-3"></div>
+    <div class="progress-step" id="ps-4" onclick="goToStep(4)">
+      <div class="progress-dot">4</div>
+      <div class="progress-label">Verstuur</div>
+    </div>
+  </div>
 </header>
 
-<div class="container">
+<!-- ══ STEP 1: ALGEMEEN ══ -->
+<div class="step active" id="step-1">
+  <p class="step-title">Algemene info</p>
+  <p class="step-sub">Vul alle gegevens in voordat je verdergaat.</p>
 
-  <!-- ── ALGEMEEN ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Algemene informatie <span class="chevron">▾</span>
-    </div>
-    <div class="card-body">
+  <div class="card">
+    <div class="card-body" style="padding-top:18px;">
       <div class="g2">
-        <div class="field">
+        <div class="field" id="f-datum">
           <label>Datum</label>
           <input type="date" id="datum">
         </div>
-        <div class="field">
+        <div class="field" id="f-naam">
           <label>Ingevuld door</label>
-          <input type="text" id="naam" placeholder="Naam">
+          <input type="text" id="naam" placeholder="Jouw naam">
         </div>
       </div>
-      <div class="field">
+      <div class="field" id="f-bouwplaats">
         <label>Bouwplaats</label>
-        <input type="text" id="bouwplaats" placeholder="Naam / adres bouwplaats">
+        <input type="text" id="bouwplaats" placeholder="Naam / adres">
       </div>
       <div class="g2">
-        <div class="field">
-          <label>Werknr. (van)</label>
-          <input type="text" id="glob_van" placeholder="Van werknr.">
+        <div class="field" id="f-glob_van">
+          <label>Werknr. van</label>
+          <input type="text" id="glob_van" placeholder="Van">
         </div>
-        <div class="field">
-          <label>Werknr. (naar)</label>
-          <input type="text" id="glob_naar" placeholder="Naar werknr.">
+        <div class="field" id="f-glob_naar">
+          <label>Werknr. naar</label>
+          <input type="text" id="glob_naar" placeholder="Naar">
         </div>
       </div>
-      <div class="field">
+      <div class="field" id="f-glob_opslag">
         <label>Opslag / zaak</label>
         <input type="text" id="glob_opslag" placeholder="Opslaglocatie">
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ── AANSLUITINGEN ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Aansluitingen <span class="chevron">▾</span>
-    </div>
-    <div class="card-body" id="sec-aansluitingen">
-      <!-- items rendered by JS -->
-    </div>
-  </div>
+<!-- ══ STEP 2: MATERIEEL ══ -->
+<div class="step" id="step-2">
+  <p class="step-title">Materieel</p>
+  <p class="step-sub">Gebruik + en − om aantallen in te stellen. Tik op ⋯ voor details.</p>
 
-  <!-- ── KETEN ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Keten <span class="chevron">▾</span>
-    </div>
-    <div class="card-body" id="sec-keten">
-    </div>
-  </div>
+  <div class="tab-bar" id="tab-bar"></div>
+  <div class="item-list" id="item-list"></div>
+</div>
 
-  <!-- ── CONTAINERS ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Materiaalcontainers <span class="chevron">▾</span>
-    </div>
-    <div class="card-body" id="sec-containers">
-    </div>
-  </div>
+<!-- ══ STEP 3: FOTO'S ══ -->
+<div class="step" id="step-3">
+  <p class="step-title">Foto's & opmerkingen</p>
+  <p class="step-sub">Optioneel — voeg foto's en een opmerking toe.</p>
 
-  <!-- ── LICHTMASTEN ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Lichtmasten <span class="chevron">▾</span>
-    </div>
-    <div class="card-body" id="sec-lichtmasten">
-    </div>
-  </div>
-
-  <!-- ── BOUWHEKKEN ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Bouwhekken &amp; Rijplaten <span class="chevron">▾</span>
-    </div>
-    <div class="card-body" id="sec-hekken">
-    </div>
-  </div>
-
-  <!-- ── FOTO'S ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Foto's <span class="chevron">▾</span>
-    </div>
-    <div class="card-body">
-      <div class="field">
-        <label>Foto's toevoegen (max 5)</label>
+  <div class="card">
+    <div class="card-body" style="padding-top:18px;">
+      <label class="foto-upload-area" for="fotos">
         <input type="file" id="fotos" multiple accept="image/*" capture="environment">
-      </div>
+        <div class="foto-upload-icon">📷</div>
+        <div class="foto-upload-text">Tik om <span>foto's toe te voegen</span></div>
+      </label>
       <div class="foto-grid" id="foto-preview"></div>
     </div>
   </div>
 
-  <!-- ── OPMERKINGEN ── -->
-  <div class="card glass">
-    <div class="card-header open" onclick="toggleCard(this)">
-      Algemene opmerkingen <span class="chevron">▾</span>
-    </div>
+  <div class="card">
+    <div class="card-title">Opmerkingen</div>
     <div class="card-body">
       <div class="field">
-        <textarea id="algemeen_opmerking" rows="3" placeholder="Eventuele opmerkingen..." style="resize:vertical;"></textarea>
+        <textarea id="algemeen_opmerking" rows="4" placeholder="Eventuele opmerkingen..."></textarea>
       </div>
     </div>
   </div>
+</div>
 
-</div><!-- /container -->
+<!-- ══ STEP 4: SAMENVATTING ══ -->
+<div class="step" id="step-4">
+  <p class="step-title">Controleer & verstuur</p>
+  <p class="step-sub">Controleer alles en tik op Verstuur.</p>
+  <div id="summary-content"></div>
+</div>
 
-<!-- ── BUTTON BAR ── -->
-<div class="btn-bar">
-  <button class="btn btn-primary" onclick="verstuurAlles()">Verstuur</button>
+<!-- Nav buttons -->
+<div class="nav-bar" id="nav-bar">
+  <button class="btn-nav btn-back" id="btn-prev" onclick="prevStep()" style="display:none">← Terug</button>
+  <button class="btn-nav btn-next" id="btn-next" onclick="nextStep()">Volgende →</button>
+</div>
+
+<!-- Bottom sheet -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()"></div>
+<div class="bottom-sheet" id="bottom-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="sheet-title"></div>
+  <div id="sheet-body"></div>
+  <button class="sheet-save" onclick="saveSheet()">Opslaan</button>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════════
-   ITEM DEFINITIE
-══════════════════════════════════════════════ */
+/* ══ DATA ══════════════════════════════════════════ */
 const SECTIES = {
-  'sec-aansluitingen': [
-    { id: 'bouwmeterkast', naam: 'Bouwmeterkast (35A / 63A / 125A)' },
-    { id: 'waterput',      naam: 'Waterput' },
-    { id: 'waterkraan',    naam: 'Waterkraan / standvink' },
+  'Aansluitingen': [
+    { id:'bouwmeterkast', naam:'Bouwmeterkast (35A / 63A / 125A)' },
+    { id:'waterput',      naam:'Waterput' },
+    { id:'waterkraan',    naam:'Waterkraan / standvink' },
   ],
-  'sec-keten': [
-    { id: 'pipokeet',          naam: 'Pipokeet' },
-    { id: 'schaftkeet_1',      naam: 'Schaftkeet 1' },
-    { id: 'schaftkeet_2',      naam: 'Schaftkeet 2' },
-    { id: 'schaftkeet_3',      naam: 'Schaftkeet 3' },
-    { id: 'schaftkeet_4',      naam: 'Schaftkeet 4' },
-    { id: 'uitvoerderskeet_1', naam: 'Uitvoerderskeet 1' },
-    { id: 'uitvoerderskeet_2', naam: 'Uitvoerderskeet 2' },
-    { id: 'uitvoerderskeet_3', naam: 'Uitvoerderskeet 3' },
-    { id: 'uitvoerderskeet_4', naam: 'Uitvoerderskeet 4' },
-    { id: 'keettrap',          naam: 'Keettrap (Set)' },
+  'Keten': [
+    { id:'pipokeet',          naam:'Pipokeet' },
+    { id:'schaftkeet_1',      naam:'Schaftkeet 1' },
+    { id:'schaftkeet_2',      naam:'Schaftkeet 2' },
+    { id:'schaftkeet_3',      naam:'Schaftkeet 3' },
+    { id:'schaftkeet_4',      naam:'Schaftkeet 4' },
+    { id:'uitvoerderskeet_1', naam:'Uitvoerderskeet 1' },
+    { id:'uitvoerderskeet_2', naam:'Uitvoerderskeet 2' },
+    { id:'uitvoerderskeet_3', naam:'Uitvoerderskeet 3' },
+    { id:'uitvoerderskeet_4', naam:'Uitvoerderskeet 4' },
+    { id:'keettrap',          naam:'Keettrap (Set)' },
   ],
-  'sec-containers': [
-    { id: 'container_1', naam: 'Materiaalcontainer 1' },
-    { id: 'container_2', naam: 'Materiaalcontainer 2' },
+  'Containers': [
+    { id:'container_1', naam:'Materiaalcontainer 1' },
+    { id:'container_2', naam:'Materiaalcontainer 2' },
   ],
-  'sec-lichtmasten': [
-    { id: 'lichtmast_1', naam: 'Lichtmast 1' },
-    { id: 'lichtmast_2', naam: 'Lichtmast 2' },
-    { id: 'lichtmast_3', naam: 'Lichtmast 3' },
-    { id: 'lichtmast_4', naam: 'Lichtmast 4' },
-    { id: 'lichtmast_5', naam: 'Lichtmast 5' },
-    { id: 'lichtmast_6', naam: 'Lichtmast 6' },
+  'Lichtmasten': [
+    { id:'lichtmast_1', naam:'Lichtmast 1' },
+    { id:'lichtmast_2', naam:'Lichtmast 2' },
+    { id:'lichtmast_3', naam:'Lichtmast 3' },
+    { id:'lichtmast_4', naam:'Lichtmast 4' },
+    { id:'lichtmast_5', naam:'Lichtmast 5' },
+    { id:'lichtmast_6', naam:'Lichtmast 6' },
   ],
-  'sec-hekken': [
-    { id: 'bouwhekken',        naam: 'Bouwhekken' },
-    { id: 'bouwhek_voeten',    naam: 'Bouwhek voeten' },
-    { id: 'hekklemmen',        naam: 'Hekklemmen' },
-    { id: 'hekwielen',         naam: 'Hekwielen' },
-    { id: 'hek_schoren',       naam: 'Hek schoren' },
-    { id: 'kunststof_rijplaten', naam: 'Kunststof rijplaten' },
+  'Bouwhekken': [
+    { id:'bouwhekken',         naam:'Bouwhekken' },
+    { id:'bouwhek_voeten',     naam:'Bouwhek voeten' },
+    { id:'hekklemmen',         naam:'Hekklemmen' },
+    { id:'hekwielen',          naam:'Hekwielen' },
+    { id:'hek_schoren',        naam:'Hek schoren' },
+    { id:'kunststof_rijplaten',naam:'Kunststof rijplaten' },
   ]
 };
 
-/* ══════════════════════════════════════════════
-   RENDER ITEMS
-══════════════════════════════════════════════ */
-function renderItems() {
-  for (const [sectieId, items] of Object.entries(SECTIES)) {
-    const container = document.getElementById(sectieId);
-    if (!container) continue;
-    container.innerHTML = '';
-    items.forEach(item => {
-      container.insertAdjacentHTML('beforeend', `
-        <div class="onderdeel" id="o_${item.id}">
-          <div class="onderdeel-title" onclick="toggleItem('${item.id}')">
-            <span>${item.naam}</span>
-            <span class="badge leeg" id="badge_${item.id}">—</span>
-          </div>
-          <div class="onderdeel-detail" id="detail_${item.id}">
-            <div class="g3" style="margin-bottom:8px">
-              <div class="input-group">
-                <span class="field-label">Aantal</span>
-                <input type="number" id="${item.id}_aantal" placeholder="0" min="0"
-                       oninput="updateBadge('${item.id}')">
-              </div>
-              <div class="input-group">
-                <span class="field-label">Nummer</span>
-                <input type="text" id="${item.id}_nummer" placeholder="Nr.">
-              </div>
-              <div class="input-group">
-                <span class="field-label">Opmerking</span>
-                <input type="text" id="${item.id}_opmerking" placeholder="...">
-              </div>
-            </div>
-            <div class="g2">
-              <div class="input-group">
-                <span class="field-label">Werknr. (van)</span>
-                <input type="text" id="${item.id}_van" placeholder="Van">
-              </div>
-              <div class="input-group">
-                <span class="field-label">Werknr. (naar)</span>
-                <input type="text" id="${item.id}_naar" placeholder="Naar">
-              </div>
-            </div>
-            <div style="margin-top:8px">
-              <div class="input-group">
-                <span class="field-label">Opslag / zaak</span>
-                <input type="text" id="${item.id}_opslag" placeholder="Opslaglocatie">
-              </div>
-            </div>
-          </div>
-        </div>
-      `);
-    });
+// State per item
+const STATE = {};
+function initState() {
+  alleItems().forEach(i => {
+    STATE[i.id] = { aantal: 0, nummer: '', van: '', naar: '', opslag: '', opm: '' };
+  });
+}
+function alleItems() {
+  return Object.values(SECTIES).flat();
+}
+
+/* ══ WIZARD ════════════════════════════════════════ */
+let currentStep = 1;
+const TOTAL = 4;
+
+function goToStep(n) {
+  if (n < 1 || n > TOTAL) return;
+  if (n > currentStep && !validateStep(currentStep)) return;
+
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  updateProgress();
+  updateNav();
+
+  if (currentStep === 2) renderTabContent(activeTab);
+  if (currentStep === 4) renderSummary();
+}
+
+function nextStep() { goToStep(currentStep + 1); }
+function prevStep() { goToStep(currentStep - 1); }
+
+function updateProgress() {
+  for (let i = 1; i <= TOTAL; i++) {
+    const ps = document.getElementById('ps-' + i);
+    ps.classList.remove('active', 'done');
+    if (i < currentStep)  ps.classList.add('done');
+    if (i === currentStep) ps.classList.add('active');
+
+    const dot = ps.querySelector('.progress-dot');
+    dot.textContent = i < currentStep ? '✓' : i;
+  }
+  for (let i = 1; i < TOTAL; i++) {
+    const pl = document.getElementById('pl-' + i);
+    pl.classList.toggle('done', i < currentStep);
   }
 }
 
-/* ══════════════════════════════════════════════
-   TOGGLE ACCORDION
-══════════════════════════════════════════════ */
-function toggleCard(header) {
-  const body = header.nextElementSibling;
-  const isOpen = !body.classList.contains('collapsed');
-  body.classList.toggle('collapsed', isOpen);
-  header.classList.toggle('open', !isOpen);
+function updateNav() {
+  const prev = document.getElementById('btn-prev');
+  const next = document.getElementById('btn-next');
+  prev.style.display = currentStep > 1 ? '' : 'none';
+
+  if (currentStep === TOTAL) {
+    next.textContent = '✓ Verstuur';
+    next.className = 'btn-nav btn-verstuur';
+    next.onclick = verstuurAlles;
+  } else {
+    next.textContent = 'Volgende →';
+    next.className = 'btn-nav btn-next';
+    next.onclick = nextStep;
+  }
 }
 
-function toggleItem(id) {
-  const detail = document.getElementById('detail_' + id);
-  detail.classList.toggle('open');
+function validateStep(n) {
+  if (n !== 1) return true;
+  const velden = ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'];
+  const labels = { datum:'Datum', naam:'Naam', bouwplaats:'Bouwplaats', glob_van:'Werknr. van', glob_naar:'Werknr. naar', glob_opslag:'Opslag / zaak' };
+  const mis = [];
 
-  // Pre-fill Van/Naar/Opslag uit globale velden als leeg
+  velden.forEach(id => {
+    const el = document.getElementById(id);
+    const wrap = document.getElementById('f-' + id);
+    if (!el.value.trim()) {
+      mis.push(labels[id]);
+      wrap && wrap.classList.add('error');
+      el.addEventListener('input', () => wrap && wrap.classList.remove('error'), { once: true });
+    }
+  });
+
+  if (mis.length) {
+    showToast('⚠️ Vul in: ' + mis.join(', '));
+    return false;
+  }
+  return true;
+}
+
+/* ══ TABS ══════════════════════════════════════════ */
+let activeTab = Object.keys(SECTIES)[0];
+
+function renderTabs() {
+  const bar = document.getElementById('tab-bar');
+  bar.innerHTML = '';
+  Object.keys(SECTIES).forEach(naam => {
+    const count = SECTIES[naam].filter(i => STATE[i.id].aantal > 0).length;
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (naam === activeTab ? ' active' : '');
+    btn.innerHTML = naam + (count ? `<span class="tab-badge">${count}</span>` : '');
+    btn.onclick = () => { activeTab = naam; renderTabs(); renderTabContent(naam); };
+    bar.appendChild(btn);
+  });
+}
+
+function renderTabContent(tab) {
+  const list = document.getElementById('item-list');
+  list.innerHTML = '';
+  SECTIES[tab].forEach(item => {
+    const s = STATE[item.id];
+    const hasDetail = s.nummer || s.opm || (s.van && s.van !== document.getElementById('glob_van').value) || (s.naar && s.naar !== document.getElementById('glob_naar').value);
+    const row = document.createElement('div');
+    row.className = 'item-row' + (s.aantal > 0 ? ' has-value' : '');
+    row.id = 'row-' + item.id;
+    row.innerHTML = `
+      <div class="item-naam">${item.naam}</div>
+      <div class="stepper">
+        <button class="stepper-btn" onclick="changeAantal('${item.id}',-1)">−</button>
+        <span class="stepper-val ${s.aantal > 0 ? 'nonzero' : ''}" id="sv-${item.id}">${s.aantal}</span>
+        <button class="stepper-btn plus" onclick="changeAantal('${item.id}',1)">+</button>
+      </div>
+      <button class="item-detail-btn ${hasDetail ? 'has-detail' : ''}" id="db-${item.id}" onclick="openSheet('${item.id}')">⋯</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function changeAantal(id, delta) {
+  STATE[id].aantal = Math.max(0, STATE[id].aantal + delta);
+  const sv = document.getElementById('sv-' + id);
+  const row = document.getElementById('row-' + id);
+  if (sv) { sv.textContent = STATE[id].aantal; sv.className = 'stepper-val' + (STATE[id].aantal > 0 ? ' nonzero' : ''); }
+  if (row) row.className = 'item-row' + (STATE[id].aantal > 0 ? ' has-value' : '');
+  renderTabs();
+}
+
+/* ══ BOTTOM SHEET ══════════════════════════════════ */
+let sheetItemId = null;
+
+function openSheet(id) {
+  sheetItemId = id;
+  const item = alleItems().find(i => i.id === id);
+  const s = STATE[id];
   const globVan    = document.getElementById('glob_van').value;
   const globNaar   = document.getElementById('glob_naar').value;
   const globOpslag = document.getElementById('glob_opslag').value;
 
-  const vanField    = document.getElementById(id + '_van');
-  const naarField   = document.getElementById(id + '_naar');
-  const opslagField = document.getElementById(id + '_opslag');
+  document.getElementById('sheet-title').textContent = item.naam;
+  document.getElementById('sheet-body').innerHTML = `
+    <div class="g2" style="gap:10px;margin-bottom:10px;">
+      <div class="sheet-field">
+        <label>Nummer</label>
+        <input id="sf-nummer" type="text" placeholder="Serienummer" value="${s.nummer}">
+      </div>
+      <div class="sheet-field">
+        <label>Opmerking</label>
+        <input id="sf-opm" type="text" placeholder="..." value="${s.opm}">
+      </div>
+    </div>
+    <div class="g2" style="gap:10px;margin-bottom:10px;">
+      <div class="sheet-field">
+        <label>Werknr. van</label>
+        <input id="sf-van" type="text" placeholder="${globVan}" value="${s.van || globVan}">
+      </div>
+      <div class="sheet-field">
+        <label>Werknr. naar</label>
+        <input id="sf-naar" type="text" placeholder="${globNaar}" value="${s.naar || globNaar}">
+      </div>
+    </div>
+    <div class="sheet-field">
+      <label>Opslag / zaak</label>
+      <input id="sf-opslag" type="text" placeholder="${globOpslag}" value="${s.opslag || globOpslag}">
+    </div>
+  `;
 
-  if (detail.classList.contains('open')) {
-    if (!vanField.value    && globVan)    vanField.value    = globVan;
-    if (!naarField.value   && globNaar)   naarField.value   = globNaar;
-    if (!opslagField.value && globOpslag) opslagField.value = globOpslag;
-  }
+  document.getElementById('sheet-overlay').classList.add('open');
+  document.getElementById('bottom-sheet').classList.add('open');
 }
 
-function updateBadge(id) {
-  const val   = document.getElementById(id + '_aantal').value;
-  const badge = document.getElementById('badge_' + id);
-  if (val && parseInt(val) > 0) {
-    badge.textContent = val;
-    badge.classList.remove('leeg');
-  } else {
-    badge.textContent = '—';
-    badge.classList.add('leeg');
-  }
+function closeSheet() {
+  document.getElementById('sheet-overlay').classList.remove('open');
+  document.getElementById('bottom-sheet').classList.remove('open');
+  sheetItemId = null;
 }
 
-/* ══════════════════════════════════════════════
-   ALLE ITEMS (plat)
-══════════════════════════════════════════════ */
-function alleItems() {
-  const items = [];
-  for (const lijst of Object.values(SECTIES)) {
-    items.push(...lijst);
-  }
-  return items;
+function saveSheet() {
+  if (!sheetItemId) return;
+  STATE[sheetItemId].nummer = document.getElementById('sf-nummer').value;
+  STATE[sheetItemId].opm    = document.getElementById('sf-opm').value;
+  STATE[sheetItemId].van    = document.getElementById('sf-van').value;
+  STATE[sheetItemId].naar   = document.getElementById('sf-naar').value;
+  STATE[sheetItemId].opslag = document.getElementById('sf-opslag').value;
+
+  const hasDetail = STATE[sheetItemId].nummer || STATE[sheetItemId].opm;
+  const db = document.getElementById('db-' + sheetItemId);
+  if (db) db.className = 'item-detail-btn' + (hasDetail ? ' has-detail' : '');
+
+  closeSheet();
+  showToast('Details opgeslagen ✓');
 }
 
-/* ══════════════════════════════════════════════
-   DATA VERZAMELEN
-══════════════════════════════════════════════ */
+/* ══ FOTO'S ════════════════════════════════════════ */
+document.getElementById('fotos').addEventListener('change', function(e) {
+  const preview = document.getElementById('foto-preview');
+  preview.innerHTML = '';
+  Array.from(e.target.files).slice(0,5).forEach(file => {
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    preview.appendChild(img);
+  });
+});
+
+/* ══ SAMENVATTING ══════════════════════════════════ */
+function renderSummary() {
+  const data = collectData();
+  let html = '';
+
+  html += `<div class="card"><div class="card-title">Algemene informatie</div><div class="card-body"><div class="summary-info">`;
+  [['Datum', data.datum],['Ingevuld door', data.naam],['Bouwplaats', data.bouwplaats],['Werknr. van', data.glob_van],['Werknr. naar', data.glob_naar],['Opslag / zaak', data.glob_opslag]].forEach(([l,v]) => {
+    html += `<div class="summary-field"><div class="sf-label">${l}</div><div class="sf-val">${v || '—'}</div></div>`;
+  });
+  html += `</div></div></div>`;
+
+  let heeftItems = false;
+  let itemsHtml = `<div class="card"><div class="card-title">Geselecteerd materieel</div><div class="card-body">`;
+
+  for (const [cat, items] of Object.entries(SECTIES)) {
+    const gevuld = items.filter(i => STATE[i.id].aantal > 0);
+    if (!gevuld.length) continue;
+    heeftItems = true;
+    itemsHtml += `<div class="summary-cat-title">${cat}</div>`;
+    gevuld.forEach(item => {
+      const s = STATE[item.id];
+      itemsHtml += `<div class="summary-item-row">
+        <div>
+          <div class="summary-item-naam">${item.naam}</div>
+          ${s.nummer ? `<div class="summary-item-nummer">Nr. ${s.nummer}</div>` : ''}
+        </div>
+        <div class="summary-item-aantal">×${s.aantal}</div>
+      </div>`;
+    });
+  }
+
+  if (!heeftItems) {
+    itemsHtml += `<div class="empty-state">Geen items geselecteerd.<br>Ga terug naar stap 2.</div>`;
+  }
+  itemsHtml += `</div></div>`;
+  html += itemsHtml;
+
+  if (data.algemeen_opmerking) {
+    html += `<div class="card"><div class="card-title">Opmerkingen</div><div class="card-body"><p style="font-size:14px;color:var(--zacht);line-height:1.5;">${data.algemeen_opmerking}</p></div></div>`;
+  }
+
+  document.getElementById('summary-content').innerHTML = html;
+}
+
+/* ══ DATA VERZAMELEN ═══════════════════════════════ */
 function collectData() {
   const data = {
-    datum:          document.getElementById('datum').value,
-    naam:           document.getElementById('naam').value,
-    bouwplaats:     document.getElementById('bouwplaats').value,
-    glob_van:       document.getElementById('glob_van').value,
-    glob_naar:      document.getElementById('glob_naar').value,
-    glob_opslag:    document.getElementById('glob_opslag').value,
-    algemeen_opmerking: document.getElementById('algemeen_opmerking').value,
+    datum:               document.getElementById('datum').value,
+    naam:                document.getElementById('naam').value,
+    bouwplaats:          document.getElementById('bouwplaats').value,
+    glob_van:            document.getElementById('glob_van').value,
+    glob_naar:           document.getElementById('glob_naar').value,
+    glob_opslag:         document.getElementById('glob_opslag').value,
+    algemeen_opmerking:  document.getElementById('algemeen_opmerking').value,
     onderdelen: {}
   };
-
   alleItems().forEach(item => {
-    const aantal = document.getElementById(item.id + '_aantal')?.value;
-    const nummer = document.getElementById(item.id + '_nummer')?.value;
-    const van    = document.getElementById(item.id + '_van')?.value;
-    const naar   = document.getElementById(item.id + '_naar')?.value;
-    const opslag = document.getElementById(item.id + '_opslag')?.value;
-    const opm    = document.getElementById(item.id + '_opmerking')?.value;
-
-    data.onderdelen[item.id] = { naam: item.naam, aantal, nummer, van, naar, opslag, opm };
+    const s = STATE[item.id];
+    data.onderdelen[item.id] = {
+      naam: item.naam,
+      aantal: String(s.aantal),
+      nummer: s.nummer,
+      van:    s.van    || data.glob_van,
+      naar:   s.naar   || data.glob_naar,
+      opslag: s.opslag || data.glob_opslag,
+      opm:    s.opm
+    };
   });
-
   return data;
 }
 
-/* ══════════════════════════════════════════════
-   OFFLINE OPSLAAN
-══════════════════════════════════════════════ */
-function saveOffline() {
-  const data = collectData();
-  localStorage.setItem('mwb_verplaatslijst', JSON.stringify(data));
-  showToast('Opgeslagen ✓');
-}
+/* ══ VERSTUREN ═════════════════════════════════════ */
+const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
 
-/* ══════════════════════════════════════════════
-   OPGESLAGEN DATA LADEN
-══════════════════════════════════════════════ */
-function loadSaved() {
-  const raw = localStorage.getItem('mwb_verplaatslijst');
-  if (!raw) return;
-  const data = JSON.parse(raw);
-
-  if (data.datum)       document.getElementById('datum').value          = data.datum;
-  if (data.naam)        document.getElementById('naam').value           = data.naam;
-  if (data.bouwplaats)  document.getElementById('bouwplaats').value     = data.bouwplaats;
-  if (data.glob_van)    document.getElementById('glob_van').value       = data.glob_van;
-  if (data.glob_naar)   document.getElementById('glob_naar').value      = data.glob_naar;
-  if (data.glob_opslag) document.getElementById('glob_opslag').value    = data.glob_opslag;
-  if (data.algemeen_opmerking) document.getElementById('algemeen_opmerking').value = data.algemeen_opmerking;
-
-  if (data.onderdelen) {
-    for (const [id, velden] of Object.entries(data.onderdelen)) {
-      const el = (suffix) => document.getElementById(id + '_' + suffix);
-      if (el('aantal'))    { el('aantal').value    = velden.aantal  || ''; updateBadge(id); }
-      if (el('nummer'))      el('nummer').value    = velden.nummer  || '';
-      if (el('van'))         el('van').value        = velden.van     || '';
-      if (el('naar'))        el('naar').value       = velden.naar    || '';
-      if (el('opslag'))      el('opslag').value     = velden.opslag  || '';
-      if (el('opmerking'))   el('opmerking').value  = velden.opm     || '';
-    }
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ALLES VERSTUREN (Notion + Mail)
-══════════════════════════════════════════════ */
 async function verstuurAlles() {
   const data = collectData();
 
-  const ontbrekend = [];
-  if (!data.datum)       ontbrekend.push('Datum');
-  if (!data.naam)        ontbrekend.push('Naam');
-  if (!data.bouwplaats)  ontbrekend.push('Bouwplaats');
-  if (!data.glob_van)    ontbrekend.push('Werknr. van');
-  if (!data.glob_naar)   ontbrekend.push('Werknr. naar');
-  if (!data.glob_opslag) ontbrekend.push('Opslag / zaak');
-
-  if (ontbrekend.length > 0) {
-    showToast('⚠️ Vul in: ' + ontbrekend.join(', '));
-    // Scroll naar boven zodat gebruiker de velden ziet
-    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
-    // Markeer lege velden rood
-    ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && !el.value) {
-        el.style.borderColor = 'rgba(239,68,68,0.80)';
-        el.style.boxShadow  = '0 0 0 3px rgba(239,68,68,0.20)';
-        el.addEventListener('input', () => {
-          el.style.borderColor = '';
-          el.style.boxShadow   = '';
-        }, { once: true });
-      }
-    });
-    return;
-  }
-
-  saveOffline();
   showToast('⏳ Versturen...');
 
-  // Eerst naar Notion
   try {
-    const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
+    const res  = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
     const json = await res.json();
-    if (json.ok) {
-      showToast('✅ Opgeslagen in Notion!');
-    } else {
-      showToast('⚠️ Notion mislukt, mail wordt geopend');
-    }
-  } catch (e) {
+    showToast(json.ok ? '✅ Opgeslagen in Notion!' : '⚠️ Notion mislukt, mail wordt geopend');
+  } catch(e) {
     showToast('⚠️ Notion mislukt, mail wordt geopend');
   }
 
-  // Dan ook mail openen
   setTimeout(() => {
     const onderwerp = `Verplaatslijst – ${data.bouwplaats} – ${data.datum}`;
-    const body = buildMailBody(data);
-    window.location.href =
-      `mailto:materieel@middelwateringbouw.nl` +
-      `?subject=${encodeURIComponent(onderwerp)}` +
-      `&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:materieel@middelwateringbouw.nl?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(buildMailBody(data))}`;
   }, 1200);
 }
 
-/* ══════════════════════════════════════════════
-   NOTION VERSTUREN
-══════════════════════════════════════════════ */
-
-// Vul hier de Cloudflare Worker URL in na het deployen:
-const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
-
-async function stuurNaarNotion() {
-  if (!WORKER_URL) {
-    showToast('⚠️ Worker URL nog niet ingesteld');
-    return;
-  }
-
-  const data = collectData();
-  const ontbrekend = [];
-  if (!data.datum)       ontbrekend.push('Datum');
-  if (!data.naam)        ontbrekend.push('Naam');
-  if (!data.bouwplaats)  ontbrekend.push('Bouwplaats');
-  if (!data.glob_van)    ontbrekend.push('Werknr. van');
-  if (!data.glob_naar)   ontbrekend.push('Werknr. naar');
-  if (!data.glob_opslag) ontbrekend.push('Opslag / zaak');
-
-  if (ontbrekend.length > 0) {
-    showToast('⚠️ Vul in: ' + ontbrekend.join(', '));
-    // Scroll naar boven zodat gebruiker de velden ziet
-    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
-    // Markeer lege velden rood
-    ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && !el.value) {
-        el.style.borderColor = 'rgba(239,68,68,0.80)';
-        el.style.boxShadow  = '0 0 0 3px rgba(239,68,68,0.20)';
-        el.addEventListener('input', () => {
-          el.style.borderColor = '';
-          el.style.boxShadow   = '';
-        }, { once: true });
-      }
-    });
-    return;
-  }
-
-  saveOffline();
-  showToast('⏳ Versturen naar Notion...');
-
-  try {
-    const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-
-    const json = await res.json();
-    if (json.ok) {
-      showToast('✅ Opgeslagen in Notion!');
-    } else {
-      showToast('❌ Fout: ' + (json.error || 'onbekend'));
-    }
-  } catch (e) {
-    showToast('❌ Verbindingsfout');
-  }
-}
-
-/* ══════════════════════════════════════════════
-   MAIL BODY OPBOUWEN
-══════════════════════════════════════════════ */
 function buildMailBody(data) {
-  let lines = [];
-  lines.push('VERPLAATSLIJST MIDDELWATERING BOUW');
-  lines.push('===================================');
-  lines.push('');
-  lines.push(`Datum:       ${data.datum}`);
-  lines.push(`Ingevuld:    ${data.naam}`);
-  lines.push(`Bouwplaats:  ${data.bouwplaats}`);
-  lines.push(`Van werknr.: ${data.glob_van}`);
-  lines.push(`Naar werknr.:${data.glob_naar}`);
-  lines.push(`Opslag/zaak: ${data.glob_opslag}`);
-  lines.push('');
+  const lines = ['VERPLAATSLIJST MIDDELWATERING BOUW','===================================','',
+    `Datum:       ${data.datum}`,`Ingevuld:    ${data.naam}`,`Bouwplaats:  ${data.bouwplaats}`,
+    `Van werknr.: ${data.glob_van}`,`Naar werknr.:${data.glob_naar}`,`Opslag/zaak: ${data.glob_opslag}`,''];
 
-  // Groepeer per sectie
-  const sectieNamen = {
-    'sec-aansluitingen': 'AANSLUITINGEN',
-    'sec-keten':         'KETEN',
-    'sec-containers':    'MATERIAALCONTAINERS',
-    'sec-lichtmasten':   'LICHTMASTEN',
-    'sec-hekken':        'BOUWHEKKEN & RIJPLATEN'
-  };
-
-  for (const [sectieId, items] of Object.entries(SECTIES)) {
-    const heeftInhoud = items.some(i => {
-      const v = data.onderdelen[i.id];
-      return v && (v.aantal || v.nummer || v.opm);
-    });
-    if (!heeftInhoud) continue;
-
-    lines.push(sectieNamen[sectieId] || sectieId.toUpperCase());
-    lines.push('---');
-
-    items.forEach(item => {
+  for (const [cat, items] of Object.entries(SECTIES)) {
+    const gevuld = items.filter(i => parseInt(data.onderdelen[i.id]?.aantal) > 0);
+    if (!gevuld.length) continue;
+    lines.push(cat.toUpperCase(), '---');
+    gevuld.forEach(item => {
       const v = data.onderdelen[item.id];
-      if (!v || (!v.aantal && !v.nummer && !v.opm)) return;
-
-      lines.push(`${item.naam}`);
+      lines.push(item.naam);
       if (v.aantal)  lines.push(`  Aantal:    ${v.aantal}`);
       if (v.nummer)  lines.push(`  Nummer:    ${v.nummer}`);
       if (v.van)     lines.push(`  Van:       ${v.van}`);
@@ -845,111 +833,30 @@ function buildMailBody(data) {
     });
     lines.push('');
   }
-
-  if (data.algemeen_opmerking) {
-    lines.push('OPMERKINGEN');
-    lines.push('---');
-    lines.push(data.algemeen_opmerking);
-    lines.push('');
-  }
-
-  lines.push('---');
-  lines.push('Verstuurd via Verplaatslijst-app MWB');
-
+  if (data.algemeen_opmerking) lines.push('OPMERKINGEN','---',data.algemeen_opmerking,'');
+  lines.push('---','Verstuurd via Verplaatslijst-app MWB');
   return lines.join('\n');
 }
 
-/* ══════════════════════════════════════════════
-   VERSTUREN
-══════════════════════════════════════════════ */
-function versturen() {
-  const data = collectData();
-
-  const ontbrekend = [];
-  if (!data.datum)       ontbrekend.push('Datum');
-  if (!data.naam)        ontbrekend.push('Naam');
-  if (!data.bouwplaats)  ontbrekend.push('Bouwplaats');
-  if (!data.glob_van)    ontbrekend.push('Werknr. van');
-  if (!data.glob_naar)   ontbrekend.push('Werknr. naar');
-  if (!data.glob_opslag) ontbrekend.push('Opslag / zaak');
-
-  if (ontbrekend.length > 0) {
-    showToast('⚠️ Vul in: ' + ontbrekend.join(', '));
-    // Scroll naar boven zodat gebruiker de velden ziet
-    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
-    // Markeer lege velden rood
-    ['datum','naam','bouwplaats','glob_van','glob_naar','glob_opslag'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && !el.value) {
-        el.style.borderColor = 'rgba(239,68,68,0.80)';
-        el.style.boxShadow  = '0 0 0 3px rgba(239,68,68,0.20)';
-        el.addEventListener('input', () => {
-          el.style.borderColor = '';
-          el.style.boxShadow   = '';
-        }, { once: true });
-      }
-    });
-    return;
-  }
-
-  saveOffline(); // altijd ook lokaal opslaan
-
-  const onderwerp = `Verplaatslijst – ${data.bouwplaats} – ${data.datum}`;
-  const body      = buildMailBody(data);
-
-  window.location.href =
-    `mailto:materieel@middelwateringbouw.nl` +
-    `?subject=${encodeURIComponent(onderwerp)}` +
-    `&body=${encodeURIComponent(body)}`;
-}
-
-/* ══════════════════════════════════════════════
-   FOTO PREVIEW
-══════════════════════════════════════════════ */
-document.getElementById('fotos').addEventListener('change', function(e) {
-  const preview = document.getElementById('foto-preview');
-  preview.innerHTML = '';
-  const files = Array.from(e.target.files).slice(0, 5);
-  files.forEach(file => {
-    const img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
-    preview.appendChild(img);
-  });
-});
-
-/* ══════════════════════════════════════════════
-   TOAST NOTIFICATION
-══════════════════════════════════════════════ */
+/* ══ TOAST ═════════════════════════════════════════ */
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ══════════════════════════════════════════════
-   STANDAARD DATUM
-══════════════════════════════════════════════ */
-function setDefaultDatum() {
+/* ══ INIT ══════════════════════════════════════════ */
+function setDatum() {
   const el = document.getElementById('datum');
-  if (!el.value) {
-    const now = new Date();
-    el.value = now.toISOString().split('T')[0];
-  }
+  if (!el.value) el.value = new Date().toISOString().split('T')[0];
 }
 
-/* ══════════════════════════════════════════════
-   SERVICE WORKER
-══════════════════════════════════════════════ */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-renderItems();
-setDefaultDatum();
+initState();
+setDatum();
+renderTabs();
+renderTabContent(activeTab);
 </script>
 </body>
 </html>
