@@ -241,6 +241,39 @@ header img  { height:32px; object-fit:contain; }
 }
 .sheet-field input::placeholder { color:var(--dim); }
 .sheet-field input:focus { outline:none; border-color:rgba(249,115,22,.55); background:rgba(255,255,255,.10); box-shadow:0 0 0 3px rgba(249,115,22,.14); }
+/* ── TYPE CHIPS ─────────────────────────────────── */
+.type-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.type-chip {
+  padding:9px 18px; border-radius:30px; font-family:inherit;
+  font-size:13px; font-weight:700; cursor:pointer;
+  background:rgba(255,255,255,.08); border:1.5px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.70); transition:all .2s; -webkit-appearance:none;
+}
+.type-chip.active { background:rgba(249,115,22,.30); border-color:var(--oranje); color:#fff; box-shadow:0 2px 10px rgba(249,115,22,.30); }
+
+/* ── SHEET FOTO'S ───────────────────────────────── */
+.sheet-foto-title { font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; }
+.sheet-foto-add-btn {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:11px; border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.06); border:1.5px dashed rgba(255,255,255,.18);
+  color:rgba(255,255,255,.65); font-family:inherit; font-size:13px; font-weight:600;
+  cursor:pointer; transition:all .2s; -webkit-appearance:none; margin-bottom:10px;
+}
+.sheet-foto-add-btn:hover { border-color:var(--oranje); color:var(--oranje); background:rgba(249,115,22,.06); }
+.sheet-foto-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
+.sheet-foto-item img { width:70px; height:70px; object-fit:cover; border-radius:10px; border:1.5px solid rgba(255,255,255,.15); flex-shrink:0; }
+.sheet-foto-item .foto-opm { flex:1; }
+.sheet-foto-item .foto-opm input {
+  width:100%; padding:9px 11px;
+  border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-sm);
+  font-family:inherit; font-size:13px; color:var(--tekst);
+  background:rgba(255,255,255,.07); -webkit-appearance:none;
+}
+.sheet-foto-item .foto-opm input::placeholder { color:var(--dim); }
+.sheet-foto-item .foto-del { width:28px; height:28px; border-radius:50%; background:rgba(239,68,68,.20); border:none; color:rgba(239,68,68,.80); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; -webkit-appearance:none; }
+.foto-indicator { font-size:10px; color:var(--oranje); font-weight:700; margin-left:4px; }
+
 .sheet-save {
   width:100%; padding:15px; border:none; border-radius:14px; margin-top:8px;
   font-family:inherit; font-size:15px; font-weight:700; color:#fff; cursor:pointer;
@@ -511,7 +544,7 @@ const SECTIES = {
 const STATE = {};
 function initState() {
   alleItems().forEach(i => {
-    STATE[i.id] = { aantal: 0, nummer: '', van: '', naar: '', opslag: '', opm: '' };
+    STATE[i.id] = { aantal: 0, nummer: '', van: '', naar: '', opslag: '', opm: '', types: [], fotos: [] };
   });
 }
 function alleItems() {
@@ -618,12 +651,13 @@ function renderTabContent(tab) {
   list.innerHTML = '';
   SECTIES[tab].forEach(item => {
     const s = STATE[item.id];
-    const hasDetail = s.nummer || s.opm || (s.van && s.van !== document.getElementById('glob_van').value) || (s.naar && s.naar !== document.getElementById('glob_naar').value);
+    const hasDetail = s.nummer || s.opm || s.fotos.length > 0 || (s.van && s.van !== document.getElementById('glob_van').value) || (s.naar && s.naar !== document.getElementById('glob_naar').value);
+    const fotoLabel = s.fotos.length > 0 ? `<span class="foto-indicator">📷${s.fotos.length}</span>` : '';
     const row = document.createElement('div');
     row.className = 'item-row' + (s.aantal > 0 ? ' has-value' : '');
     row.id = 'row-' + item.id;
     row.innerHTML = `
-      <div class="item-naam">${item.naam}</div>
+      <div class="item-naam">${item.naam}${fotoLabel}</div>
       <div class="stepper">
         <button class="stepper-btn" onclick="changeAantal('${item.id}',-1)">−</button>
         <span class="stepper-val ${s.aantal > 0 ? 'nonzero' : ''}" id="sv-${item.id}">${s.aantal}</span>
@@ -647,17 +681,29 @@ function changeAantal(id, delta) {
 
 /* ══ BOTTOM SHEET ══════════════════════════════════ */
 let sheetItemId = null;
+let sheetFotos  = []; // tijdelijke foto array terwijl sheet open is
 
 function openSheet(id) {
   sheetItemId = id;
-  const item = alleItems().find(i => i.id === id);
-  const s = STATE[id];
+  sheetFotos  = STATE[id].fotos.map(f => ({ ...f })); // kopie
+  const item     = alleItems().find(i => i.id === id);
+  const s        = STATE[id];
   const globVan    = document.getElementById('glob_van').value;
   const globNaar   = document.getElementById('glob_naar').value;
   const globOpslag = document.getElementById('glob_opslag').value;
+  const isBouwmeter = id === 'bouwmeterkast';
 
   document.getElementById('sheet-title').textContent = item.naam;
   document.getElementById('sheet-body').innerHTML = `
+    ${isBouwmeter ? `
+      <div style="margin-bottom:14px;">
+        <div class="sheet-foto-title">Type bouwmeterkast</div>
+        <div class="type-chips">
+          <button class="type-chip ${s.types.includes('35A')  ? 'active':''}" onclick="toggleType('35A')" >35A</button>
+          <button class="type-chip ${s.types.includes('63A')  ? 'active':''}" onclick="toggleType('63A')" >63A</button>
+          <button class="type-chip ${s.types.includes('125A') ? 'active':''}" onclick="toggleType('125A')">125A</button>
+        </div>
+      </div>` : ''}
     <div class="g2" style="gap:10px;margin-bottom:10px;">
       <div class="sheet-field">
         <label>Nummer</label>
@@ -678,20 +724,91 @@ function openSheet(id) {
         <input id="sf-naar" type="text" placeholder="${globNaar}" value="${s.naar || globNaar}">
       </div>
     </div>
-    <div class="sheet-field">
+    <div class="sheet-field" style="margin-bottom:16px;">
       <label>Opslag / zaak</label>
       <input id="sf-opslag" type="text" placeholder="${globOpslag}" value="${s.opslag || globOpslag}">
     </div>
+    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;">
+      <div class="sheet-foto-title">Foto's</div>
+      <label class="sheet-foto-add-btn">
+        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addSheetFoto(event)">
+        📷 Foto toevoegen
+      </label>
+      <div id="sf-foto-list"></div>
+    </div>
   `;
 
+  renderSheetFotos();
   document.getElementById('sheet-overlay').classList.add('open');
   document.getElementById('bottom-sheet').classList.add('open');
+}
+
+function toggleType(type) {
+  if (!sheetItemId) return;
+  const types = STATE[sheetItemId].types;
+  const idx   = types.indexOf(type);
+  if (idx > -1) types.splice(idx, 1); else types.push(type);
+  // update chip UI
+  document.querySelectorAll('.type-chip').forEach(btn => {
+    btn.classList.toggle('active', types.includes(btn.textContent.trim()));
+  });
+}
+
+async function addSheetFoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const dataUrl = await resizeImage(file);
+  sheetFotos.push({ dataUrl, opmerking: '' });
+  renderSheetFotos();
+  e.target.value = '';
+}
+
+function renderSheetFotos() {
+  const list = document.getElementById('sf-foto-list');
+  if (!list) return;
+  list.innerHTML = '';
+  sheetFotos.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'sheet-foto-item';
+    div.innerHTML = `
+      <img src="${f.dataUrl}" alt="foto">
+      <div class="foto-opm">
+        <input type="text" placeholder="Opmerking bij foto..." value="${f.opmerking}"
+          oninput="sheetFotos[${i}].opmerking=this.value">
+      </div>
+      <button class="foto-del" onclick="deleteSheetFoto(${i})">✕</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function deleteSheetFoto(i) {
+  sheetFotos.splice(i, 1);
+  renderSheetFotos();
+}
+
+function resizeImage(file, maxW = 900) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg', 0.75));
+    };
+    img.src = url;
+  });
 }
 
 function closeSheet() {
   document.getElementById('sheet-overlay').classList.remove('open');
   document.getElementById('bottom-sheet').classList.remove('open');
   sheetItemId = null;
+  sheetFotos  = [];
 }
 
 function saveSheet() {
@@ -701,11 +818,14 @@ function saveSheet() {
   STATE[sheetItemId].van    = document.getElementById('sf-van').value;
   STATE[sheetItemId].naar   = document.getElementById('sf-naar').value;
   STATE[sheetItemId].opslag = document.getElementById('sf-opslag').value;
+  STATE[sheetItemId].fotos  = [...sheetFotos];
 
-  const hasDetail = STATE[sheetItemId].nummer || STATE[sheetItemId].opm;
+  const hasDetail = STATE[sheetItemId].nummer || STATE[sheetItemId].opm || STATE[sheetItemId].fotos.length > 0;
   const db = document.getElementById('db-' + sheetItemId);
   if (db) db.className = 'item-detail-btn' + (hasDetail ? ' has-detail' : '');
 
+  // foto-indicator in item row bijwerken
+  renderTabContent(activeTab);
   autosave();
   closeSheet();
   showToast('Details opgeslagen ✓');
@@ -743,10 +863,12 @@ function renderSummary() {
     itemsHtml += `<div class="summary-cat-title">${cat}</div>`;
     gevuld.forEach(item => {
       const s = STATE[item.id];
+      const typeLabel = (item.id === 'bouwmeterkast' && s.types.length) ? ` — ${s.types.join(', ')}` : '';
       itemsHtml += `<div class="summary-item-row">
         <div>
-          <div class="summary-item-naam">${item.naam}</div>
+          <div class="summary-item-naam">${item.naam}${typeLabel}</div>
           ${s.nummer ? `<div class="summary-item-nummer">Nr. ${s.nummer}</div>` : ''}
+          ${s.fotos.length ? `<div class="summary-item-nummer">📷 ${s.fotos.length} foto${s.fotos.length>1?'s':''}</div>` : ''}
         </div>
         <div class="summary-item-aantal">×${s.aantal}</div>
       </div>`;
