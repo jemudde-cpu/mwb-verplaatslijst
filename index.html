@@ -12,448 +12,330 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --oranje:     #f97316;
-  --oranje-dim: rgba(249,115,22,0.18);
-  --blauw:      #4d7cfe;
-  --rood:       #ef4444;
-  --groen:      #22c55e;
-  --tekst:      rgba(255,255,255,0.95);
-  --zacht:      rgba(255,255,255,0.50);
-  --dim:        rgba(255,255,255,0.28);
-  --glas-rand:  rgba(255,255,255,0.16);
-  --glas-bg:    rgba(255,255,255,0.07);
-  --input-bg:   rgba(255,255,255,0.06);
-  --radius-lg:  22px;
-  --radius:     14px;
-  --radius-sm:  10px;
+  --oranje:    #f97316;
+  --groen:     #22c55e;
+  --tekst:     rgba(255,255,255,0.95);
+  --zacht:     rgba(255,255,255,0.55);
+  --dim:       rgba(255,255,255,0.30);
+  --glas-rand: rgba(255,255,255,0.14);
+  --glas-bg:   rgba(255,255,255,0.07);
+  --input-bg:  rgba(255,255,255,0.07);
+  --radius-lg: 20px;
+  --radius:    13px;
+  --radius-sm: 10px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #060e1c;
-  color: var(--tekst);
-  min-height: 100vh;
-  overflow-x: hidden;
-  overscroll-behavior: none;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#060e1c; color:var(--tekst);
+  min-height:100vh; overflow-x:hidden; overscroll-behavior:none;
 }
 
 /* ── ORBS ─────────────────────────────────────────── */
-.orb { position: fixed; border-radius: 50%; filter: blur(90px); pointer-events: none; z-index: 0; }
-.orb-1 { width:580px;height:580px; background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent); top:-180px;left:-120px; animation:d1 22s ease-in-out infinite alternate; }
-.orb-2 { width:460px;height:460px; background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent); bottom:-120px;right:-80px; animation:d2 28s ease-in-out infinite alternate; }
-.orb-3 { width:320px;height:320px; background:radial-gradient(circle,#1a4acc,#071540 60%,transparent); top:40%;left:50%;transform:translate(-50%,-50%); animation:d3 18s ease-in-out infinite alternate; }
-.orb-4 { width:260px;height:260px; background:radial-gradient(circle,rgba(249,115,22,.50),rgba(234,88,12,.15) 55%,transparent); top:18%;right:-70px; animation:d2 24s ease-in-out infinite alternate; }
-.orb-5 { width:190px;height:190px; background:radial-gradient(circle,rgba(249,115,22,.35),rgba(234,88,12,.10) 55%,transparent); bottom:22%;left:-50px; animation:d1 30s ease-in-out infinite alternate; }
-@keyframes d1 { from{transform:translate(0,0) scale(1)} to{transform:translate(60px,80px) scale(1.1)} }
-@keyframes d2 { from{transform:translate(0,0) scale(1.05)} to{transform:translate(-50px,-60px) scale(.95)} }
-@keyframes d3 { from{transform:translate(-50%,-50%) scale(1)} to{transform:translate(-50%,-50%) scale(1.15)} }
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
+.orb-1{width:580px;height:580px;background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent);top:-180px;left:-120px;animation:d1 22s ease-in-out infinite alternate;}
+.orb-2{width:460px;height:460px;background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent);bottom:-120px;right:-80px;animation:d2 28s ease-in-out infinite alternate;}
+.orb-3{width:320px;height:320px;background:radial-gradient(circle,#1a4acc,#071540 60%,transparent);top:40%;left:50%;transform:translate(-50%,-50%);animation:d3 18s ease-in-out infinite alternate;}
+.orb-4{width:260px;height:260px;background:radial-gradient(circle,rgba(249,115,22,.50),rgba(234,88,12,.15) 55%,transparent);top:18%;right:-70px;animation:d2 24s ease-in-out infinite alternate;}
+.orb-5{width:190px;height:190px;background:radial-gradient(circle,rgba(249,115,22,.35),rgba(234,88,12,.10) 55%,transparent);bottom:22%;left:-50px;animation:d1 30s ease-in-out infinite alternate;}
+@keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(60px,80px) scale(1.1)}}
+@keyframes d2{from{transform:translate(0,0) scale(1.05)}to{transform:translate(-50px,-60px) scale(.95)}}
+@keyframes d3{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.15)}}
 
 /* ── HEADER ───────────────────────────────────────── */
-header {
-  position: sticky; top: 0; z-index: 60;
-  background: rgba(6,14,28,.80);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
-  border-bottom: 1px solid rgba(255,255,255,.09);
-  padding: 12px 18px 0;
-  box-shadow: 0 4px 24px rgba(0,0,0,.35);
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(6,14,28,.82);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  backdrop-filter:blur(28px) saturate(160%);
+  border-bottom:1px solid rgba(255,255,255,.09);
+  padding:12px 18px 0;
+  box-shadow:0 4px 24px rgba(0,0,0,.35);
 }
-.header-top { display:flex; align-items:center; gap:12px; padding-bottom:12px; }
-header img  { height:32px; object-fit:contain; }
-.header-title { color:#fff; font-size:15px; font-weight:700; line-height:1.2; letter-spacing:-.2px; flex:1; }
-.header-title small { display:block; font-size:10px; font-weight:400; opacity:.50; }
+.header-top{display:flex;align-items:center;gap:12px;padding-bottom:12px;}
+header img{height:32px;object-fit:contain;}
+.header-title{color:#fff;font-size:15px;font-weight:700;line-height:1.2;letter-spacing:-.2px;flex:1;}
+.header-title small{display:block;font-size:10px;font-weight:400;opacity:.50;}
 
 /* ── PROGRESS ─────────────────────────────────────── */
-.progress { display:flex; align-items:center; gap:0; padding:0 4px 12px; }
-.progress-step { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; cursor:pointer; }
-.progress-dot {
-  width:28px; height:28px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:12px; font-weight:700;
-  background:rgba(255,255,255,.10); border:1.5px solid rgba(255,255,255,.15);
-  color:var(--zacht); transition:all .3s;
-}
-.progress-step.active .progress-dot { background:var(--oranje); border-color:var(--oranje); color:#fff; box-shadow:0 0 12px rgba(249,115,22,.50); }
-.progress-step.done   .progress-dot { background:rgba(34,197,94,.25); border-color:var(--groen); color:var(--groen); }
-.progress-label { font-size:9px; font-weight:600; color:var(--dim); text-transform:uppercase; letter-spacing:.4px; transition:color .3s; }
-.progress-step.active .progress-label { color:var(--oranje); }
-.progress-step.done   .progress-label { color:var(--groen); }
-.progress-line { flex:1; height:1.5px; background:rgba(255,255,255,.10); margin-bottom:16px; transition:background .3s; }
-.progress-line.done { background:rgba(34,197,94,.40); }
+.progress{display:flex;align-items:center;gap:0;padding:0 4px 12px;}
+.progress-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;}
+.progress-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:rgba(255,255,255,.10);border:1.5px solid rgba(255,255,255,.15);color:var(--zacht);transition:all .3s;}
+.progress-step.active .progress-dot{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 0 12px rgba(249,115,22,.50);}
+.progress-step.done   .progress-dot{background:rgba(34,197,94,.25);border-color:var(--groen);color:var(--groen);}
+.progress-label{font-size:9px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;transition:color .3s;}
+.progress-step.active .progress-label{color:var(--oranje);}
+.progress-step.done   .progress-label{color:var(--groen);}
+.progress-line{flex:1;height:1.5px;background:rgba(255,255,255,.10);margin-bottom:16px;transition:background .3s;}
+.progress-line.done{background:rgba(34,197,94,.40);}
 
 /* ── WIZARD ───────────────────────────────────────── */
-.wizard { position:relative; z-index:1; }
-.step { display:none; padding:16px 16px 110px; max-width:680px; margin:0 auto; animation:fadeIn .3s ease; }
-.step.active { display:block; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.wizard{position:relative;z-index:1;}
+.step{display:none;padding:16px 16px 110px;max-width:680px;margin:0 auto;animation:fadeIn .3s ease;}
+.step.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── GLASS CARD ───────────────────────────────────── */
-.card {
-  background: var(--glas-bg);
-  -webkit-backdrop-filter: brightness(1.08) blur(28px) saturate(160%);
-  backdrop-filter: brightness(1.08) blur(28px) saturate(160%);
-  border: 1px solid var(--glas-rand);
-  border-radius: var(--radius-lg);
-  margin-bottom: 14px; overflow: hidden;
-  filter: drop-shadow(-3px -5px 24px rgba(0,0,0,.28));
-  position: relative;
+.card{
+  background:var(--glas-bg);
+  -webkit-backdrop-filter:brightness(1.08) blur(28px) saturate(160%);
+  backdrop-filter:brightness(1.08) blur(28px) saturate(160%);
+  border:1px solid var(--glas-rand);
+  border-radius:var(--radius-lg);
+  margin-bottom:14px;
+  position:relative;
+  box-shadow:0 4px 28px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.12);
 }
-.card::before {
-  content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; z-index:1;
-  box-shadow: inset 6px 6px 0 -6px rgba(255,255,255,.60), inset 0 0 10px 1px rgba(255,255,255,.10);
-}
-.card-title { font-size:11px; font-weight:700; letter-spacing:.7px; text-transform:uppercase; color:var(--zacht); padding:16px 18px 0; margin-bottom:14px; border-left:3px solid var(--oranje); padding-left:14px; }
-.card-body { padding:0 18px 18px; }
+.card-title{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--zacht);padding:16px 18px 0;margin-bottom:14px;border-left:3px solid var(--oranje);padding-left:14px;}
+.card-body{padding:0 18px 18px;}
 
 /* ── FIELDS ───────────────────────────────────────── */
-.field { margin-bottom:14px; }
-.field label { display:block; font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.6px; margin-bottom:6px; }
-.field input, .field textarea {
-  width:100%; padding:12px 14px;
-  border:1px solid rgba(255,255,255,.13); border-radius:var(--radius);
-  font-family:inherit; font-size:14px; font-weight:500; color:var(--tekst);
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.field input,.field textarea{
+  width:100%;padding:12px 14px;
+  border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);
+  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
   background:var(--input-bg);
-  transition:border-color .2s, background .2s, box-shadow .25s;
+  transition:border-color .2s,background .2s,box-shadow .25s;
   -webkit-appearance:none;
 }
-.field input::placeholder, .field textarea::placeholder { color:var(--dim); }
-.field input:focus, .field textarea:focus {
-  outline:none; border-color:rgba(249,115,22,.60);
-  background:rgba(255,255,255,.10); box-shadow:0 0 0 3px rgba(249,115,22,.15);
-}
-.field input[type="date"] { color-scheme:dark; }
-.field.error input { border-color:rgba(239,68,68,.80); box-shadow:0 0 0 3px rgba(239,68,68,.18); }
-.g2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-
-/* ── STEP TITLES ──────────────────────────────────── */
-.step-title { font-size:22px; font-weight:800; margin-bottom:6px; letter-spacing:-.4px; }
-.step-sub   { font-size:14px; color:var(--zacht); margin-bottom:20px; }
+.field input::placeholder,.field textarea::placeholder{color:var(--dim);}
+.field input:focus,.field textarea:focus{outline:none;border-color:rgba(249,115,22,.60);background:rgba(255,255,255,.10);box-shadow:0 0 0 3px rgba(249,115,22,.15);}
+.field input[type="date"]{color-scheme:dark;}
+.field.error input{border-color:rgba(239,68,68,.80);box-shadow:0 0 0 3px rgba(239,68,68,.18);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.step-title{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-.4px;}
+.step-sub{font-size:14px;color:var(--zacht);margin-bottom:20px;}
 
 /* ── BEWEGING KAARTEN ─────────────────────────────── */
-.beweging-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 10px; margin-bottom: 20px;
+.beweging-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.beweging-card{
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);
+  border-radius:var(--radius-lg);padding:16px 10px;
+  cursor:pointer;text-align:center;
+  transition:all .25s cubic-bezier(.34,1.56,.64,1);
+  position:relative;-webkit-appearance:none;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
 }
-.beweging-card {
-  background: rgba(255,255,255,.05);
-  border: 1.5px solid rgba(255,255,255,.12);
-  border-radius: var(--radius-lg); padding: 16px 10px;
-  cursor: pointer; text-align: center;
-  transition: all .25s cubic-bezier(.34,1.56,.64,1);
-  position: relative; -webkit-appearance: none;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-}
-.beweging-card:active { transform: scale(.95); }
-.beweging-card.selected {
-  background: rgba(249,115,22,.15);
-  border-color: var(--oranje);
-  box-shadow: 0 0 0 3px rgba(249,115,22,.20), 0 8px 28px rgba(249,115,22,.25);
-  transform: scale(1.03);
-}
-.beweging-card .bc-icon { font-size: 26px; line-height: 1; }
-.beweging-card .bc-arrow {
-  font-size: 11px; color: var(--oranje); font-weight: 700;
-  letter-spacing: 1px;
-}
-.beweging-card .bc-title {
-  font-size: 11px; font-weight: 700; color: var(--tekst);
-  line-height: 1.3;
-}
-.beweging-card .bc-sub {
-  font-size: 9px; color: var(--zacht); font-weight: 500;
-}
-.beweging-card .bc-check {
-  position: absolute; top: 8px; right: 8px;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--oranje); color: #fff;
-  font-size: 10px; font-weight: 800;
-  display: none; align-items: center; justify-content: center;
-}
-.beweging-card.selected .bc-check { display: flex; }
+.beweging-card:active{transform:scale(.95);}
+.beweging-card.selected{background:rgba(249,115,22,.15);border-color:var(--oranje);box-shadow:0 0 0 3px rgba(249,115,22,.20),0 8px 28px rgba(249,115,22,.25);transform:scale(1.03);}
+.bc-icon{font-size:24px;line-height:1;}
+.bc-arrow{font-size:11px;color:var(--oranje);font-weight:700;letter-spacing:1px;}
+.bc-title{font-size:11px;font-weight:700;color:var(--tekst);line-height:1.3;}
+.bc-sub{font-size:9px;color:var(--zacht);font-weight:500;}
+.bc-check{position:absolute;top:7px;right:7px;width:17px;height:17px;border-radius:50%;background:var(--oranje);color:#fff;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
+.beweging-card.selected .bc-check{display:flex;}
 
 /* ── LOCATIE VELDEN ───────────────────────────────── */
-.locatie-velden {
-  display: none;
-  animation: fadeIn .3s ease;
-}
-.locatie-velden.show { display: block; }
-.locatie-label {
-  font-size: 10px; font-weight: 700; color: var(--zacht);
-  text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px;
-}
-.locatie-zaak {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 14px;
-  background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.25);
-  border-radius: var(--radius); margin-bottom: 14px;
-}
-.locatie-zaak .lz-icon { font-size: 20px; }
-.locatie-zaak .lz-text { flex: 1; }
-.locatie-zaak .lz-title { font-size: 14px; font-weight: 700; color: var(--groen); }
-.locatie-zaak .lz-sub { font-size: 11px; color: var(--zacht); }
+.locatie-velden{display:none;animation:fadeIn .3s ease;}
+.locatie-velden.show{display:block;}
+.locatie-label{font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.locatie-zaak{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:var(--radius);margin-bottom:16px;}
+.lz-icon{font-size:20px;}
+.lz-title{font-size:14px;font-weight:700;color:var(--groen);}
+.lz-sub{font-size:11px;color:var(--zacht);}
 
 /* ── AUTOCOMPLETE ─────────────────────────────────── */
-.ac-wrap { position: relative; margin-bottom: 14px; }
-.ac-input-row {
-  position: relative; display: flex; align-items: center;
-}
-.ac-search-icon {
-  position: absolute; left: 12px; font-size: 14px;
-  color: var(--zacht); pointer-events: none;
-}
-.ac-input {
-  width: 100%; padding: 12px 14px 12px 38px;
-  border: 1px solid rgba(255,255,255,.13); border-radius: var(--radius);
-  font-family: inherit; font-size: 14px; font-weight: 500; color: var(--tekst);
-  background: var(--input-bg);
-  transition: border-color .2s, background .2s, box-shadow .25s;
-  -webkit-appearance: none;
-}
-.ac-input::placeholder { color: var(--dim); }
-.ac-input:focus {
-  outline: none; border-color: rgba(249,115,22,.60);
-  background: rgba(255,255,255,.10); box-shadow: 0 0 0 3px rgba(249,115,22,.15);
-}
-.ac-input.selected { border-color: rgba(249,115,22,.40); background: rgba(249,115,22,.06); }
-.ac-clear {
-  position: absolute; right: 10px; width: 26px; height: 26px;
-  border-radius: 50%; background: rgba(255,255,255,.12); border: none;
-  color: var(--zacht); font-size: 13px; cursor: pointer;
-  display: none; align-items: center; justify-content: center;
-  -webkit-appearance: none;
-}
-.ac-input.selected ~ .ac-clear { display: flex; }
-.ac-werknr-badge {
-  margin-top: 6px; display: none;
-  font-size: 11px; font-weight: 600; color: var(--oranje);
-  padding: 3px 10px; background: rgba(249,115,22,.12);
-  border-radius: 20px; width: fit-content;
-}
-.ac-werknr-badge.show { display: block; }
-.ac-dropdown {
-  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-  background: rgba(14,26,50,.97);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
-  border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius);
-  z-index: 100; max-height: 240px; overflow-y: auto;
-  box-shadow: 0 12px 40px rgba(0,0,0,.50);
-  display: none;
-}
-.ac-dropdown.open { display: block; }
-.ac-item {
-  padding: 12px 16px; cursor: pointer;
-  display: flex; align-items: center; gap: 10px;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  transition: background .15s;
-}
-.ac-item:last-child { border-bottom: none; }
-.ac-item:hover, .ac-item:active { background: rgba(249,115,22,.12); }
-.ac-item-naam { font-size: 14px; font-weight: 600; color: var(--tekst); flex: 1; }
-.ac-item-nr { font-size: 11px; font-weight: 700; color: var(--oranje); padding: 2px 8px; background: rgba(249,115,22,.15); border-radius: 10px; flex-shrink: 0; }
-.ac-item-empty { padding: 16px; text-align: center; font-size: 13px; color: var(--dim); }
-.ac-divider { height: 1px; background: rgba(255,255,255,.08); margin: 4px 0; }
-
-/* ── BEWEGING SAMENVATTING (kleine pill) ──────────── */
-.beweging-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.25);
-  border-radius: 20px; padding: 5px 12px; font-size: 12px;
-  font-weight: 600; color: var(--oranje); margin-bottom: 14px;
-}
-
-/* ── TAB BAR ──────────────────────────────────────── */
-.tab-bar { display:flex; gap:6px; overflow-x:auto; padding:0 0 12px; scrollbar-width:none; -ms-overflow-style:none; }
-.tab-bar::-webkit-scrollbar { display:none; }
-.tab-btn {
-  flex-shrink:0; padding:8px 14px;
-  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
-  border-radius:30px; font-family:inherit; font-size:12px; font-weight:600;
-  color:var(--zacht); cursor:pointer; transition:all .2s; white-space:nowrap;
-  display:flex; align-items:center; gap:6px;
-}
-.tab-btn.active { background:var(--oranje); border-color:var(--oranje); color:#fff; box-shadow:0 3px 14px rgba(249,115,22,.40); }
-.tab-badge { background:rgba(255,255,255,.25); color:#fff; font-size:10px; font-weight:700; border-radius:10px; padding:1px 6px; min-width:18px; text-align:center; }
-.tab-btn.active .tab-badge { background:rgba(255,255,255,.30); }
-
-/* ── ITEM ROWS ────────────────────────────────────── */
-.item-list { display:flex; flex-direction:column; gap:6px; }
-.item-row {
-  display:flex; align-items:center;
-  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09);
-  border-radius:var(--radius); padding:12px 14px;
-  transition:border-color .2s, background .2s; gap:10px;
-}
-.item-row.has-value { border-color:rgba(249,115,22,.35); background:rgba(249,115,22,.06); }
-.item-naam { flex:1; font-size:14px; font-weight:600; color:rgba(255,255,255,.88); }
-.item-nummer-tag { font-size:10px; font-weight:700; color:var(--oranje); background:rgba(249,115,22,.12); border-radius:8px; padding:2px 7px; margin-left:4px; }
-.item-detail-btn {
-  width:30px; height:30px; border-radius:50%;
-  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
-  color:var(--zacht); font-size:14px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .2s; flex-shrink:0;
-}
-.item-detail-btn.has-detail { border-color:var(--oranje); color:var(--oranje); }
-
-/* ── STEPPER ──────────────────────────────────────── */
-.stepper { display:flex; align-items:center; gap:0; flex-shrink:0; }
-.stepper-btn {
-  width:34px; height:34px; border-radius:50%;
-  background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.15);
-  color:#fff; font-size:18px; font-weight:300; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:all .15s; line-height:1; flex-shrink:0;
+/* Wrapper heeft geen overflow:hidden zodat dropdown zichtbaar is */
+.ac-wrap{position:relative;margin-bottom:16px;}
+.ac-input-row{position:relative;display:flex;align-items:center;}
+.ac-search-icon{position:absolute;left:13px;font-size:14px;color:var(--zacht);pointer-events:none;z-index:1;}
+.ac-input{
+  width:100%;padding:13px 14px 13px 40px;
+  border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);
+  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
+  background:rgba(255,255,255,.08);
+  transition:border-color .2s,background .2s,box-shadow .25s;
   -webkit-appearance:none;
 }
-.stepper-btn:active { transform:scale(.88); }
-.stepper-btn.plus { background:rgba(249,115,22,.25); border-color:rgba(249,115,22,.40); }
-.stepper-btn.plus:hover { background:rgba(249,115,22,.45); }
-.stepper-val { width:36px; text-align:center; font-size:16px; font-weight:700; color:var(--tekst); padding:0 2px; }
-.stepper-val.nonzero { color:var(--oranje); }
+.ac-input::placeholder{color:var(--dim);}
+.ac-input:focus{outline:none;border-color:rgba(249,115,22,.60);background:rgba(255,255,255,.11);box-shadow:0 0 0 3px rgba(249,115,22,.15);}
+.ac-input.selected{border-color:rgba(249,115,22,.45);background:rgba(249,115,22,.07);}
+.ac-clear{position:absolute;right:10px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.12);border:none;color:var(--zacht);font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;-webkit-appearance:none;z-index:1;}
+.ac-input.selected ~ .ac-clear{display:flex;}
+.ac-badge{margin-top:5px;display:none;font-size:11px;font-weight:700;color:var(--oranje);padding:3px 10px;background:rgba(249,115,22,.12);border-radius:20px;width:fit-content;}
+.ac-badge.show{display:block;}
+
+/* Dropdown is FIXED zodat hij nooit geclipped wordt */
+.ac-dropdown{
+  position:fixed;z-index:9999;
+  background:rgba(8,18,38,.98);
+  -webkit-backdrop-filter:blur(32px) saturate(180%);
+  backdrop-filter:blur(32px) saturate(180%);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:var(--radius);
+  max-height:260px;overflow-y:auto;
+  box-shadow:0 16px 48px rgba(0,0,0,.65);
+  display:none;
+}
+.ac-dropdown.open{display:block;}
+.ac-item{padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s;}
+.ac-item:last-child{border-bottom:none;}
+.ac-item:hover,.ac-item:active{background:rgba(249,115,22,.14);}
+.ac-item-naam{font-size:14px;font-weight:600;color:var(--tekst);flex:1;}
+.ac-item-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.15);border-radius:10px;flex-shrink:0;}
+.ac-empty{padding:16px;text-align:center;font-size:13px;color:var(--dim);}
+
+/* ── TAB BAR ──────────────────────────────────────── */
+.tab-bar-wrap{
+  background:rgba(6,14,28,.60);
+  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--radius-lg);
+  padding:10px;margin-bottom:12px;
+  box-shadow:0 2px 16px rgba(0,0,0,.20);
+}
+.tab-bar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex-shrink:0;padding:9px 16px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;
+  color:rgba(255,255,255,.85);cursor:pointer;transition:all .2s;white-space:nowrap;
+  display:flex;align-items:center;gap:6px;-webkit-appearance:none;
+}
+.tab-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 3px 14px rgba(249,115,22,.40);}
+.tab-badge{background:rgba(255,255,255,.28);color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:18px;text-align:center;}
+
+/* ── ITEM CARDS ───────────────────────────────────── */
+.item-card{
+  background:rgba(14,26,52,.70);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--radius);
+  margin-bottom:8px;
+  overflow:hidden;
+  transition:border-color .2s,background .2s;
+  box-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+.item-card.has-value{border-color:rgba(249,115,22,.45);background:rgba(249,115,22,.08);}
+.item-row{display:flex;align-items:center;padding:13px 14px;gap:10px;}
+.item-naam{flex:1;font-size:14px;font-weight:600;color:rgba(255,255,255,.92);}
+.item-foto-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
+  color:var(--zacht);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;flex-shrink:0;-webkit-appearance:none;
+}
+.item-foto-btn.has-detail{border-color:var(--oranje);color:var(--oranje);background:rgba(249,115,22,.12);}
+
+/* ── STEPPER ──────────────────────────────────────── */
+.stepper{display:flex;align-items:center;gap:0;flex-shrink:0;}
+.stepper-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  color:#fff;font-size:18px;font-weight:300;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;line-height:1;flex-shrink:0;-webkit-appearance:none;
+}
+.stepper-btn:active{transform:scale(.88);}
+.stepper-btn.plus{background:rgba(249,115,22,.28);border-color:rgba(249,115,22,.45);}
+.stepper-btn.plus:hover{background:rgba(249,115,22,.48);}
+.stepper-val{width:36px;text-align:center;font-size:16px;font-weight:700;color:var(--tekst);padding:0 2px;}
+.stepper-val.nonzero{color:var(--oranje);}
+
+/* ── INLINE NUMMER INPUTS ─────────────────────────── */
+.item-nummers{
+  padding:0 14px 13px;
+  display:flex;flex-wrap:wrap;gap:8px;
+}
+.item-nr-input{
+  flex:1;min-width:120px;max-width:200px;
+  padding:10px 13px;
+  border:1px solid rgba(255,255,255,.14);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:13px;font-weight:600;color:var(--tekst);
+  background:rgba(255,255,255,.08);-webkit-appearance:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.item-nr-input::placeholder{color:var(--dim);font-weight:400;}
+.item-nr-input:focus{outline:none;border-color:rgba(249,115,22,.55);background:rgba(255,255,255,.11);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
 
 /* ── BOTTOM SHEET ─────────────────────────────────── */
-.sheet-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,.55);
-  -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
-  z-index:80; opacity:0; pointer-events:none; transition:opacity .3s;
-}
-.sheet-overlay.open { opacity:1; pointer-events:all; }
-.bottom-sheet {
-  position:fixed; bottom:0; left:0; right:0; z-index:90;
-  background:rgba(12,22,44,.96);
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:80;opacity:0;pointer-events:none;transition:opacity .3s;}
+.sheet-overlay.open{opacity:1;pointer-events:all;}
+.bottom-sheet{
+  position:fixed;bottom:0;left:0;right:0;z-index:90;
+  background:rgba(10,20,42,.97);
   -webkit-backdrop-filter:blur(32px) saturate(180%);
   backdrop-filter:blur(32px) saturate(180%);
   border-top:1px solid rgba(255,255,255,.14);
   border-radius:24px 24px 0 0;
   padding:12px 20px 40px;
-  transform:translateY(100%); transition:transform .35s cubic-bezier(.32,1,.32,1);
-  max-height:85vh; overflow-y:auto;
+  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,1,.32,1);
+  max-height:85vh;overflow-y:auto;
   box-shadow:0 -8px 40px rgba(0,0,0,.50);
 }
-.bottom-sheet.open { transform:translateY(0); }
-.sheet-handle { width:40px; height:4px; border-radius:2px; background:rgba(255,255,255,.20); margin:0 auto 16px; }
-.sheet-title { font-size:16px; font-weight:700; margin-bottom:16px; color:#fff; }
-.sheet-field { margin-bottom:12px; }
-.sheet-field label { display:block; font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
-.sheet-field input {
-  width:100%; padding:11px 13px;
-  border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-sm);
-  font-family:inherit; font-size:14px; font-weight:500; color:var(--tekst);
-  background:rgba(255,255,255,.07);
-  transition:border-color .2s,box-shadow .2s; -webkit-appearance:none;
-}
-.sheet-field input::placeholder { color:var(--dim); }
-.sheet-field input:focus { outline:none; border-color:rgba(249,115,22,.55); background:rgba(255,255,255,.10); box-shadow:0 0 0 3px rgba(249,115,22,.14); }
+.bottom-sheet.open{transform:translateY(0);}
+.sheet-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.20);margin:0 auto 16px;}
+.sheet-title{font-size:16px;font-weight:700;margin-bottom:4px;color:#fff;}
+.sheet-sub{font-size:12px;color:var(--zacht);margin-bottom:16px;}
+.sheet-field{margin-bottom:12px;}
+.sheet-field label{display:block;font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.sheet-field input{width:100%;padding:11px 13px;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
+.sheet-field input::placeholder{color:var(--dim);}
+.sheet-field input:focus{outline:none;border-color:rgba(249,115,22,.55);background:rgba(255,255,255,.10);box-shadow:0 0 0 3px rgba(249,115,22,.14);}
 
 /* ── TYPE CHIPS ───────────────────────────────────── */
-.type-chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-.type-chip {
-  padding:9px 18px; border-radius:30px; font-family:inherit;
-  font-size:13px; font-weight:700; cursor:pointer;
-  background:rgba(255,255,255,.08); border:1.5px solid rgba(255,255,255,.15);
-  color:rgba(255,255,255,.70); transition:all .2s; -webkit-appearance:none;
-}
-.type-chip.active { background:rgba(249,115,22,.30); border-color:var(--oranje); color:#fff; box-shadow:0 2px 10px rgba(249,115,22,.30); }
+.type-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.type-chip{padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.70);transition:all .2s;-webkit-appearance:none;}
+.type-chip.active{background:rgba(249,115,22,.30);border-color:var(--oranje);color:#fff;box-shadow:0 2px 10px rgba(249,115,22,.30);}
 
-/* ── SHEET FOTO'S ─────────────────────────────────── */
-.sheet-foto-title { font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.6px; margin-bottom:8px; }
-.sheet-foto-add-btn {
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  width:100%; padding:11px; border-radius:var(--radius-sm);
-  background:rgba(255,255,255,.06); border:1.5px dashed rgba(255,255,255,.18);
-  color:rgba(255,255,255,.65); font-family:inherit; font-size:13px; font-weight:600;
-  cursor:pointer; transition:all .2s; -webkit-appearance:none; margin-bottom:10px;
-}
-.sheet-foto-add-btn:hover { border-color:var(--oranje); color:var(--oranje); background:rgba(249,115,22,.06); }
-.sheet-foto-item { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
-.sheet-foto-item img { width:70px; height:70px; object-fit:cover; border-radius:10px; border:1.5px solid rgba(255,255,255,.15); flex-shrink:0; }
-.sheet-foto-item .foto-opm { flex:1; }
-.sheet-foto-item .foto-opm input { width:100%; padding:9px 11px; border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-sm); font-family:inherit; font-size:13px; color:var(--tekst); background:rgba(255,255,255,.07); -webkit-appearance:none; }
-.sheet-foto-item .foto-opm input::placeholder { color:var(--dim); }
-.sheet-foto-item .foto-del { width:28px; height:28px; border-radius:50%; background:rgba(239,68,68,.20); border:none; color:rgba(239,68,68,.80); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; -webkit-appearance:none; }
-.foto-indicator { font-size:10px; color:var(--oranje); font-weight:700; margin-left:4px; }
-.sheet-save {
-  width:100%; padding:15px; border:none; border-radius:14px; margin-top:8px;
-  font-family:inherit; font-size:15px; font-weight:700; color:#fff; cursor:pointer;
-  background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));
-  box-shadow:0 4px 20px rgba(249,115,22,.35);
-  transition:all .2s; -webkit-appearance:none;
-}
-.sheet-save:active { transform:scale(.97); }
+/* ── FOTO IN SHEET ────────────────────────────────── */
+.sheet-foto-title{font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+.sheet-foto-add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:var(--radius-sm);background:rgba(255,255,255,.06);border:1.5px dashed rgba(255,255,255,.18);color:rgba(255,255,255,.65);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-appearance:none;margin-bottom:10px;}
+.sheet-foto-add-btn:hover{border-color:var(--oranje);color:var(--oranje);background:rgba(249,115,22,.06);}
+.sheet-foto-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.sheet-foto-item img{width:70px;height:70px;object-fit:cover;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);flex-shrink:0;}
+.sheet-foto-item .foto-opm{flex:1;}
+.sheet-foto-item .foto-opm input{width:100%;padding:9px 11px;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;}
+.sheet-foto-item .foto-opm input::placeholder{color:var(--dim);}
+.sheet-foto-item .foto-del{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.20);border:none;color:rgba(239,68,68,.80);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;}
+.foto-indicator{font-size:10px;color:var(--oranje);font-weight:700;margin-left:4px;}
+.sheet-save{width:100%;padding:15px;border:none;border-radius:14px;margin-top:8px;font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));box-shadow:0 4px 20px rgba(249,115,22,.35);transition:all .2s;-webkit-appearance:none;}
+.sheet-save:active{transform:scale(.97);}
 
 /* ── SAMENVATTING ─────────────────────────────────── */
-.summary-info { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-.summary-field { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09); border-radius:var(--radius-sm); padding:10px 12px; }
-.summary-field .sf-label { font-size:9px; font-weight:700; color:var(--dim); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
-.summary-field .sf-val { font-size:13px; font-weight:600; color:var(--tekst); }
-.summary-item-row { display:flex; justify-content:space-between; align-items:center; padding:9px 12px; border-radius:var(--radius-sm); background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); margin-bottom:6px; }
-.summary-item-naam { font-size:13px; font-weight:600; }
-.summary-item-aantal { font-size:14px; font-weight:800; color:var(--oranje); min-width:28px; text-align:right; }
-.summary-item-nummer { font-size:11px; color:var(--zacht); margin-top:2px; }
-.summary-cat-title { font-size:10px; font-weight:700; color:var(--zacht); text-transform:uppercase; letter-spacing:.6px; padding:10px 0 6px; border-bottom:1px solid rgba(255,255,255,.07); margin-bottom:8px; }
-.empty-state { text-align:center; padding:30px; color:var(--dim); font-size:14px; }
+.summary-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.summary-field{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius-sm);padding:10px 12px;}
+.summary-field .sf-label{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.summary-field .sf-val{font-size:13px;font-weight:600;color:var(--tekst);}
+.summary-item-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 12px;border-radius:var(--radius-sm);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-bottom:6px;}
+.summary-item-naam{font-size:13px;font-weight:600;}
+.summary-item-detail{font-size:11px;color:var(--zacht);margin-top:2px;}
+.summary-item-aantal{font-size:14px;font-weight:800;color:var(--oranje);min-width:28px;text-align:right;flex-shrink:0;}
+.summary-cat-title{font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;padding:10px 0 6px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:8px;}
+.empty-state{text-align:center;padding:30px;color:var(--dim);font-size:14px;}
 
-/* ── BEWEGING BLOK IN SAMENVATTING ────────────────── */
-.beweging-block {
-  background: rgba(249,115,22,.07);
-  border: 1px solid rgba(249,115,22,.22);
-  border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px;
-  display: flex; align-items: center; gap: 14px;
-}
-.bb-icon { font-size: 28px; flex-shrink: 0; }
-.bb-info { flex: 1; }
-.bb-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--oranje); margin-bottom: 6px; }
-.bb-route { font-size: 14px; font-weight: 700; color: var(--tekst); line-height: 1.4; }
-.bb-route .bb-nr { font-size: 11px; font-weight: 600; color: var(--zacht); display: block; }
-.bb-pijl { font-size: 18px; color: var(--oranje); flex-shrink: 0; }
+/* ── BEWEGING BLOK ────────────────────────────────── */
+.beweging-block{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.22);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
+.bb-icon{font-size:26px;flex-shrink:0;}
+.bb-info{flex:1;}
+.bb-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--oranje);margin-bottom:4px;}
+.bb-naam{font-size:13px;font-weight:700;color:var(--tekst);}
+.bb-nr{font-size:11px;font-weight:600;color:var(--zacht);}
+.bb-pijl{font-size:18px;color:var(--oranje);flex-shrink:0;}
 
 /* ── NAV BUTTONS ──────────────────────────────────── */
-.nav-bar {
-  position:fixed; bottom:0; left:0; right:0; z-index:50;
-  background:rgba(6,14,28,.85);
-  -webkit-backdrop-filter:blur(28px) saturate(160%);
-  backdrop-filter:blur(28px) saturate(160%);
-  border-top:1px solid rgba(255,255,255,.09);
-  padding:12px 16px 22px;
-  display:flex; gap:10px;
-  box-shadow:0 -6px 28px rgba(0,0,0,.30);
-}
-.btn-nav {
-  flex:1; padding:15px; border-radius:14px;
-  font-family:inherit; font-size:15px; font-weight:700; cursor:pointer;
-  transition:all .2s cubic-bezier(.34,1.56,.64,1); -webkit-appearance:none;
-}
-.btn-nav:active { transform:scale(.96); }
-.btn-back { background:rgba(255,255,255,.08); color:rgba(255,255,255,.75); border:1px solid rgba(255,255,255,.14); flex:0 0 80px; }
-.btn-back:hover { background:rgba(255,255,255,.14); }
-.btn-next { background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90)); color:#fff; border:1px solid rgba(249,115,22,.40); box-shadow:0 4px 22px rgba(249,115,22,.35), inset 0 1px 0 rgba(255,255,255,.20); }
-.btn-next:hover { box-shadow:0 6px 28px rgba(249,115,22,.55), inset 0 1px 0 rgba(255,255,255,.25); }
-.btn-verstuur { background:linear-gradient(135deg,rgba(34,197,94,.80),rgba(22,163,74,.85)); color:#fff; border:1px solid rgba(34,197,94,.35); box-shadow:0 4px 22px rgba(34,197,94,.30), inset 0 1px 0 rgba(255,255,255,.20); }
+.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(6,14,28,.88);-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%);border-top:1px solid rgba(255,255,255,.09);padding:12px 16px 22px;display:flex;gap:10px;box-shadow:0 -6px 28px rgba(0,0,0,.30);}
+.btn-nav{flex:1;padding:15px;border-radius:14px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);-webkit-appearance:none;}
+.btn-nav:active{transform:scale(.96);}
+.btn-back{background:rgba(255,255,255,.09);color:rgba(255,255,255,.80);border:1px solid rgba(255,255,255,.16);flex:0 0 80px;}
+.btn-next{background:linear-gradient(135deg,rgba(249,115,22,.88),rgba(234,88,12,.93));color:#fff;border:1px solid rgba(249,115,22,.40);box-shadow:0 4px 22px rgba(249,115,22,.35),inset 0 1px 0 rgba(255,255,255,.20);}
+.btn-verstuur{background:linear-gradient(135deg,rgba(34,197,94,.82),rgba(22,163,74,.88));color:#fff;border:1px solid rgba(34,197,94,.35);box-shadow:0 4px 22px rgba(34,197,94,.30),inset 0 1px 0 rgba(255,255,255,.20);}
 
 /* ── TOAST ────────────────────────────────────────── */
-.toast {
-  position:fixed; top:74px; left:50%;
-  transform:translateX(-50%) translateY(-14px);
-  background:rgba(14,26,50,.92); -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.16); color:#fff;
-  padding:11px 20px; border-radius:28px; font-size:13px; font-weight:600;
-  opacity:0; transition:opacity .3s,transform .3s; z-index:200;
-  pointer-events:none; white-space:nowrap; box-shadow:0 8px 28px rgba(0,0,0,.30);
-}
-.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast{position:fixed;top:74px;left:50%;transform:translateX(-50%) translateY(-14px);background:rgba(14,26,50,.93);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16);color:#fff;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:200;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.30);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ── INFO ROW ─────────────────────────────────────── */
-.info-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px;
-  background: rgba(77,124,254,.10); border: 1px solid rgba(77,124,254,.25);
-  border-radius: var(--radius); margin-bottom: 16px;
-  font-size: 13px; color: var(--zacht);
-}
-.info-row .ir-icon { font-size: 18px; flex-shrink: 0; }
+.info-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(77,124,254,.10);border:1px solid rgba(77,124,254,.22);border-radius:var(--radius);margin-bottom:16px;font-size:13px;color:var(--zacht);}
+.info-row .ir-icon{font-size:18px;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -498,11 +380,10 @@ header img  { height:32px; object-fit:contain; }
 
 <div class="wizard">
 
-<!-- ══ STAP 1: WIE & WANNEER ══ -->
+<!-- ══ STAP 1 ══ -->
 <div class="step active" id="step-1">
   <p class="step-title">Wie ben jij?</p>
   <p class="step-sub">Vul je naam en de datum in.</p>
-
   <div class="card">
     <div class="card-body" style="padding-top:18px;">
       <div class="g2">
@@ -517,26 +398,25 @@ header img  { height:32px; object-fit:contain; }
       </div>
     </div>
   </div>
-
   <div class="info-row">
     <span class="ir-icon">💡</span>
-    <span>Kies daarna welk materieel je wilt verplaatsen en geef het nummer op dat op het materieel staat.</span>
+    <span>Kies daarna het type verplaatsing, selecteer het materieel en vul het nummer in dat op het materieel staat.</span>
   </div>
 </div>
 
-<!-- ══ STAP 2: VERPLAATSING ══ -->
+<!-- ══ STAP 2 ══ -->
 <div class="step" id="step-2">
   <p class="step-title">Verplaatsing</p>
   <p class="step-sub">Hoe wordt het materieel verplaatst?</p>
 
-  <div class="card">
+  <div class="card" style="overflow:visible;">
     <div class="card-body" style="padding-top:18px;">
 
       <div class="beweging-grid">
         <button class="beweging-card" id="bc-zaak_klus" onclick="selectBeweging('zaak_klus')">
           <div class="bc-check">✓</div>
           <div class="bc-icon">🏭</div>
-          <div class="bc-arrow">→</div>
+          <div class="bc-arrow">↓</div>
           <div class="bc-icon">🏗️</div>
           <div class="bc-title">Van zaak naar klus</div>
           <div class="bc-sub">Depot → Project</div>
@@ -544,7 +424,7 @@ header img  { height:32px; object-fit:contain; }
         <button class="beweging-card" id="bc-klus_klus" onclick="selectBeweging('klus_klus')">
           <div class="bc-check">✓</div>
           <div class="bc-icon">🏗️</div>
-          <div class="bc-arrow">→</div>
+          <div class="bc-arrow">↓</div>
           <div class="bc-icon">🏗️</div>
           <div class="bc-title">Klus naar klus</div>
           <div class="bc-sub">Project → Project</div>
@@ -552,98 +432,72 @@ header img  { height:32px; object-fit:contain; }
         <button class="beweging-card" id="bc-klus_zaak" onclick="selectBeweging('klus_zaak')">
           <div class="bc-check">✓</div>
           <div class="bc-icon">🏗️</div>
-          <div class="bc-arrow">→</div>
+          <div class="bc-arrow">↓</div>
           <div class="bc-icon">🏭</div>
           <div class="bc-title">Terug naar zaak</div>
           <div class="bc-sub">Project → Depot</div>
         </button>
       </div>
 
-      <!-- Velden voor "Van zaak → Klus" -->
+      <!-- Van zaak → Klus -->
       <div class="locatie-velden" id="lv-zaak_klus">
-        <div style="margin-bottom:14px;">
-          <div class="locatie-label">Van</div>
-          <div class="locatie-zaak">
-            <span class="lz-icon">🏭</span>
-            <div class="lz-text">
-              <div class="lz-title">De Zaak – Depot</div>
-              <div class="lz-sub">Vertrekpunt: magazijn / depot</div>
-            </div>
-          </div>
+        <div class="locatie-label" style="margin-bottom:6px;">Van</div>
+        <div class="locatie-zaak" style="margin-bottom:16px;">
+          <span class="lz-icon">🏭</span>
+          <div><div class="lz-title">De Zaak – Depot</div><div class="lz-sub">Vertrekpunt: magazijn / depot</div></div>
         </div>
         <div class="locatie-label">Naar welke klus?</div>
-        <div class="ac-wrap" id="ac-wrap-naar-zk">
+        <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-naar-zk" type="text"
-              placeholder="Typ naam of werknummer..."
-              oninput="acFilter('naar-zk', this.value)"
-              onfocus="acOpen('naar-zk')"
-              autocomplete="off" autocorrect="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-naar-zk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-zk',this.value)" onfocus="acOpen('naar-zk')" autocomplete="off" spellcheck="false">
             <button class="ac-clear" onclick="acClear('naar-zk')">✕</button>
           </div>
-          <div class="ac-werknr-badge" id="ac-badge-naar-zk"></div>
+          <div class="ac-badge" id="ac-badge-naar-zk"></div>
           <div class="ac-dropdown" id="ac-dropdown-naar-zk"></div>
         </div>
       </div>
 
-      <!-- Velden voor "Klus → Klus" -->
+      <!-- Klus → Klus -->
       <div class="locatie-velden" id="lv-klus_klus">
         <div class="locatie-label">Van welke klus?</div>
-        <div class="ac-wrap" id="ac-wrap-van-kk">
+        <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-van-kk" type="text"
-              placeholder="Typ naam of werknummer..."
-              oninput="acFilter('van-kk', this.value)"
-              onfocus="acOpen('van-kk')"
-              autocomplete="off" autocorrect="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-van-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kk',this.value)" onfocus="acOpen('van-kk')" autocomplete="off" spellcheck="false">
             <button class="ac-clear" onclick="acClear('van-kk')">✕</button>
           </div>
-          <div class="ac-werknr-badge" id="ac-badge-van-kk"></div>
+          <div class="ac-badge" id="ac-badge-van-kk"></div>
           <div class="ac-dropdown" id="ac-dropdown-van-kk"></div>
         </div>
         <div class="locatie-label">Naar welke klus?</div>
-        <div class="ac-wrap" id="ac-wrap-naar-kk">
+        <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-naar-kk" type="text"
-              placeholder="Typ naam of werknummer..."
-              oninput="acFilter('naar-kk', this.value)"
-              onfocus="acOpen('naar-kk')"
-              autocomplete="off" autocorrect="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-naar-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-kk',this.value)" onfocus="acOpen('naar-kk')" autocomplete="off" spellcheck="false">
             <button class="ac-clear" onclick="acClear('naar-kk')">✕</button>
           </div>
-          <div class="ac-werknr-badge" id="ac-badge-naar-kk"></div>
+          <div class="ac-badge" id="ac-badge-naar-kk"></div>
           <div class="ac-dropdown" id="ac-dropdown-naar-kk"></div>
         </div>
       </div>
 
-      <!-- Velden voor "Klus → Zaak" -->
+      <!-- Klus → Zaak -->
       <div class="locatie-velden" id="lv-klus_zaak">
         <div class="locatie-label">Van welke klus?</div>
-        <div class="ac-wrap" id="ac-wrap-van-kz">
+        <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-van-kz" type="text"
-              placeholder="Typ naam of werknummer..."
-              oninput="acFilter('van-kz', this.value)"
-              onfocus="acOpen('van-kz')"
-              autocomplete="off" autocorrect="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-van-kz" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kz',this.value)" onfocus="acOpen('van-kz')" autocomplete="off" spellcheck="false">
             <button class="ac-clear" onclick="acClear('van-kz')">✕</button>
           </div>
-          <div class="ac-werknr-badge" id="ac-badge-van-kz"></div>
+          <div class="ac-badge" id="ac-badge-van-kz"></div>
           <div class="ac-dropdown" id="ac-dropdown-van-kz"></div>
         </div>
-        <div style="margin-top:4px;">
-          <div class="locatie-label">Naar</div>
-          <div class="locatie-zaak">
-            <span class="lz-icon">🏭</span>
-            <div class="lz-text">
-              <div class="lz-title">De Zaak – Depot</div>
-              <div class="lz-sub">Bestemming: magazijn / depot</div>
-            </div>
-          </div>
+        <div class="locatie-label" style="margin-top:4px;">Naar</div>
+        <div class="locatie-zaak">
+          <span class="lz-icon">🏭</span>
+          <div><div class="lz-title">De Zaak – Depot</div><div class="lz-sub">Bestemming: magazijn / depot</div></div>
         </div>
       </div>
 
@@ -651,22 +505,22 @@ header img  { height:32px; object-fit:contain; }
   </div>
 </div>
 
-<!-- ══ STAP 3: MATERIEEL ══ -->
+<!-- ══ STAP 3 ══ -->
 <div class="step" id="step-3">
   <p class="step-title">Materieel</p>
-  <p class="step-sub">Selecteer wat verplaatst wordt en vul het nummer in. Tik op ⋯ voor foto / opmerking.</p>
-
-  <div class="tab-bar" id="tab-bar"></div>
-  <div class="item-list" id="item-list"></div>
+  <p class="step-sub">Stel het aantal in en vul het nummer in van elk stuk.</p>
+  <div class="tab-bar-wrap">
+    <div class="tab-bar" id="tab-bar"></div>
+  </div>
+  <div id="item-list"></div>
 </div>
 
-<!-- ══ STAP 4: SAMENVATTING ══ -->
+<!-- ══ STAP 4 ══ -->
 <div class="step" id="step-4">
   <p class="step-title">Controleer & verstuur</p>
   <p class="step-sub">Kijk alles na en tik op Verstuur.</p>
   <div id="summary-content"></div>
-
-  <div class="card" style="margin-top:8px;">
+  <div class="card">
     <div class="card-title">Opmerkingen</div>
     <div class="card-body">
       <div class="field">
@@ -678,17 +532,16 @@ header img  { height:32px; object-fit:contain; }
 
 </div><!-- /wizard -->
 
-<!-- Nav bar -->
-<div class="nav-bar" id="nav-bar">
+<div class="nav-bar">
   <button class="btn-nav btn-back" id="btn-prev" onclick="prevStep()" style="display:none">← Terug</button>
   <button class="btn-nav btn-next" id="btn-next" onclick="nextStep()">Volgende →</button>
 </div>
 
-<!-- Bottom sheet -->
 <div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()"></div>
 <div class="bottom-sheet" id="bottom-sheet">
   <div class="sheet-handle"></div>
   <div class="sheet-title" id="sheet-title"></div>
+  <div class="sheet-sub" id="sheet-sub"></div>
   <div id="sheet-body"></div>
   <button class="sheet-save" onclick="saveSheet()">Opslaan ✓</button>
 </div>
@@ -697,55 +550,41 @@ header img  { height:32px; object-fit:contain; }
 
 <script>
 /* ══════════════════════════════════════════════════════
-   KLUSSEN DATABASE
-   ── Pas deze lijst aan met jullie actuele klussen ──
-   Formaat: { naam: '...', werknr: '...' }
+   KLUSSEN DATABASE – pas aan met jullie actuele klussen
    ══════════════════════════════════════════════════════ */
 const KLUSSEN = [
-  { naam: 'Rijswijk – Bosgeesterlaan',       werknr: '2024-101' },
-  { naam: 'Rijswijk – Jan Thijssenweg',      werknr: '2025-003' },
-  { naam: 'Den Haag – Spui 255',             werknr: '2024-102' },
-  { naam: 'Den Haag – Laan van Meerdervoort',werknr: '2025-002' },
-  { naam: 'Delft – Binnenwatersloot',        werknr: '2024-103' },
-  { naam: 'Zoetermeer – Röntgenlaan 12',     werknr: '2025-001' },
-  { naam: 'Wassenaar – Kerkstraat 14',       werknr: '2025-004' },
-  { naam: 'Leidschendam – Vliet 8',          werknr: '2025-005' },
-  { naam: 'Nootdorp – Boekweitakker 3',      werknr: '2025-006' },
-  { naam: 'Pijnacker – Rottezoom 20',        werknr: '2025-007' },
+  { naam:'Rijswijk – Bosgeesterlaan',        werknr:'2024-101' },
+  { naam:'Rijswijk – Jan Thijssenweg',       werknr:'2025-003' },
+  { naam:'Den Haag – Spui 255',              werknr:'2024-102' },
+  { naam:'Den Haag – Laan van Meerdervoort', werknr:'2025-002' },
+  { naam:'Delft – Binnenwatersloot',         werknr:'2024-103' },
+  { naam:'Zoetermeer – Röntgenlaan 12',      werknr:'2025-001' },
+  { naam:'Wassenaar – Kerkstraat 14',        werknr:'2025-004' },
+  { naam:'Leidschendam – Vliet 8',           werknr:'2025-005' },
+  { naam:'Nootdorp – Boekweitakker 3',       werknr:'2025-006' },
+  { naam:'Pijnacker – Rottezoom 20',         werknr:'2025-007' },
 ];
 
 /* ══════════════════════════════════════════════════════
-   MATERIEEL DATA
+   MATERIEEL – per soort 1 regel, nummers per stuk inline
    ══════════════════════════════════════════════════════ */
 const SECTIES = {
   'Aansluitingen': [
-    { id:'bouwmeterkast', naam:'Bouwmeterkast (35A / 63A / 125A)', hasTypes: true },
-    { id:'waterput',      naam:'Waterput' },
-    { id:'waterkraan',    naam:'Waterkraan / standvink' },
+    { id:'bouwmeterkast', naam:'Bouwmeterkast', hasNr:true, hasTypes:true },
+    { id:'waterput',      naam:'Waterput',      hasNr:true },
+    { id:'waterkraan',    naam:'Waterkraan / standvink', hasNr:true },
   ],
   'Keten': [
-    { id:'pipokeet',          naam:'Pipokeet' },
-    { id:'schaftkeet_1',      naam:'Schaftkeet 1' },
-    { id:'schaftkeet_2',      naam:'Schaftkeet 2' },
-    { id:'schaftkeet_3',      naam:'Schaftkeet 3' },
-    { id:'schaftkeet_4',      naam:'Schaftkeet 4' },
-    { id:'uitvoerderskeet_1', naam:'Uitvoerderskeet 1' },
-    { id:'uitvoerderskeet_2', naam:'Uitvoerderskeet 2' },
-    { id:'uitvoerderskeet_3', naam:'Uitvoerderskeet 3' },
-    { id:'uitvoerderskeet_4', naam:'Uitvoerderskeet 4' },
-    { id:'keettrap',          naam:'Keettrap (Set)' },
+    { id:'schaftkeet',     naam:'Schaftkeet',      hasNr:true },
+    { id:'uitvoerderskeet',naam:'Uitvoerderskeet',  hasNr:true },
+    { id:'pipokeet',       naam:'Pipokeet',         hasNr:true },
+    { id:'keettrap',       naam:'Keettrap (set)',   hasNr:true },
   ],
   'Containers': [
-    { id:'container_1', naam:'Materiaalcontainer 1' },
-    { id:'container_2', naam:'Materiaalcontainer 2' },
+    { id:'container', naam:'Materiaalcontainer', hasNr:true },
   ],
   'Lichtmasten': [
-    { id:'lichtmast_1', naam:'Lichtmast 1' },
-    { id:'lichtmast_2', naam:'Lichtmast 2' },
-    { id:'lichtmast_3', naam:'Lichtmast 3' },
-    { id:'lichtmast_4', naam:'Lichtmast 4' },
-    { id:'lichtmast_5', naam:'Lichtmast 5' },
-    { id:'lichtmast_6', naam:'Lichtmast 6' },
+    { id:'lichtmast', naam:'Lichtmast', hasNr:true },
   ],
   'Bouwhekken': [
     { id:'bouwhekken',          naam:'Bouwhekken' },
@@ -754,28 +593,19 @@ const SECTIES = {
     { id:'hekwielen',           naam:'Hekwielen' },
     { id:'hek_schoren',         naam:'Hek schoren' },
     { id:'kunststof_rijplaten', naam:'Kunststof rijplaten' },
-  ]
+  ],
 };
 
 /* ══════════════════════════════════════════════════════
-   BEWEGING STATE
+   STATE
    ══════════════════════════════════════════════════════ */
-const BEWEGING = {
-  type: '',           // 'zaak_klus' | 'klus_klus' | 'klus_zaak'
-  van: { naam: '', werknr: '' },
-  naar: { naam: '', werknr: '' },
-};
-
-// Autocomplete per veld: slaat geselecteerde klus op
+const STATE   = {};
+const BEWEGING = { type:'', van:{ naam:'', werknr:'' }, naar:{ naam:'', werknr:'' } };
 const AC_STATE = {};
 
-/* ══════════════════════════════════════════════════════
-   ITEM STATE
-   ══════════════════════════════════════════════════════ */
-const STATE = {};
 function initState() {
-  alleItems().forEach(i => {
-    STATE[i.id] = { aantal: 0, nummer: '', opm: '', types: [], fotos: [] };
+  alleItems().forEach(item => {
+    STATE[item.id] = { aantal:0, nummers:[], opm:'', types:[], fotos:[] };
   });
 }
 function alleItems() { return Object.values(SECTIES).flat(); }
@@ -789,23 +619,16 @@ const TOTAL = 4;
 function goToStep(n) {
   if (n < 1 || n > TOTAL) return;
   if (n > currentStep && !validateStep(currentStep)) return;
-
   document.getElementById('step-' + currentStep).classList.remove('active');
   currentStep = n;
   document.getElementById('step-' + currentStep).classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // Sluit alle AC dropdowns
+  window.scrollTo({ top:0, behavior:'smooth' });
+  // Sluit alle dropdowns
   document.querySelectorAll('.ac-dropdown.open').forEach(d => d.classList.remove('open'));
-
-  updateProgress();
-  updateNav();
-  autosave();
-
-  if (currentStep === 3) { renderTabs(); renderTabContent(activeTab); }
+  updateProgress(); updateNav(); autosave();
+  if (currentStep === 3) renderMaterialStep();
   if (currentStep === 4) renderSummary();
 }
-
 function nextStep() { goToStep(currentStep + 1); }
 function prevStep() { goToStep(currentStep - 1); }
 
@@ -813,7 +636,7 @@ function updateProgress() {
   for (let i = 1; i <= TOTAL; i++) {
     const ps = document.getElementById('ps-' + i);
     ps.classList.remove('active','done');
-    if (i < currentStep)  ps.classList.add('done');
+    if (i < currentStep) ps.classList.add('done');
     if (i === currentStep) ps.classList.add('active');
     ps.querySelector('.progress-dot').textContent = i < currentStep ? '✓' : i;
   }
@@ -826,15 +649,10 @@ function updateNav() {
   const prev = document.getElementById('btn-prev');
   const next = document.getElementById('btn-next');
   prev.style.display = currentStep > 1 ? '' : 'none';
-
   if (currentStep === TOTAL) {
-    next.textContent = '✓ Verstuur';
-    next.className = 'btn-nav btn-verstuur';
-    next.onclick = verstuurAlles;
+    next.textContent = '✓ Verstuur'; next.className = 'btn-nav btn-verstuur'; next.onclick = verstuurAlles;
   } else {
-    next.textContent = 'Volgende →';
-    next.className = 'btn-nav btn-next';
-    next.onclick = nextStep;
+    next.textContent = 'Volgende →'; next.className = 'btn-nav btn-next'; next.onclick = nextStep;
   }
 }
 
@@ -843,110 +661,90 @@ function validateStep(n) {
     const mis = [];
     if (!document.getElementById('datum').value) mis.push('Datum');
     if (!document.getElementById('naam').value.trim()) mis.push('Naam');
-
     ['datum','naam'].forEach(id => {
-      const el = document.getElementById(id);
-      const wrap = document.getElementById('f-' + id);
-      if (!el.value.trim()) {
-        wrap && wrap.classList.add('error');
-        el.addEventListener('input', () => wrap && wrap.classList.remove('error'), { once: true });
-      }
+      const el = document.getElementById(id); const wrap = document.getElementById('f-' + id);
+      if (!el.value.trim()) { wrap && wrap.classList.add('error'); el.addEventListener('input', () => wrap && wrap.classList.remove('error'), {once:true}); }
     });
-
     if (mis.length) { showToast('⚠️ Vul in: ' + mis.join(', ')); return false; }
     return true;
   }
-
   if (n === 2) {
     if (!BEWEGING.type) { showToast('⚠️ Kies een bewegingstype'); return false; }
-
-    if (BEWEGING.type === 'zaak_klus' && !BEWEGING.naar.naam) {
-      showToast('⚠️ Selecteer een klus als bestemming'); return false;
-    }
-    if (BEWEGING.type === 'klus_klus' && (!BEWEGING.van.naam || !BEWEGING.naar.naam)) {
-      showToast('⚠️ Vul beide bouwplaatsen in'); return false;
-    }
-    if (BEWEGING.type === 'klus_zaak' && !BEWEGING.van.naam) {
-      showToast('⚠️ Selecteer de klus waar het vandaan komt'); return false;
-    }
+    if (BEWEGING.type === 'zaak_klus' && !BEWEGING.naar.naam) { showToast('⚠️ Selecteer een klus als bestemming'); return false; }
+    if (BEWEGING.type === 'klus_klus' && (!BEWEGING.van.naam || !BEWEGING.naar.naam)) { showToast('⚠️ Vul beide klussen in'); return false; }
+    if (BEWEGING.type === 'klus_zaak' && !BEWEGING.van.naam) { showToast('⚠️ Selecteer de klus waar het vandaan komt'); return false; }
     return true;
   }
-
   if (n === 3) {
-    const heeftItems = alleItems().some(i => STATE[i.id].aantal > 0);
-    if (!heeftItems) { showToast('⚠️ Selecteer minstens 1 item'); return false; }
+    if (!alleItems().some(i => STATE[i.id].aantal > 0)) { showToast('⚠️ Selecteer minstens 1 item'); return false; }
     return true;
   }
-
   return true;
 }
 
 /* ══════════════════════════════════════════════════════
-   BEWEGING TYPE SELECTIE
+   BEWEGING
    ══════════════════════════════════════════════════════ */
 function selectBeweging(type) {
   BEWEGING.type = type;
-  BEWEGING.van  = { naam: '', werknr: '' };
-  BEWEGING.naar = { naam: '', werknr: '' };
-
-  // Reset AC state
-  ['naar-zk','van-kk','naar-kk','van-kz'].forEach(id => {
-    acClearSilent(id);
-  });
-
-  // Update kaarten
+  BEWEGING.van  = { naam:'', werknr:'' };
+  BEWEGING.naar = { naam:'', werknr:'' };
+  ['naar-zk','van-kk','naar-kk','van-kz'].forEach(id => acClearSilent(id));
   ['zaak_klus','klus_klus','klus_zaak'].forEach(t => {
     document.getElementById('bc-' + t).classList.toggle('selected', t === type);
-  });
-
-  // Toon juiste velden
-  ['zaak_klus','klus_klus','klus_zaak'].forEach(t => {
     document.getElementById('lv-' + t).classList.toggle('show', t === type);
   });
-
-  // Stel de zaak in voor de vaste kanten
-  if (type === 'zaak_klus') {
-    BEWEGING.van = { naam: 'De Zaak – Depot', werknr: 'DE ZAAK' };
-  } else if (type === 'klus_zaak') {
-    BEWEGING.naar = { naam: 'De Zaak – Depot', werknr: 'DE ZAAK' };
-  }
-
+  if (type === 'zaak_klus') BEWEGING.van  = { naam:'De Zaak – Depot', werknr:'DE ZAAK' };
+  if (type === 'klus_zaak') BEWEGING.naar = { naam:'De Zaak – Depot', werknr:'DE ZAAK' };
   autosave();
 }
 
 /* ══════════════════════════════════════════════════════
-   AUTOCOMPLETE
-   veldId: 'naar-zk' | 'van-kk' | 'naar-kk' | 'van-kz'
+   AUTOCOMPLETE – dropdown is position:fixed, altijd zichtbaar
    ══════════════════════════════════════════════════════ */
-// Sluit dropdown bij klik buiten
 document.addEventListener('click', e => {
-  if (!e.target.closest('.ac-wrap')) {
+  if (!e.target.closest('.ac-wrap') && !e.target.closest('.ac-dropdown')) {
     document.querySelectorAll('.ac-dropdown.open').forEach(d => d.classList.remove('open'));
   }
 });
 
 function acOpen(veldId) {
-  acFilter(veldId, document.getElementById('ac-input-' + veldId).value);
+  const input    = document.getElementById('ac-input-' + veldId);
+  const dropdown = document.getElementById('ac-dropdown-' + veldId);
+  const rect     = input.getBoundingClientRect();
+  // Positie berekenen voor fixed dropdown
+  dropdown.style.top   = (rect.bottom + 6) + 'px';
+  dropdown.style.left  = rect.left + 'px';
+  dropdown.style.width = rect.width + 'px';
+  acFilter(veldId, input.value);
 }
 
 function acFilter(veldId, query) {
   const dropdown = document.getElementById('ac-dropdown-' + veldId);
-  const results  = query.trim() === ''
+  if (!dropdown) return;
+
+  // Herbereken positie bij typen (scroll kan verplaatst zijn)
+  const input = document.getElementById('ac-input-' + veldId);
+  const rect  = input.getBoundingClientRect();
+  dropdown.style.top   = (rect.bottom + 6) + 'px';
+  dropdown.style.left  = rect.left + 'px';
+  dropdown.style.width = rect.width + 'px';
+
+  const q = query.trim().toLowerCase();
+  const results = (q === ''
     ? KLUSSEN
-    : KLUSSEN.filter(k =>
-        k.naam.toLowerCase().includes(query.toLowerCase()) ||
-        k.werknr.toLowerCase().includes(query.toLowerCase())
-      );
+    : KLUSSEN.filter(k => k.naam.toLowerCase().includes(q) || k.werknr.toLowerCase().includes(q))
+  ).slice(0, 5);
 
   dropdown.innerHTML = '';
   if (results.length === 0) {
-    dropdown.innerHTML = '<div class="ac-item-empty">Geen klussen gevonden – typ vrij verder</div>';
+    dropdown.innerHTML = '<div class="ac-empty">Geen overeenkomsten – typ verder of kies vrij</div>';
   } else {
     results.forEach(k => {
       const div = document.createElement('div');
       div.className = 'ac-item';
       div.innerHTML = `<span class="ac-item-naam">${k.naam}</span><span class="ac-item-nr">${k.werknr}</span>`;
-      div.onclick = () => acSelect(veldId, k);
+      div.onmousedown = e => { e.preventDefault(); acSelect(veldId, k); }; // mousedown zodat blur niet eerst triggert
       dropdown.appendChild(div);
     });
   }
@@ -954,77 +752,63 @@ function acFilter(veldId, query) {
 }
 
 function acSelect(veldId, klus) {
-  const input   = document.getElementById('ac-input-' + veldId);
-  const badge   = document.getElementById('ac-badge-' + veldId);
-  const dropdown= document.getElementById('ac-dropdown-' + veldId);
-
+  const input    = document.getElementById('ac-input-' + veldId);
+  const badge    = document.getElementById('ac-badge-' + veldId);
+  const dropdown = document.getElementById('ac-dropdown-' + veldId);
   input.value = klus.naam;
   input.classList.add('selected');
   badge.textContent = 'Werknr. ' + klus.werknr;
   badge.classList.add('show');
   dropdown.classList.remove('open');
-
   AC_STATE[veldId] = klus;
-
-  // Sla op in BEWEGING
-  if (veldId === 'naar-zk' || veldId === 'naar-kk') {
-    BEWEGING.naar = { naam: klus.naam, werknr: klus.werknr };
-  } else {
-    BEWEGING.van = { naam: klus.naam, werknr: klus.werknr };
-  }
-
+  if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = { naam:klus.naam, werknr:klus.werknr };
+  else BEWEGING.van = { naam:klus.naam, werknr:klus.werknr };
   autosave();
 }
 
 function acClear(veldId) {
   acClearSilent(veldId);
-  if (veldId === 'naar-zk' || veldId === 'naar-kk') {
-    if (BEWEGING.type !== 'klus_zaak') BEWEGING.naar = { naam: '', werknr: '' };
-  } else {
-    if (BEWEGING.type !== 'zaak_klus') BEWEGING.van = { naam: '', werknr: '' };
-  }
+  const isNaar = veldId === 'naar-zk' || veldId === 'naar-kk';
+  if (isNaar && BEWEGING.type !== 'klus_zaak')  BEWEGING.naar = { naam:'', werknr:'' };
+  if (!isNaar && BEWEGING.type !== 'zaak_klus') BEWEGING.van  = { naam:'', werknr:'' };
   autosave();
 }
 
 function acClearSilent(veldId) {
-  const input   = document.getElementById('ac-input-' + veldId);
-  const badge   = document.getElementById('ac-badge-'  + veldId);
-  const dropdown= document.getElementById('ac-dropdown-' + veldId);
+  const input    = document.getElementById('ac-input-' + veldId);
+  const badge    = document.getElementById('ac-badge-'  + veldId);
+  const dropdown = document.getElementById('ac-dropdown-' + veldId);
   if (!input) return;
-  input.value = '';
-  input.classList.remove('selected');
-  badge.textContent = '';
-  badge.classList.remove('show');
+  input.value = ''; input.classList.remove('selected');
+  badge.textContent = ''; badge.classList.remove('show');
   dropdown && dropdown.classList.remove('open');
   delete AC_STATE[veldId];
 }
 
-// Als de gebruiker vrij typt (buiten dropdown kiest), sla dat ook op
+// Vrije invoer opslaan bij verlaten veld
 ['naar-zk','van-kk','naar-kk','van-kz'].forEach(veldId => {
   const input = document.getElementById('ac-input-' + veldId);
   if (!input) return;
   input.addEventListener('blur', () => {
-    // Als er geen selectie is maar wel tekst, sla vrije invoer op
+    setTimeout(() => { const dd = document.getElementById('ac-dropdown-' + veldId); if (dd) dd.classList.remove('open'); }, 150);
     if (!AC_STATE[veldId] && input.value.trim()) {
-      const klus = { naam: input.value.trim(), werknr: '' };
-      if (veldId === 'naar-zk' || veldId === 'naar-kk') {
-        BEWEGING.naar = klus;
-      } else {
-        BEWEGING.van = klus;
-      }
+      const klus = { naam:input.value.trim(), werknr:'' };
+      if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = klus;
+      else BEWEGING.van = klus;
+      autosave();
     }
-    // Sluit dropdown na korte vertraging (anders vangt de click niet)
-    setTimeout(() => {
-      const dd = document.getElementById('ac-dropdown-' + veldId);
-      if (dd) dd.classList.remove('open');
-    }, 200);
   });
 });
 
 /* ══════════════════════════════════════════════════════
-   TABS & ITEMS
+   MATERIEEL STAP
    ══════════════════════════════════════════════════════ */
 let activeTab = Object.keys(SECTIES)[0];
+
+function renderMaterialStep() {
+  renderTabs();
+  renderTabContent(activeTab);
+}
 
 function renderTabs() {
   const bar = document.getElementById('tab-bar');
@@ -1044,71 +828,88 @@ function renderTabContent(tab) {
   list.innerHTML = '';
   SECTIES[tab].forEach(item => {
     const s = STATE[item.id];
-    const hasDetail = s.nummer || s.opm || s.fotos.length > 0 || s.types.length > 0;
-    const numTag = s.nummer ? `<span class="item-nummer-tag">${s.nummer}</span>` : '';
-    const fotoLabel = s.fotos.length > 0 ? `<span class="foto-indicator">📷${s.fotos.length}</span>` : '';
+    const hasDetail = s.opm || s.fotos.length > 0 || s.types.length > 0;
+    const fotoTxt = s.fotos.length > 0 ? `<span class="foto-indicator">📷${s.fotos.length}</span>` : '';
 
-    const row = document.createElement('div');
-    row.className = 'item-row' + (s.aantal > 0 ? ' has-value' : '');
-    row.id = 'row-' + item.id;
-    row.innerHTML = `
-      <div class="item-naam">${item.naam}${numTag}${fotoLabel}</div>
-      <div class="stepper">
-        <button class="stepper-btn" onclick="changeAantal('${item.id}',-1)">−</button>
-        <span class="stepper-val ${s.aantal > 0 ? 'nonzero' : ''}" id="sv-${item.id}">${s.aantal}</span>
-        <button class="stepper-btn plus" onclick="changeAantal('${item.id}',1)">+</button>
+    const card = document.createElement('div');
+    card.className = 'item-card' + (s.aantal > 0 ? ' has-value' : '');
+    card.id = 'card-' + item.id;
+
+    // Inline nummer inputs
+    let nrHtml = '';
+    if (item.hasNr && s.aantal > 0) {
+      nrHtml = `<div class="item-nummers">`;
+      for (let i = 0; i < s.aantal; i++) {
+        const val = s.nummers[i] || '';
+        nrHtml += `<input class="item-nr-input"
+          placeholder="Nummer ${i + 1}"
+          value="${val.replace(/"/g,'&quot;')}"
+          oninput="STATE['${item.id}'].nummers[${i}]=this.value;autosave()">`;
+      }
+      nrHtml += `</div>`;
+    }
+
+    card.innerHTML = `
+      <div class="item-row">
+        <div class="item-naam">${item.naam}${fotoTxt}</div>
+        <div class="stepper">
+          <button class="stepper-btn" onclick="changeAantal('${item.id}',-1)">−</button>
+          <span class="stepper-val${s.aantal > 0 ? ' nonzero' : ''}" id="sv-${item.id}">${s.aantal}</span>
+          <button class="stepper-btn plus" onclick="changeAantal('${item.id}',1)">+</button>
+        </div>
+        <button class="item-foto-btn${hasDetail ? ' has-detail' : ''}" id="db-${item.id}" onclick="openSheet('${item.id}')">📷</button>
       </div>
-      <button class="item-detail-btn ${hasDetail ? 'has-detail' : ''}" id="db-${item.id}" onclick="openSheet('${item.id}')">⋯</button>
+      ${nrHtml}
     `;
-    list.appendChild(row);
+    list.appendChild(card);
   });
 }
 
 function changeAantal(id, delta) {
-  STATE[id].aantal = Math.max(0, STATE[id].aantal + delta);
-  autosave();
-  const sv  = document.getElementById('sv-' + id);
-  const row = document.getElementById('row-' + id);
-  if (sv)  { sv.textContent = STATE[id].aantal; sv.className = 'stepper-val' + (STATE[id].aantal > 0 ? ' nonzero' : ''); }
-  if (row) row.className = 'item-row' + (STATE[id].aantal > 0 ? ' has-value' : '');
+  const item = alleItems().find(i => i.id === id);
+  const nieuw = Math.max(0, STATE[id].aantal + delta);
+  STATE[id].aantal = nieuw;
+  // Houd nummers array synchroon met aantal
+  if (item.hasNr) {
+    while (STATE[id].nummers.length < nieuw) STATE[id].nummers.push('');
+    while (STATE[id].nummers.length > nieuw) STATE[id].nummers.pop();
+  }
+  renderTabContent(activeTab);
   renderTabs();
+  autosave();
 }
 
 /* ══════════════════════════════════════════════════════
-   BOTTOM SHEET
+   BOTTOM SHEET (foto + opmerking + type chips)
    ══════════════════════════════════════════════════════ */
 let sheetItemId = null;
 let sheetFotos  = [];
 
 function openSheet(id) {
   sheetItemId = id;
-  sheetFotos  = STATE[id].fotos.map(f => ({ ...f }));
-
+  sheetFotos  = STATE[id].fotos.map(f => ({...f}));
   const item        = alleItems().find(i => i.id === id);
   const s           = STATE[id];
   const isBouwmeter = id === 'bouwmeterkast';
 
   document.getElementById('sheet-title').textContent = item.naam;
+  document.getElementById('sheet-sub').textContent   = "Foto's en opmerkingen";
   document.getElementById('sheet-body').innerHTML = `
     ${isBouwmeter ? `
       <div style="margin-bottom:14px;">
         <div class="sheet-foto-title">Type bouwmeterkast</div>
         <div class="type-chips">
-          <button class="type-chip ${s.types.includes('35A')  ? 'active':''}" onclick="toggleType('35A')">35A</button>
-          <button class="type-chip ${s.types.includes('63A')  ? 'active':''}" onclick="toggleType('63A')">63A</button>
-          <button class="type-chip ${s.types.includes('125A') ? 'active':''}" onclick="toggleType('125A')">125A</button>
+          <button class="type-chip${s.types.includes('35A')  ? ' active':''}" onclick="toggleType('35A')">35A</button>
+          <button class="type-chip${s.types.includes('63A')  ? ' active':''}" onclick="toggleType('63A')">63A</button>
+          <button class="type-chip${s.types.includes('125A') ? ' active':''}" onclick="toggleType('125A')">125A</button>
         </div>
       </div>` : ''}
     <div class="sheet-field">
-      <label>Nummer op het materieel</label>
-      <input id="sf-nummer" type="text" placeholder="Bijv. SK-01, LM-03, ..." value="${s.nummer}">
-    </div>
-    <div class="sheet-field">
-      <label>Opmerking</label>
+      <label>Opmerking (bijv. schade)</label>
       <input id="sf-opm" type="text" placeholder="Bijv. rechterdeur beschadigd..." value="${s.opm}">
     </div>
-    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-top:6px;">
-      <div class="sheet-foto-title">📷 Foto's (bijv. schade melden)</div>
+    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-top:4px;">
+      <div class="sheet-foto-title">Foto's toevoegen</div>
       <label class="sheet-foto-add-btn">
         <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addSheetFoto(event)">
         📷 Foto toevoegen
@@ -1116,7 +917,6 @@ function openSheet(id) {
       <div id="sf-foto-list"></div>
     </div>
   `;
-
   renderSheetFotos();
   document.getElementById('sheet-overlay').classList.add('open');
   document.getElementById('bottom-sheet').classList.add('open');
@@ -1127,23 +927,19 @@ function toggleType(type) {
   const types = STATE[sheetItemId].types;
   const idx   = types.indexOf(type);
   if (idx > -1) types.splice(idx, 1); else types.push(type);
-  document.querySelectorAll('.type-chip').forEach(btn => {
-    btn.classList.toggle('active', types.includes(btn.textContent.trim()));
-  });
+  document.querySelectorAll('.type-chip').forEach(btn => btn.classList.toggle('active', types.includes(btn.textContent.trim())));
 }
 
 async function addSheetFoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const dataUrl = await resizeImage(file);
-  sheetFotos.push({ dataUrl, opmerking: '' });
+  sheetFotos.push({ dataUrl, opmerking:'' });
   renderSheetFotos();
   e.target.value = '';
 }
 
 function renderSheetFotos() {
-  const list = document.getElementById('sf-foto-list');
-  if (!list) return;
+  const list = document.getElementById('sf-foto-list'); if (!list) return;
   list.innerHTML = '';
   sheetFotos.forEach((f, i) => {
     const div = document.createElement('div');
@@ -1151,8 +947,7 @@ function renderSheetFotos() {
     div.innerHTML = `
       <img src="${f.dataUrl}" alt="foto">
       <div class="foto-opm">
-        <input type="text" placeholder="Omschrijving / schade..." value="${f.opmerking}"
-          oninput="sheetFotos[${i}].opmerking=this.value">
+        <input type="text" placeholder="Omschrijving..." value="${f.opmerking}" oninput="sheetFotos[${i}].opmerking=this.value">
       </div>
       <button class="foto-del" onclick="deleteSheetFoto(${i})">✕</button>
     `;
@@ -1160,23 +955,17 @@ function renderSheetFotos() {
   });
 }
 
-function deleteSheetFoto(i) {
-  sheetFotos.splice(i, 1);
-  renderSheetFotos();
-}
+function deleteSheetFoto(i) { sheetFotos.splice(i, 1); renderSheetFotos(); }
 
 function resizeImage(file, maxW = 900) {
   return new Promise(resolve => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
+    const img = new Image(); const url = URL.createObjectURL(file);
     img.onload = () => {
       let w = img.width, h = img.height;
       if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
-      const c = document.createElement('canvas');
-      c.width = w; c.height = h;
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
       c.getContext('2d').drawImage(img, 0, 0, w, h);
-      URL.revokeObjectURL(url);
-      resolve(c.toDataURL('image/jpeg', 0.75));
+      URL.revokeObjectURL(url); resolve(c.toDataURL('image/jpeg', 0.75));
     };
     img.src = url;
   });
@@ -1185,20 +974,14 @@ function resizeImage(file, maxW = 900) {
 function closeSheet() {
   document.getElementById('sheet-overlay').classList.remove('open');
   document.getElementById('bottom-sheet').classList.remove('open');
-  sheetItemId = null;
-  sheetFotos  = [];
+  sheetItemId = null; sheetFotos = [];
 }
 
 function saveSheet() {
   if (!sheetItemId) return;
-  STATE[sheetItemId].nummer = document.getElementById('sf-nummer').value;
-  STATE[sheetItemId].opm    = document.getElementById('sf-opm').value;
-  STATE[sheetItemId].fotos  = [...sheetFotos];
-
-  renderTabContent(activeTab);
-  autosave();
-  closeSheet();
-  showToast('Opgeslagen ✓');
+  STATE[sheetItemId].opm   = document.getElementById('sf-opm').value;
+  STATE[sheetItemId].fotos = [...sheetFotos];
+  renderTabContent(activeTab); autosave(); closeSheet(); showToast('Opgeslagen ✓');
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1206,69 +989,55 @@ function saveSheet() {
    ══════════════════════════════════════════════════════ */
 function renderSummary() {
   const data = collectData();
+  const typeLabel = { zaak_klus:'Van de zaak naar klus', klus_klus:'Klus naar andere klus', klus_zaak:'Terug naar de zaak' }[data.beweging_type] || '–';
+  const typeIcon  = { zaak_klus:'🏭', klus_klus:'🔄', klus_zaak:'🏗️' }[data.beweging_type] || '📦';
   let html = '';
-
-  // ── Beweging blok ──
-  const typeLabel = {
-    zaak_klus: 'Van de zaak naar klus',
-    klus_klus: 'Klus naar andere klus',
-    klus_zaak: 'Terug naar de zaak',
-  }[data.beweging_type] || '–';
-  const typeIcon = { zaak_klus:'🏭', klus_klus:'🔄', klus_zaak:'🏗️' }[data.beweging_type] || '📦';
 
   html += `<div class="beweging-block">
     <div class="bb-icon">${typeIcon}</div>
     <div class="bb-info">
       <div class="bb-type">${typeLabel}</div>
-      <div class="bb-route">
-        ${data.van_naam || 'De Zaak'}
-        ${data.van_werknr ? `<span class="bb-nr">Werknr. ${data.van_werknr}</span>` : ''}
-      </div>
+      <div class="bb-naam">${data.van_naam || '—'}</div>
+      ${data.van_werknr ? `<div class="bb-nr">Werknr. ${data.van_werknr}</div>` : ''}
     </div>
     <div class="bb-pijl">→</div>
     <div class="bb-info">
-      <div class="bb-route">
-        ${data.naar_naam || 'De Zaak'}
-        ${data.naar_werknr ? `<span class="bb-nr">Werknr. ${data.naar_werknr}</span>` : ''}
-      </div>
+      <div class="bb-naam">${data.naar_naam || '—'}</div>
+      ${data.naar_werknr ? `<div class="bb-nr">Werknr. ${data.naar_werknr}</div>` : ''}
     </div>
   </div>`;
 
-  // ── Info ──
   html += `<div class="card"><div class="card-title">Informatie</div><div class="card-body"><div class="summary-info">`;
-  [['Datum', data.datum],['Ingevuld door', data.naam]].forEach(([l,v]) => {
-    html += `<div class="summary-field"><div class="sf-label">${l}</div><div class="sf-val">${v || '—'}</div></div>`;
+  [['Datum',data.datum],['Ingevuld door',data.naam]].forEach(([l,v]) => {
+    html += `<div class="summary-field"><div class="sf-label">${l}</div><div class="sf-val">${v||'—'}</div></div>`;
   });
   html += `</div></div></div>`;
 
-  // ── Items ──
   let heeftItems = false;
-  let itemsHtml = `<div class="card"><div class="card-title">Geselecteerd materieel</div><div class="card-body">`;
-
+  let iHtml = `<div class="card"><div class="card-title">Geselecteerd materieel</div><div class="card-body">`;
   for (const [cat, items] of Object.entries(SECTIES)) {
     const gevuld = items.filter(i => STATE[i.id].aantal > 0);
     if (!gevuld.length) continue;
     heeftItems = true;
-    itemsHtml += `<div class="summary-cat-title">${cat}</div>`;
+    iHtml += `<div class="summary-cat-title">${cat}</div>`;
     gevuld.forEach(item => {
       const s = STATE[item.id];
       const typeLabel = (item.id === 'bouwmeterkast' && s.types.length) ? ` – ${s.types.join(', ')}` : '';
-      itemsHtml += `<div class="summary-item-row">
+      const nrsText = s.nummers.filter(Boolean).join(', ');
+      iHtml += `<div class="summary-item-row">
         <div>
           <div class="summary-item-naam">${item.naam}${typeLabel}</div>
-          ${s.nummer ? `<div class="summary-item-nummer">Nr: ${s.nummer}</div>` : ''}
-          ${s.opm    ? `<div class="summary-item-nummer">📝 ${s.opm}</div>` : ''}
-          ${s.fotos.length ? `<div class="summary-item-nummer">📷 ${s.fotos.length} foto${s.fotos.length>1?'s':''}</div>` : ''}
+          ${nrsText ? `<div class="summary-item-detail">Nr: ${nrsText}</div>` : ''}
+          ${s.opm ? `<div class="summary-item-detail">📝 ${s.opm}</div>` : ''}
+          ${s.fotos.length ? `<div class="summary-item-detail">📷 ${s.fotos.length} foto${s.fotos.length>1?'s':''}</div>` : ''}
         </div>
         <div class="summary-item-aantal">×${s.aantal}</div>
       </div>`;
     });
   }
-
-  if (!heeftItems) itemsHtml += `<div class="empty-state">Geen items geselecteerd.<br>Ga terug naar stap 3.</div>`;
-  itemsHtml += `</div></div>`;
-  html += itemsHtml;
-
+  if (!heeftItems) iHtml += `<div class="empty-state">Geen items. Ga terug naar stap 3.</div>`;
+  iHtml += `</div></div>`;
+  html += iHtml;
   document.getElementById('summary-content').innerHTML = html;
 }
 
@@ -1277,28 +1046,26 @@ function renderSummary() {
    ══════════════════════════════════════════════════════ */
 function collectData() {
   const data = {
-    datum:                document.getElementById('datum').value,
-    naam:                 document.getElementById('naam').value,
-    beweging_type:        BEWEGING.type,
-    van_naam:             BEWEGING.van.naam,
-    van_werknr:           BEWEGING.van.werknr,
-    naar_naam:            BEWEGING.naar.naam,
-    naar_werknr:          BEWEGING.naar.werknr,
-    algemeen_opmerking:   document.getElementById('algemeen_opmerking').value,
-    onderdelen: {}
+    datum:              document.getElementById('datum').value,
+    naam:               document.getElementById('naam').value,
+    beweging_type:      BEWEGING.type,
+    van_naam:           BEWEGING.van.naam,
+    van_werknr:         BEWEGING.van.werknr,
+    naar_naam:          BEWEGING.naar.naam,
+    naar_werknr:        BEWEGING.naar.werknr,
+    algemeen_opmerking: document.getElementById('algemeen_opmerking').value,
+    onderdelen: {},
   };
-
   alleItems().forEach(item => {
     const s = STATE[item.id];
     data.onderdelen[item.id] = {
       naam:   item.naam,
       aantal: String(s.aantal),
-      nummer: s.nummer,
+      nummers:s.nummers.join(', '),
       opm:    s.opm,
       types:  s.types.join(', '),
     };
   });
-
   return data;
 }
 
@@ -1310,34 +1077,27 @@ const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
 async function verstuurAlles() {
   const data = collectData();
   showToast('⏳ Versturen...');
-
   try {
     const res  = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
     const json = await res.json();
     if (json.ok) { clearDraft(); showToast('✅ Opgeslagen in Notion!'); }
     else showToast('⚠️ Notion mislukt – mail wordt geopend');
-  } catch(e) {
-    showToast('⚠️ Fout – mail wordt geopend');
-  }
-
+  } catch(e) { showToast('⚠️ Fout – mail wordt geopend'); }
   setTimeout(() => {
-    const onderwerp = `Verplaatslijst – ${data.naar_naam || data.van_naam || 'onbekend'} – ${data.datum}`;
+    const onderwerp = `Verplaatslijst – ${data.naar_naam || data.van_naam || '?'} – ${data.datum}`;
     window.location.href = `mailto:materieel@middelwateringbouw.nl?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(buildMailBody(data))}`;
   }, 1200);
 }
 
 function buildMailBody(data) {
-  const typeLabel = { zaak_klus:'Van zaak naar klus', klus_klus:'Klus naar klus', klus_zaak:'Terug naar zaak' }[data.beweging_type] || '';
+  const tl = { zaak_klus:'Van zaak naar klus', klus_klus:'Klus naar klus', klus_zaak:'Terug naar zaak' }[data.beweging_type] || '';
   const lines = [
-    'VERPLAATSLIJST MIDDELWATERING BOUW',
-    '===================================', '',
-    `Datum:        ${data.datum}`,
-    `Ingevuld door:${data.naam}`,
-    `Beweging:     ${typeLabel}`,
-    `Van:          ${data.van_naam} (${data.van_werknr})`,
-    `Naar:         ${data.naar_naam} (${data.naar_werknr})`, '',
+    'VERPLAATSLIJST MIDDELWATERING BOUW','===================================','',
+    `Datum:         ${data.datum}`,`Ingevuld door: ${data.naam}`,
+    `Beweging:      ${tl}`,
+    `Van:           ${data.van_naam} (${data.van_werknr})`,
+    `Naar:          ${data.naar_naam} (${data.naar_werknr})`, '',
   ];
-
   for (const [cat, items] of Object.entries(SECTIES)) {
     const gevuld = items.filter(i => parseInt(data.onderdelen[i.id]?.aantal) > 0);
     if (!gevuld.length) continue;
@@ -1345,13 +1105,12 @@ function buildMailBody(data) {
     gevuld.forEach(item => {
       const v = data.onderdelen[item.id];
       lines.push(`  ${item.naam}  ×${v.aantal}`);
-      if (v.nummer) lines.push(`    Nummer: ${v.nummer}`);
-      if (v.types)  lines.push(`    Type:   ${v.types}`);
-      if (v.opm)    lines.push(`    Opmerking: ${v.opm}`);
+      if (v.nummers) lines.push(`    Nummers: ${v.nummers}`);
+      if (v.types)   lines.push(`    Type:    ${v.types}`);
+      if (v.opm)     lines.push(`    Opmerking: ${v.opm}`);
     });
     lines.push('');
   }
-
   if (data.algemeen_opmerking) lines.push('OPMERKINGEN','---',data.algemeen_opmerking,'');
   lines.push('---','Verstuurd via Verplaatslijst-app MWB');
   return lines.join('\n');
@@ -1371,33 +1130,34 @@ function showToast(msg) {
    ══════════════════════════════════════════════════════ */
 function autosave() {
   const velden = {
-    datum:               document.getElementById('datum')?.value || '',
-    naam:                document.getElementById('naam')?.value  || '',
-    algemeen_opmerking:  document.getElementById('algemeen_opmerking')?.value || '',
+    datum:              document.getElementById('datum')?.value || '',
+    naam:               document.getElementById('naam')?.value  || '',
+    algemeen_opmerking: document.getElementById('algemeen_opmerking')?.value || '',
   };
-  // Verwijder fotos uit state voor localstorage grootte
-  const stateZonderFotos = {};
-  Object.entries(STATE).forEach(([k,v]) => {
-    stateZonderFotos[k] = { ...v, fotos: [] };
-  });
-  localStorage.setItem('mwb_draft', JSON.stringify({
-    velden, state: stateZonderFotos, beweging: BEWEGING, stap: currentStep, tab: activeTab
-  }));
+  const stateLight = {};
+  Object.entries(STATE).forEach(([k,v]) => { stateLight[k] = {...v, fotos:[]}; });
+  localStorage.setItem('mwb_draft', JSON.stringify({ velden, state:stateLight, beweging:BEWEGING, stap:currentStep, tab:activeTab }));
 }
 
 function laadDraft() {
-  const raw = localStorage.getItem('mwb_draft');
-  if (!raw) return false;
+  const raw = localStorage.getItem('mwb_draft'); if (!raw) return false;
   try {
     const { velden, state, beweging, stap, tab } = JSON.parse(raw);
-
-    if (velden) {
-      Object.entries(velden).forEach(([id, val]) => {
-        const el = document.getElementById(id);
-        if (el) el.value = val;
+    if (velden) Object.entries(velden).forEach(([id,val]) => { const el = document.getElementById(id); if (el) el.value = val; });
+    if (state) {
+      Object.entries(state).forEach(([id, s]) => {
+        if (STATE[id]) {
+          STATE[id].aantal  = s.aantal  || 0;
+          STATE[id].nummers = s.nummers || [];
+          STATE[id].opm     = s.opm     || '';
+          STATE[id].types   = s.types   || [];
+          STATE[id].fotos   = s.fotos   || [];
+          // Zorg dat nummers array klopt met aantal
+          while (STATE[id].nummers.length < STATE[id].aantal) STATE[id].nummers.push('');
+          while (STATE[id].nummers.length > STATE[id].aantal) STATE[id].nummers.pop();
+        }
       });
     }
-    if (state)    Object.assign(STATE, state);
     if (beweging) Object.assign(BEWEGING, beweging);
     if (tab && SECTIES[tab]) activeTab = tab;
 
@@ -1405,23 +1165,17 @@ function laadDraft() {
     if (BEWEGING.type) {
       ['zaak_klus','klus_klus','klus_zaak'].forEach(t => {
         document.getElementById('bc-' + t).classList.toggle('selected', t === BEWEGING.type);
-      });
-      ['zaak_klus','klus_klus','klus_zaak'].forEach(t => {
         document.getElementById('lv-' + t).classList.toggle('show', t === BEWEGING.type);
       });
-
-      // Herstel autocomplete invoervelden
       const herstelAC = (veldId, klus) => {
-        if (!klus || !klus.naam) return;
+        if (!klus?.naam) return;
         const input = document.getElementById('ac-input-' + veldId);
         const badge = document.getElementById('ac-badge-'  + veldId);
         if (!input) return;
-        input.value = klus.naam;
-        input.classList.add('selected');
-        if (klus.werknr) { badge.textContent = 'Werknr. ' + klus.werknr; badge.classList.add('show'); }
+        input.value = klus.naam; input.classList.add('selected');
+        if (klus.werknr && klus.werknr !== 'DE ZAAK') { badge.textContent = 'Werknr. ' + klus.werknr; badge.classList.add('show'); }
         AC_STATE[veldId] = klus;
       };
-
       if (BEWEGING.type === 'zaak_klus') herstelAC('naar-zk', BEWEGING.naar);
       if (BEWEGING.type === 'klus_klus') { herstelAC('van-kk', BEWEGING.van); herstelAC('naar-kk', BEWEGING.naar); }
       if (BEWEGING.type === 'klus_zaak') herstelAC('van-kz', BEWEGING.van);
@@ -1431,12 +1185,10 @@ function laadDraft() {
       currentStep = stap;
       document.getElementById('step-1').classList.remove('active');
       document.getElementById('step-' + currentStep).classList.add('active');
-      updateProgress();
-      updateNav();
-      if (currentStep === 3) { renderTabs(); renderTabContent(activeTab); }
+      updateProgress(); updateNav();
+      if (currentStep === 3) renderMaterialStep();
       if (currentStep === 4) renderSummary();
     }
-
     return true;
   } catch(e) { return false; }
 }
@@ -1444,24 +1196,18 @@ function laadDraft() {
 function clearDraft() { localStorage.removeItem('mwb_draft'); }
 
 ['datum','naam','algemeen_opmerking'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', autosave);
+  const el = document.getElementById(id); if (el) el.addEventListener('input', autosave);
 });
 
 /* ══════════════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════════════ */
-function setDatum() {
-  const el = document.getElementById('datum');
-  if (!el.value) el.value = new Date().toISOString().split('T')[0];
-}
-
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-
 initState();
 const hadDraft = laadDraft();
-if (!hadDraft) setDatum();
-if (currentStep === 1) { renderTabs(); renderTabContent(activeTab); }
+if (!hadDraft) {
+  document.getElementById('datum').value = new Date().toISOString().split('T')[0];
+}
 </script>
 </body>
 </html>
