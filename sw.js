@@ -1,7 +1,7 @@
-const CACHE = 'mwb-verplaatslijst-v1';
+const CACHE = 'mwb-verplaatslijst-v3';
 
 const BESTANDEN = [
-  './verplaatslijst.html',
+  './index.html',
   './manifest.json'
 ];
 

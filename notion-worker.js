@@ -12,7 +12,6 @@ export default {
       'Access-Control-Allow-Headers': 'Content-Type',
     };
 
-    // Preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: CORS });
     }
@@ -24,16 +23,21 @@ export default {
     try {
       const data = await request.json();
 
-      // ── Details tekst opbouwen uit onderdelen ──
+      // ── Bewegingstype label ──
+      const typeLabel = {
+        zaak_klus: 'Van zaak → Klus',
+        klus_klus: 'Klus → Klus',
+        klus_zaak: 'Klus → Zaak',
+      }[data.beweging_type] || data.beweging_type || '';
+
+      // ── Details tekst opbouwen ──
       let details = '';
       if (data.onderdelen) {
         for (const item of Object.values(data.onderdelen)) {
           if (item.aantal && parseInt(item.aantal) > 0) {
             details += `${item.naam}: ${item.aantal}`;
             if (item.nummer) details += ` (nr. ${item.nummer})`;
-            if (item.van)    details += ` | van: ${item.van}`;
-            if (item.naar)   details += ` | naar: ${item.naar}`;
-            if (item.opslag) details += ` | opslag: ${item.opslag}`;
+            if (item.types)  details += ` [${item.types}]`;
             if (item.opm)    details += ` – ${item.opm}`;
             details += '\n';
           }
@@ -41,21 +45,23 @@ export default {
       }
 
       // ── Notion pagina aanmaken ──
+      const naar     = data.naar_naam  || '';
+      const van      = data.van_naam   || '';
+      const naarNr   = data.naar_werknr || '';
+      const vanNr    = data.van_werknr  || '';
+      const naamTitle = `${naar || van} – ${data.datum || '?'}`;
+
       const notionBody = {
         parent: { database_id: env.NOTION_DB_ID },
         properties: {
           'Naam': {
-            title: [{
-              text: {
-                content: `${data.bouwplaats || 'Onbekend'} – ${data.datum || '?'}`
-              }
-            }]
+            title: [{ text: { content: naamTitle } }]
           },
-          'Bouwplaats':    { rich_text: [{ text: { content: data.bouwplaats    || '' } }] },
-          'Werknr. Van':   { rich_text: [{ text: { content: data.glob_van      || '' } }] },
-          'Werknr. Naar':  { rich_text: [{ text: { content: data.glob_naar     || '' } }] },
-          'Opslag / Zaak': { rich_text: [{ text: { content: data.glob_opslag   || '' } }] },
-          'Ingevuld door': { rich_text: [{ text: { content: data.naam          || '' } }] },
+          'Bouwplaats':    { rich_text: [{ text: { content: naar } }] },
+          'Werknr. Van':   { rich_text: [{ text: { content: vanNr  || (van  ? `${van}`  : '') } }] },
+          'Werknr. Naar':  { rich_text: [{ text: { content: naarNr || (naar ? `${naar}` : '') } }] },
+          'Opslag / Zaak': { rich_text: [{ text: { content: typeLabel } }] },
+          'Ingevuld door': { rich_text: [{ text: { content: data.naam || '' } }] },
           'Details':       { rich_text: [{ text: { content: details.slice(0, 2000) } }] },
           'Opmerkingen':   { rich_text: [{ text: { content: data.algemeen_opmerking || '' } }] },
           'Status':        { select: { name: 'Nieuw' } },
