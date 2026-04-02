@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beheer – Middelwatering Bouw</title>
+<meta name="theme-color" content="#0a1628">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --oranje:    #f97316;
+  --groen:     #22c55e;
+  --rood:      #ef4444;
+  --blauw:     #4d7cfe;
+  --tekst:     rgba(255,255,255,0.95);
+  --zacht:     rgba(255,255,255,0.55);
+  --dim:       rgba(255,255,255,0.30);
+  --glas-rand: rgba(255,255,255,0.13);
+  --glas-bg:   rgba(255,255,255,0.06);
+  --input-bg:  rgba(255,255,255,0.07);
+  --radius-lg: 18px;
+  --radius:    12px;
+  --radius-sm: 8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#060e1c;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
+
+/* ── ORBS ─────────────────────────────────────────── */
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent);top:-150px;left:-100px;animation:d1 22s ease-in-out infinite alternate;}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent);bottom:-100px;right:-60px;animation:d2 28s ease-in-out infinite alternate;}
+.orb-4{width:220px;height:220px;background:radial-gradient(circle,rgba(249,115,22,.45),transparent 65%);top:15%;right:-50px;animation:d2 24s ease-in-out infinite alternate;}
+@keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,70px) scale(1.1)}}
+@keyframes d2{from{transform:translate(0,0)}to{transform:translate(-40px,-50px)}}
+
+/* ── HEADER ───────────────────────────────────────── */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(6,14,28,.85);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  backdrop-filter:blur(28px) saturate(160%);
+  border-bottom:1px solid rgba(255,255,255,.09);
+}
+.header-top{display:flex;align-items:center;gap:12px;padding:12px 18px;}
+header img{height:30px;object-fit:contain;}
+.header-title{flex:1;font-size:15px;font-weight:700;line-height:1.2;}
+.header-title small{display:block;font-size:10px;font-weight:400;opacity:.50;}
+.header-app-link{font-size:12px;font-weight:600;color:var(--oranje);text-decoration:none;padding:6px 14px;border:1px solid rgba(249,115,22,.30);border-radius:20px;background:rgba(249,115,22,.08);white-space:nowrap;}
+
+/* ── TABS ─────────────────────────────────────────── */
+.tab-nav{display:flex;padding:0 16px 12px;gap:6px;overflow-x:auto;scrollbar-width:none;}
+.tab-nav::-webkit-scrollbar{display:none;}
+.tab-nav-btn{
+  flex-shrink:0;padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;
+}
+.tab-nav-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 3px 14px rgba(249,115,22,.35);}
+
+/* ── CONTENT ──────────────────────────────────────── */
+.main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:16px 16px 40px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── GLASS CARD ───────────────────────────────────── */
+.card{background:var(--glas-bg);-webkit-backdrop-filter:brightness(1.05) blur(24px) saturate(150%);backdrop-filter:brightness(1.05) blur(24px) saturate(150%);border:1px solid var(--glas-rand);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.10);}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;}
+.card-title-row{display:flex;align-items:center;gap:10px;}
+.card-icon{font-size:20px;flex-shrink:0;}
+.card-title{font-size:14px;font-weight:700;color:var(--tekst);}
+.card-sub{font-size:11px;color:var(--zacht);margin-top:2px;}
+.card-body{padding:0 16px 16px;}
+.divider{height:1px;background:rgba(255,255,255,.07);margin:12px 0;}
+
+/* ── SEARCH BAR ───────────────────────────────────── */
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--zacht);pointer-events:none;}
+.search-input{
+  width:100%;padding:12px 14px 12px 40px;
+  border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);
+  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
+  background:rgba(255,255,255,.07);-webkit-appearance:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.search-input::placeholder{color:var(--dim);}
+.search-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
+
+/* ── INZENDING CARD ───────────────────────────────── */
+.inz-card{
+  background:rgba(14,26,52,.75);border:1px solid rgba(255,255,255,.11);
+  border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.22);transition:border-color .2s;
+}
+.inz-card:hover{border-color:rgba(255,255,255,.18);}
+.inz-header{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;cursor:pointer;
+}
+.inz-date{font-size:12px;font-weight:700;color:var(--oranje);flex-shrink:0;}
+.inz-title{flex:1;min-width:0;}
+.inz-naam{font-size:14px;font-weight:700;color:var(--tekst);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inz-person{font-size:11px;color:var(--zacht);margin-top:1px;}
+.inz-toggle{font-size:12px;color:var(--dim);flex-shrink:0;transition:transform .2s;}
+.inz-card.open .inz-toggle{transform:rotate(180deg);}
+.inz-body{display:none;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,.07);}
+.inz-card.open .inz-body{display:block;}
+
+/* Beweging pill */
+.beweging-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:16px;font-size:11px;font-weight:700;margin-bottom:10px;margin-top:10px;}
+.bp-zaak_klus{background:rgba(77,124,254,.15);border:1px solid rgba(77,124,254,.30);color:#7aa4ff;}
+.bp-klus_klus{background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.28);color:var(--oranje);}
+.bp-klus_zaak{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.28);color:var(--groen);}
+
+/* Route */
+.route-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.route-loc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:7px 12px;}
+.rl-label{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.rl-naam{font-size:13px;font-weight:700;color:var(--tekst);}
+.rl-nr{font-size:10px;color:var(--zacht);}
+.route-arrow{font-size:18px;color:var(--oranje);flex-shrink:0;}
+
+/* Items tabel */
+.items-table{width:100%;border-collapse:collapse;}
+.items-table th{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);}
+.items-table td{font-size:13px;padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--tekst);}
+.items-table tr:last-child td{border-bottom:none;}
+.items-table .nr{color:var(--zacht);font-size:11px;}
+
+/* ── MATERIEEL OVERZICHT ──────────────────────────── */
+.mat-section{margin-bottom:20px;}
+.mat-section-title{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
+  color:var(--oranje);padding:10px 0 8px;
+  border-bottom:1px solid rgba(249,115,22,.20);margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.mat-items{display:flex;flex-direction:column;gap:6px;}
+.mat-item{
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;
+  background:rgba(14,26,52,.70);border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--radius);
+}
+.mat-naam{flex:1;font-size:13px;font-weight:600;color:var(--tekst);}
+.mat-nr{font-size:11px;font-weight:700;color:var(--zacht);}
+.mat-locatie{font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
+.mat-locatie.zaak{background:rgba(34,197,94,.14);color:var(--groen);border:1px solid rgba(34,197,94,.25);}
+.mat-locatie.klus{background:rgba(249,115,22,.14);color:var(--oranje);border:1px solid rgba(249,115,22,.25);}
+.mat-datum{font-size:10px;color:var(--dim);margin-top:1px;}
+
+/* Geen data */
+.leeg{text-align:center;padding:32px 20px;color:var(--dim);font-size:14px;}
+.leeg .leeg-icon{font-size:32px;display:block;margin-bottom:8px;}
+
+/* ── KLUSSEN BEHEER ───────────────────────────────── */
+.klus-add-form{display:grid;grid-template-columns:1fr 120px auto;gap:8px;margin-bottom:16px;}
+.klus-add-form input{
+  padding:11px 13px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
+  background:var(--input-bg);-webkit-appearance:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.klus-add-form input::placeholder{color:var(--dim);}
+.klus-add-form input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
+.btn-add{
+  padding:11px 16px;border:none;border-radius:var(--radius-sm);
+  font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));
+  box-shadow:0 3px 14px rgba(249,115,22,.30);-webkit-appearance:none;white-space:nowrap;
+}
+.klus-list{display:flex;flex-direction:column;gap:6px;}
+.klus-row{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;
+  background:rgba(14,26,52,.70);border:1px solid rgba(255,255,255,.10);
+  border-radius:var(--radius);
+}
+.klus-naam{flex:1;font-size:14px;font-weight:600;color:var(--tekst);}
+.klus-nr{font-size:12px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.20);border-radius:10px;padding:2px 10px;flex-shrink:0;}
+.btn-del{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.25);color:rgba(239,68,68,.80);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;transition:all .15s;}
+.btn-del:hover{background:rgba(239,68,68,.30);}
+.export-wrap{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);}
+.btn-export{
+  width:100%;padding:13px;border:none;border-radius:var(--radius-sm);
+  font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;
+  background:rgba(77,124,254,.25);border:1px solid rgba(77,124,254,.30);
+  -webkit-appearance:none;transition:all .2s;
+}
+.btn-export:hover{background:rgba(77,124,254,.35);}
+.code-block{
+  margin-top:12px;padding:14px;border-radius:var(--radius-sm);
+  background:rgba(0,0,0,.40);border:1px solid rgba(255,255,255,.10);
+  font-family:'Courier New',monospace;font-size:11px;color:rgba(255,255,255,.75);
+  white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;
+  display:none;
+}
+.code-block.show{display:block;}
+.btn-copy{
+  width:100%;padding:11px;margin-top:8px;border:none;border-radius:var(--radius-sm);
+  font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;
+  background:rgba(34,197,94,.22);border:1px solid rgba(34,197,94,.28);
+  -webkit-appearance:none;display:none;
+}
+.btn-copy.show{display:block;}
+
+/* ── STATS ROW ────────────────────────────────────── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.stat-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);padding:12px 14px;text-align:center;}
+.stat-val{font-size:26px;font-weight:800;color:var(--oranje);line-height:1;}
+.stat-lbl{font-size:10px;font-weight:600;color:var(--zacht);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;}
+
+/* ── LOADING / ERROR ──────────────────────────────── */
+.loader{text-align:center;padding:40px 20px;}
+.loader-spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,.10);border-top-color:var(--oranje);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-txt{font-size:14px;color:var(--zacht);}
+.error-box{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:rgba(239,68,68,.90);}
+
+/* ── TOAST ────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(14,26,50,.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16);color:#fff;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:200;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.30);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── FOTO BADGE ───────────────────────────────────── */
+.foto-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.12);border-radius:8px;padding:2px 7px;margin-left:6px;}
+
+/* ── STATUS BADGE ─────────────────────────────────── */
+.status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.08);color:var(--zacht);}
+.status-badge.nieuw{background:rgba(249,115,22,.15);color:var(--oranje);}
+
+@media(max-width:480px){
+  .klus-add-form{grid-template-columns:1fr 90px auto;}
+  .stats-row{grid-template-columns:repeat(3,1fr);}
+  .stat-val{font-size:20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-4"></div>
+
+<header>
+  <div class="header-top">
+    <img src="https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-wit-2018.png" alt="MWB" onerror="this.style.display='none'">
+    <div class="header-title">Beheercentrum <small>Middelwatering Bouw</small></div>
+    <a href="index.html" class="header-app-link">← Naar app</a>
+  </div>
+  <div class="tab-nav">
+    <button class="tab-nav-btn active" onclick="showTab('materieel')" id="tn-materieel">📍 Materieel</button>
+    <button class="tab-nav-btn" onclick="showTab('inzendingen')" id="tn-inzendingen">📋 Inzendingen</button>
+    <button class="tab-nav-btn" onclick="showTab('klussen')" id="tn-klussen">🏗️ Klussen</button>
+  </div>
+</header>
+
+<div class="main">
+
+<!-- ══ TAB: MATERIEEL OVERZICHT ══ -->
+<div class="tab-content active" id="tab-materieel">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="search-mat" type="text" placeholder="Zoek op materieel, nummer of locatie..." oninput="filterMaterieel(this.value)">
+  </div>
+  <div id="mat-stats" class="stats-row" style="display:none"></div>
+  <div id="mat-content">
+    <div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen uit Notion...</div></div>
+  </div>
+</div>
+
+<!-- ══ TAB: INZENDINGEN ══ -->
+<div class="tab-content" id="tab-inzendingen">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="search-inz" type="text" placeholder="Zoek op naam, locatie, datum of persoon..." oninput="filterInzendingen(this.value)">
+  </div>
+  <div id="inz-stats" class="stats-row" style="display:none"></div>
+  <div id="inz-content">
+    <div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen uit Notion...</div></div>
+  </div>
+</div>
+
+<!-- ══ TAB: KLUSSEN BEHEER ══ -->
+<div class="tab-content" id="tab-klussen">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-icon">➕</span>
+        <div><div class="card-title">Klus toevoegen</div><div class="card-sub">Voeg een nieuw project toe aan de lijst</div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="klus-add-form">
+        <input type="text" id="new-klus-naam" placeholder="Naam / adres klus" oninput="clearAddError()">
+        <input type="text" id="new-klus-nr" placeholder="Werknr.">
+        <button class="btn-add" onclick="addKlus()">+ Voeg toe</button>
+      </div>
+      <div id="add-error" style="font-size:12px;color:rgba(239,68,68,.80);display:none;margin-top:-8px;margin-bottom:8px;">Vul naam en werknummer in.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-icon">🏗️</span>
+        <div><div class="card-title">Actieve klussen</div><div class="card-sub" id="klus-count-lbl">laden...</div></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="klus-list" id="klus-list"></div>
+      <div class="export-wrap">
+        <button class="btn-export" onclick="toggleExport()">📋 Exporteer code voor de app</button>
+        <div class="code-block" id="export-code"></div>
+        <button class="btn-copy" id="btn-copy" onclick="copyCode()">✓ Kopieer naar klembord</button>
+        <p style="font-size:11px;color:var(--dim);margin-top:8px;line-height:1.5;">Plak de gekopieerde code in <strong>index.html</strong> bij <code>const KLUSSEN = [...]</code> om de lijst in de app bij te werken.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
+
+/* ══════════════════════════════════════════════════════
+   STANDAARD KLUSSEN (synchroniseer met index.html)
+   ══════════════════════════════════════════════════════ */
+const DEFAULT_KLUSSEN = [
+  { naam:'Rijswijk – Bosgeesterlaan',        werknr:'2024-101' },
+  { naam:'Rijswijk – Jan Thijssenweg',       werknr:'2025-003' },
+  { naam:'Den Haag – Spui 255',              werknr:'2024-102' },
+  { naam:'Den Haag – Laan van Meerdervoort', werknr:'2025-002' },
+  { naam:'Delft – Binnenwatersloot',         werknr:'2024-103' },
+  { naam:'Zoetermeer – Röntgenlaan 12',      werknr:'2025-001' },
+  { naam:'Wassenaar – Kerkstraat 14',        werknr:'2025-004' },
+  { naam:'Leidschendam – Vliet 8',           werknr:'2025-005' },
+  { naam:'Nootdorp – Boekweitakker 3',       werknr:'2025-006' },
+  { naam:'Pijnacker – Rottezoom 20',         werknr:'2025-007' },
+];
+
+/* ══════════════════════════════════════════════════════
+   TABS
+   ══════════════════════════════════════════════════════ */
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-nav-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('tn-' + name).classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════
+   NOTION HELPER
+   ══════════════════════════════════════════════════════ */
+function getProp(props, key) {
+  const p = props?.[key];
+  if (!p) return '';
+  if (p.type === 'title')     return p.title?.map(t => t.plain_text).join('') || '';
+  if (p.type === 'rich_text') return p.rich_text?.map(t => t.plain_text).join('') || '';
+  if (p.type === 'select')    return p.select?.name || '';
+  if (p.type === 'date')      return p.date?.start  || '';
+  return '';
+}
+
+function parseSubmission(page) {
+  const p = page.properties;
+  return {
+    id:           page.id,
+    naam:         getProp(p, 'Naam'),
+    datum:        getProp(p, 'Datum'),
+    persoon:      getProp(p, 'Ingevuld door'),
+    bouwplaats:   getProp(p, 'Bouwplaats'),
+    vanNr:        getProp(p, 'Werknr. Van'),
+    naarNr:       getProp(p, 'Werknr. Naar'),
+    bewegingType: getProp(p, 'Opslag / Zaak'), // bevat typeLabel
+    details:      getProp(p, 'Details'),
+    opmerkingen:  getProp(p, 'Opmerkingen'),
+    status:       getProp(p, 'Status'),
+  };
+}
+
+// Bewegingstype label → key
+function typeKey(label) {
+  if (label.includes('Zaak → Klus') || label.includes('zaak_klus')) return 'zaak_klus';
+  if (label.includes('Klus → Klus') || label.includes('klus_klus')) return 'klus_klus';
+  if (label.includes('Klus → Zaak') || label.includes('klus_zaak')) return 'klus_zaak';
+  return '';
+}
+
+// Details tekst → array van items
+function parseDetails(details) {
+  if (!details) return [];
+  return details.split('\n').filter(Boolean).map(line => {
+    // "Schaftkeet: 2 (nr. SK-01, SK-02) [35A] – beschadigd"
+    const m = line.match(/^(.+?):\s*(\d+)(?:\s*\(nr\.\s*([^)]+)\))?(?:\s*\[([^\]]+)\])?(?:\s*[–-]\s*(.+))?/);
+    if (!m) return { raw: line };
+    return {
+      naam:    m[1].trim(),
+      aantal:  parseInt(m[2]),
+      nummers: m[3] ? m[3].split(',').map(s => s.trim()) : [],
+      types:   m[4] || '',
+      opm:     m[5] || '',
+    };
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   DATA OPHALEN
+   ══════════════════════════════════════════════════════ */
+let allSubmissions = [];
+let dataLoaded = false;
+let dataError  = false;
+
+async function loadData() {
+  try {
+    const res  = await fetch(WORKER_URL + '?action=inzendingen');
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error);
+    allSubmissions = json.results.map(parseSubmission);
+    dataLoaded = true;
+  } catch(e) {
+    dataError = e.message;
+  }
+  renderInzendingen();
+  renderMaterieel();
+}
+
+/* ══════════════════════════════════════════════════════
+   INZENDINGEN TAB
+   ══════════════════════════════════════════════════════ */
+function renderInzendingen(filter = '') {
+  const content = document.getElementById('inz-content');
+  const stats   = document.getElementById('inz-stats');
+
+  if (dataError) {
+    content.innerHTML = `<div class="error-box">⚠️ Kon data niet ophalen: ${dataError}<br><small>Controleer of de worker correct is geconfigureerd.</small></div>`;
+    return;
+  }
+  if (!dataLoaded) {
+    content.innerHTML = `<div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen...</div></div>`;
+    return;
+  }
+
+  const q = filter.toLowerCase();
+  const gefilterd = allSubmissions.filter(s =>
+    !q ||
+    s.naam.toLowerCase().includes(q) ||
+    s.persoon.toLowerCase().includes(q) ||
+    s.bouwplaats.toLowerCase().includes(q) ||
+    s.vanNr.toLowerCase().includes(q) ||
+    s.naarNr.toLowerCase().includes(q) ||
+    s.datum.includes(q) ||
+    s.details.toLowerCase().includes(q)
+  );
+
+  // Stats
+  stats.style.display = 'grid';
+  const vandaag = new Date().toISOString().split('T')[0];
+  const vandaagAantal = allSubmissions.filter(s => s.datum === vandaag).length;
+  stats.innerHTML = `
+    <div class="stat-card"><div class="stat-val">${allSubmissions.length}</div><div class="stat-lbl">Totaal</div></div>
+    <div class="stat-card"><div class="stat-val">${vandaagAantal}</div><div class="stat-lbl">Vandaag</div></div>
+    <div class="stat-card"><div class="stat-val">${gefilterd.length}</div><div class="stat-lbl">Gevonden</div></div>
+  `;
+
+  if (gefilterd.length === 0) {
+    content.innerHTML = `<div class="leeg"><span class="leeg-icon">🔍</span>Geen inzendingen gevonden.</div>`;
+    return;
+  }
+
+  content.innerHTML = gefilterd.map((s, idx) => {
+    const tk      = typeKey(s.bewegingType);
+    const pillCls = tk ? `bp-${tk}` : '';
+    const pillTxt = s.bewegingType || '–';
+    const items   = parseDetails(s.details);
+    const totItems = items.reduce((sum, i) => sum + (i.aantal || 0), 0);
+
+    const vanTxt  = s.vanNr  || '—';
+    const naarTxt = s.naarNr || '—';
+
+    const routeHtml = `
+      <div class="route-row">
+        <div class="route-loc">
+          <div class="rl-label">Van</div>
+          <div class="rl-naam">${s.naam.split(' – ')[0] || vanTxt}</div>
+          <div class="rl-nr">${vanTxt}</div>
+        </div>
+        <div class="route-arrow">→</div>
+        <div class="route-loc">
+          <div class="rl-label">Naar</div>
+          <div class="rl-naam">${s.bouwplaats || naarTxt}</div>
+          <div class="rl-nr">${naarTxt}</div>
+        </div>
+      </div>`;
+
+    const itemsHtml = items.length > 0 ? `
+      <table class="items-table">
+        <tr><th>Item</th><th>Aantal</th><th>Nummer(s)</th></tr>
+        ${items.map(i => `
+          <tr>
+            <td>${i.naam || i.raw || '?'}${i.types ? ` <span style="font-size:10px;color:var(--zacht)">[${i.types}]</span>` : ''}</td>
+            <td>${i.aantal || '–'}</td>
+            <td class="nr">${i.nummers?.join(', ') || '–'}</td>
+          </tr>
+          ${i.opm ? `<tr><td colspan="3" style="font-size:11px;color:var(--zacht);padding-top:0;">💬 ${i.opm}</td></tr>` : ''}
+        `).join('')}
+      </table>` : '';
+
+    const opmHtml = s.opmerkingen ? `<div style="margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:var(--radius-sm);font-size:13px;color:var(--zacht);">💬 ${s.opmerkingen}</div>` : '';
+
+    return `
+      <div class="inz-card" id="inz-${idx}">
+        <div class="inz-header" onclick="toggleInz(${idx})">
+          <div class="inz-date">${formatDate(s.datum)}</div>
+          <div class="inz-title">
+            <div class="inz-naam">${s.bouwplaats || s.naam}</div>
+            <div class="inz-person">👤 ${s.persoon || '–'} · ${totItems} item${totItems !== 1 ? 's' : ''}</div>
+          </div>
+          <span class="status-badge ${s.status?.toLowerCase() === 'nieuw' ? 'nieuw' : ''}">${s.status || '–'}</span>
+          <span class="inz-toggle">▼</span>
+        </div>
+        <div class="inz-body">
+          <span class="beweging-pill ${pillCls}">${pillTxt}</span>
+          ${routeHtml}
+          ${itemsHtml}
+          ${opmHtml}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleInz(idx) {
+  document.getElementById('inz-' + idx)?.classList.toggle('open');
+}
+
+function filterInzendingen(q) {
+  renderInzendingen(q);
+}
+
+function formatDate(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('nl-NL', { day:'numeric', month:'short', year:'numeric' });
+}
+
+/* ══════════════════════════════════════════════════════
+   MATERIEEL OVERZICHT TAB
+   ══════════════════════════════════════════════════════ */
+// Verwerkt submissions om laatste bekende locatie per item te bepalen
+function buildEquipmentMap() {
+  const tracker = {}; // key: "Schaftkeet||SK-01" → { naam, nummer, locatie, datum }
+
+  // Verwerk van oud naar nieuw
+  [...allSubmissions].reverse().forEach(s => {
+    const naar  = s.bouwplaats || s.naarNr || 'Onbekend';
+    const datum = s.datum;
+    const items = parseDetails(s.details);
+    items.forEach(item => {
+      if (!item.naam) return;
+      const nrs = item.nummers?.length > 0 ? item.nummers : ['*'];
+      nrs.forEach(nr => {
+        tracker[`${item.naam}||${nr}`] = {
+          naam:    item.naam,
+          nummer:  nr === '*' ? null : nr,
+          locatie: naar,
+          isZaak:  naar.toLowerCase().includes('zaak') || naar.toLowerCase().includes('depot'),
+          datum,
+          naarNr:  s.naarNr,
+        };
+      });
+    });
+  });
+
+  // Groepeer op naam
+  const grouped = {};
+  Object.values(tracker).forEach(v => {
+    if (!grouped[v.naam]) grouped[v.naam] = [];
+    grouped[v.naam].push(v);
+  });
+  return grouped;
+}
+
+let equipmentMap = {};
+let matFilter = '';
+
+function renderMaterieel(filter = '') {
+  matFilter = filter;
+  const content = document.getElementById('mat-content');
+  const stats   = document.getElementById('mat-stats');
+
+  if (dataError) {
+    content.innerHTML = `<div class="error-box">⚠️ Kon data niet ophalen: ${dataError}</div>`;
+    return;
+  }
+  if (!dataLoaded) {
+    content.innerHTML = `<div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen...</div></div>`;
+    return;
+  }
+
+  equipmentMap = buildEquipmentMap();
+  const q = filter.toLowerCase();
+
+  // Stats
+  const allItems    = Object.values(equipmentMap).flat();
+  const opZaak      = allItems.filter(i => i.isZaak).length;
+  const opKlus      = allItems.filter(i => !i.isZaak).length;
+  stats.style.display = 'grid';
+  stats.innerHTML = `
+    <div class="stat-card"><div class="stat-val">${allItems.length}</div><div class="stat-lbl">Getrackt</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--groen)">${opZaak}</div><div class="stat-lbl">Op zaak</div></div>
+    <div class="stat-card"><div class="stat-val">${opKlus}</div><div class="stat-lbl">Op klus</div></div>
+  `;
+
+  if (Object.keys(equipmentMap).length === 0) {
+    content.innerHTML = `<div class="leeg"><span class="leeg-icon">📦</span>Nog geen verplaatsingen ingestuurd.<br>Zodra mensen materieel insturen, zie je hier de locaties.</div>`;
+    return;
+  }
+
+  let html = '';
+  Object.entries(equipmentMap)
+    .filter(([naam, items]) => {
+      if (!q) return true;
+      return naam.toLowerCase().includes(q) ||
+        items.some(i => (i.nummer||'').toLowerCase().includes(q) || i.locatie.toLowerCase().includes(q));
+    })
+    .sort(([a],[b]) => a.localeCompare(b))
+    .forEach(([naam, items]) => {
+      const filteredItems = q
+        ? items.filter(i => naam.toLowerCase().includes(q) || (i.nummer||'').toLowerCase().includes(q) || i.locatie.toLowerCase().includes(q))
+        : items;
+      if (filteredItems.length === 0) return;
+
+      html += `<div class="mat-section">
+        <div class="mat-section-title">📦 ${naam} <span style="font-size:10px;color:var(--zacht);font-weight:400">${filteredItems.length} item${filteredItems.length!==1?'s':''}</span></div>
+        <div class="mat-items">
+          ${filteredItems.sort((a,b)=>(a.nummer||'').localeCompare(b.nummer||'')).map(item => `
+            <div class="mat-item">
+              <div style="flex:1;">
+                <div class="mat-naam">${item.nummer ? `Nr. ${item.nummer}` : naam}</div>
+                ${item.datum ? `<div class="mat-datum">Bijgewerkt ${formatDate(item.datum)}</div>` : ''}
+              </div>
+              <div>
+                <div class="mat-locatie ${item.isZaak ? 'zaak' : 'klus'}">${item.isZaak ? '🏭 De Zaak' : `🏗️ ${item.locatie}`}</div>
+                ${item.naarNr && !item.isZaak ? `<div style="font-size:10px;color:var(--dim);text-align:right;margin-top:2px;">${item.naarNr}</div>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`;
+    });
+
+  content.innerHTML = html || `<div class="leeg"><span class="leeg-icon">🔍</span>Geen materieel gevonden.</div>`;
+}
+
+function filterMaterieel(q) {
+  renderMaterieel(q);
+}
+
+/* ══════════════════════════════════════════════════════
+   KLUSSEN BEHEER TAB
+   ══════════════════════════════════════════════════════ */
+function loadKlussen() {
+  const raw = localStorage.getItem('mwb_klussen');
+  return raw ? JSON.parse(raw) : [...DEFAULT_KLUSSEN];
+}
+function saveKlussen(list) {
+  localStorage.setItem('mwb_klussen', JSON.stringify(list));
+}
+
+function renderKlussen() {
+  const list = loadKlussen();
+  document.getElementById('klus-count-lbl').textContent = `${list.length} klus${list.length !== 1 ? 'sen' : ''} actief`;
+  const el = document.getElementById('klus-list');
+  if (list.length === 0) {
+    el.innerHTML = `<div class="leeg" style="padding:20px;">Nog geen klussen. Voeg er een toe ↑</div>`;
+    return;
+  }
+  el.innerHTML = list
+    .sort((a,b) => a.naam.localeCompare(b.naam))
+    .map((k, i) => `
+      <div class="klus-row">
+        <div class="klus-naam">${k.naam}</div>
+        <div class="klus-nr">${k.werknr}</div>
+        <button class="btn-del" onclick="deleteKlus(${i})" title="Verwijder">✕</button>
+      </div>
+    `).join('');
+}
+
+function addKlus() {
+  const naam  = document.getElementById('new-klus-naam').value.trim();
+  const werknr = document.getElementById('new-klus-nr').value.trim();
+  if (!naam || !werknr) {
+    document.getElementById('add-error').style.display = 'block';
+    return;
+  }
+  const list = loadKlussen();
+  list.push({ naam, werknr });
+  saveKlussen(list);
+  document.getElementById('new-klus-naam').value = '';
+  document.getElementById('new-klus-nr').value = '';
+  renderKlussen();
+  showToast(`✓ ${naam} toegevoegd`);
+}
+
+function deleteKlus(idx) {
+  const list   = loadKlussen();
+  const sorted = [...list].sort((a,b) => a.naam.localeCompare(b.naam));
+  const item   = sorted[idx];
+  const realIdx = list.findIndex(k => k.naam === item.naam && k.werknr === item.werknr);
+  if (realIdx > -1) {
+    list.splice(realIdx, 1);
+    saveKlussen(list);
+    renderKlussen();
+    showToast(`Verwijderd: ${item.naam}`);
+    // Verberg export als die open stond
+    document.getElementById('export-code').classList.remove('show');
+    document.getElementById('btn-copy').classList.remove('show');
+  }
+}
+
+function clearAddError() {
+  document.getElementById('add-error').style.display = 'none';
+}
+
+function toggleExport() {
+  const codeEl = document.getElementById('export-code');
+  const copyEl = document.getElementById('btn-copy');
+  const list   = loadKlussen();
+  const code   = `const KLUSSEN = [\n${list.map(k => `  { naam:'${k.naam}', werknr:'${k.werknr}' },`).join('\n')}\n];`;
+  codeEl.textContent = code;
+  codeEl.classList.toggle('show');
+  copyEl.classList.toggle('show');
+}
+
+function copyCode() {
+  const code = document.getElementById('export-code').textContent;
+  navigator.clipboard.writeText(code)
+    .then(() => showToast('✓ Gekopieerd naar klembord'))
+    .catch(() => showToast('⚠️ Kopiëren mislukt'));
+}
+
+/* ══════════════════════════════════════════════════════
+   TOAST
+   ══════════════════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════ */
+renderKlussen();
+loadData();
+</script>
+</body>
+</html>
