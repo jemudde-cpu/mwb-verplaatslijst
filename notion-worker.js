@@ -15,11 +15,27 @@ export default {
       return new Response(null, { headers: CORS });
     }
 
-    // ── GET: inzendingen ophalen voor beheer pagina ──
+    // ── GET ──────────────────────────────────────────
     if (request.method === 'GET') {
       const url    = new URL(request.url);
       const action = url.searchParams.get('action');
 
+      // Klussen ophalen uit KV
+      if (action === 'klussen') {
+        try {
+          const raw = await env.MWB_KLUSSEN.get('klussen');
+          const klussen = raw ? JSON.parse(raw) : [];
+          return new Response(JSON.stringify({ ok: true, klussen }), {
+            headers: { ...CORS, 'Content-Type': 'application/json' },
+          });
+        } catch (e) {
+          return new Response(JSON.stringify({ ok: false, error: e.message }), {
+            status: 500, headers: { ...CORS, 'Content-Type': 'application/json' },
+          });
+        }
+      }
+
+      // Inzendingen ophalen voor beheer pagina
       if (action === 'inzendingen') {
         try {
           const res = await fetch(
@@ -61,10 +77,19 @@ export default {
       return new Response('Method not allowed', { status: 405, headers: CORS });
     }
 
-    // ── POST: nieuwe verplaatsing opslaan ──
+    // ── POST ─────────────────────────────────────────
     try {
       const data = await request.json();
 
+      // Klussen opslaan in KV
+      if (data.action === 'klussen_opslaan') {
+        await env.MWB_KLUSSEN.put('klussen', JSON.stringify(data.klussen || []));
+        return new Response(JSON.stringify({ ok: true }), {
+          headers: { ...CORS, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Nieuwe verplaatsing opslaan in Notion
       const typeLabel = {
         zaak_klus: 'Van zaak → Klus',
         klus_klus: 'Klus → Klus',
@@ -78,6 +103,7 @@ export default {
             details += `${item.naam}: ${item.aantal}`;
             if (item.nummers) details += ` (nr. ${item.nummers})`;
             if (item.types)   details += ` [${item.types}]`;
+            if (item.stuk && parseInt(item.stuk) > 0) details += ` (${item.stuk} stuk/weggegooid)`;
             if (item.opm)     details += ` – ${item.opm}`;
             details += '\n';
           }

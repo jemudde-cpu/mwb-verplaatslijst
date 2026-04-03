@@ -160,9 +160,9 @@ header img{height:32px;object-fit:contain;}
 .ac-badge{margin-top:5px;display:none;font-size:11px;font-weight:700;color:var(--oranje);padding:3px 10px;background:rgba(249,115,22,.12);border-radius:20px;width:fit-content;}
 .ac-badge.show{display:block;}
 
-/* Dropdown is FIXED zodat hij nooit geclipped wordt */
+/* Dropdown op body-niveau (escaped uit backdrop-filter context) */
 .ac-dropdown{
-  position:fixed;z-index:9999;
+  position:absolute;z-index:9999;
   background:rgba(8,18,38,.98);
   -webkit-backdrop-filter:blur(32px) saturate(180%);
   backdrop-filter:blur(32px) saturate(180%);
@@ -336,6 +336,13 @@ header img{height:32px;object-fit:contain;}
 /* ── INFO ROW ─────────────────────────────────────── */
 .info-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(77,124,254,.10);border:1px solid rgba(77,124,254,.22);border-radius:var(--radius);margin-bottom:16px;font-size:13px;color:var(--zacht);}
 .info-row .ir-icon{font-size:18px;flex-shrink:0;}
+
+/* ── DEFECT ROW (stuk / weggegooid) ──────────────── */
+.item-defect-row{display:flex;align-items:center;gap:10px;padding:0 14px 11px;border-top:1px solid rgba(239,68,68,.10);}
+.item-defect-lbl{flex:1;font-size:12px;font-weight:600;color:rgba(239,68,68,.75);}
+.stepper-btn.minus-defect{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.22);}
+.stepper-btn.plus-defect{background:rgba(239,68,68,.20);border-color:rgba(239,68,68,.32);}
+.stepper-val.defect{color:rgba(239,68,68,.90);}
 </style>
 </head>
 <body>
@@ -552,7 +559,7 @@ header img{height:32px;object-fit:contain;}
 /* ══════════════════════════════════════════════════════
    KLUSSEN DATABASE – pas aan met jullie actuele klussen
    ══════════════════════════════════════════════════════ */
-const KLUSSEN = [
+const KLUSSEN_DEFAULT = [
   { naam:'Rijswijk – Bosgeesterlaan',        werknr:'2024-101' },
   { naam:'Rijswijk – Jan Thijssenweg',       werknr:'2025-003' },
   { naam:'Den Haag – Spui 255',              werknr:'2024-102' },
@@ -564,6 +571,7 @@ const KLUSSEN = [
   { naam:'Nootdorp – Boekweitakker 3',       werknr:'2025-006' },
   { naam:'Pijnacker – Rottezoom 20',         werknr:'2025-007' },
 ];
+const KLUSSEN = [...KLUSSEN_DEFAULT];
 
 /* ══════════════════════════════════════════════════════
    MATERIEEL – per soort 1 regel, nummers per stuk inline
@@ -572,7 +580,7 @@ const SECTIES = {
   'Aansluitingen': [
     { id:'bouwmeterkast', naam:'Bouwmeterkast', hasNr:true, hasTypes:true },
     { id:'waterput',      naam:'Waterput',      hasNr:true },
-    { id:'waterkraan',    naam:'Waterkraan / standvink', hasNr:true },
+    { id:'waterkraan',    naam:'Waterkraan / standvink' },
   ],
   'Keten': [
     { id:'schaftkeet',     naam:'Schaftkeet',      hasNr:true },
@@ -587,12 +595,12 @@ const SECTIES = {
     { id:'lichtmast', naam:'Lichtmast', hasNr:true },
   ],
   'Bouwhekken': [
-    { id:'bouwhekken',          naam:'Bouwhekken' },
-    { id:'bouwhek_voeten',      naam:'Bouwhek voeten' },
-    { id:'hekklemmen',          naam:'Hekklemmen' },
-    { id:'hekwielen',           naam:'Hekwielen' },
-    { id:'hek_schoren',         naam:'Hek schoren' },
-    { id:'kunststof_rijplaten', naam:'Kunststof rijplaten' },
+    { id:'bouwhekken',          naam:'Bouwhekken',          hasDefect:true },
+    { id:'bouwhek_voeten',      naam:'Bouwhek voeten',      hasDefect:true },
+    { id:'hekklemmen',          naam:'Hekklemmen',          hasDefect:true },
+    { id:'hekwielen',           naam:'Hekwielen',           hasDefect:true },
+    { id:'hek_schoren',         naam:'Hek schoren',         hasDefect:true },
+    { id:'kunststof_rijplaten', naam:'Kunststof rijplaten', hasDefect:true },
   ],
 };
 
@@ -605,7 +613,7 @@ const AC_STATE = {};
 
 function initState() {
   alleItems().forEach(item => {
-    STATE[item.id] = { aantal:0, nummers:[], opm:'', types:[], fotos:[] };
+    STATE[item.id] = { aantal:0, nummers:[], opm:'', types:[], fotos:[], stuk:0 };
   });
 }
 function alleItems() { return Object.values(SECTIES).flat(); }
@@ -626,6 +634,7 @@ function goToStep(n) {
   // Sluit alle dropdowns
   document.querySelectorAll('.ac-dropdown.open').forEach(d => d.classList.remove('open'));
   updateProgress(); updateNav(); autosave();
+  if (currentStep === 2) syncKlussen();
   if (currentStep === 3) renderMaterialStep();
   if (currentStep === 4) renderSummary();
 }
@@ -711,12 +720,27 @@ document.addEventListener('click', e => {
 function acOpen(veldId) {
   const input    = document.getElementById('ac-input-' + veldId);
   const dropdown = document.getElementById('ac-dropdown-' + veldId);
-  const rect     = input.getBoundingClientRect();
-  // Positie berekenen voor fixed dropdown
-  dropdown.style.top   = (rect.bottom + 6) + 'px';
-  dropdown.style.left  = rect.left + 'px';
+
+  // Verplaats dropdown naar body zodat backdrop-filter op .card de positie niet verstoort
+  if (dropdown.parentElement !== document.body) {
+    document.body.appendChild(dropdown);
+  }
+
+  const rect = input.getBoundingClientRect();
+  dropdown.style.top   = (rect.bottom + window.scrollY + 6) + 'px';
+  dropdown.style.left  = (rect.left  + window.scrollX)     + 'px';
   dropdown.style.width = rect.width + 'px';
+  dropdown.style.position = 'absolute';
+
   acFilter(veldId, input.value);
+
+  // Sync klussen op de achtergrond; ververs dropdown als die nog open is
+  syncKlussen().then(() => {
+    const dd = document.getElementById('ac-dropdown-' + veldId);
+    if (dd?.classList.contains('open')) {
+      acFilter(veldId, document.getElementById('ac-input-' + veldId)?.value || '');
+    }
+  });
 }
 
 function acFilter(veldId, query) {
@@ -726,15 +750,14 @@ function acFilter(veldId, query) {
   // Herbereken positie bij typen (scroll kan verplaatst zijn)
   const input = document.getElementById('ac-input-' + veldId);
   const rect  = input.getBoundingClientRect();
-  dropdown.style.top   = (rect.bottom + 6) + 'px';
-  dropdown.style.left  = rect.left + 'px';
+  dropdown.style.top   = (rect.bottom + window.scrollY + 6) + 'px';
+  dropdown.style.left  = (rect.left  + window.scrollX)      + 'px';
   dropdown.style.width = rect.width + 'px';
 
   const q = query.trim().toLowerCase();
-  const results = (q === ''
+  const results = q === ''
     ? KLUSSEN
-    : KLUSSEN.filter(k => k.naam.toLowerCase().includes(q) || k.werknr.toLowerCase().includes(q))
-  ).slice(0, 5);
+    : KLUSSEN.filter(k => k.naam.toLowerCase().includes(q) || k.werknr.toLowerCase().includes(q));
 
   dropdown.innerHTML = '';
   if (results.length === 0) {
@@ -835,6 +858,17 @@ function renderTabContent(tab) {
     card.className = 'item-card' + (s.aantal > 0 ? ' has-value' : '');
     card.id = 'card-' + item.id;
 
+    // Inline type chips voor bouwmeterkast (eerst type kiezen, dan nummer)
+    let typeHtml = '';
+    if (item.id === 'bouwmeterkast' && s.aantal > 0) {
+      typeHtml = `<div style="padding:0 14px 10px;">
+        <div style="font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Type meterkast</div>
+        <div class="type-chips" style="margin-bottom:0;">
+          ${['35A','63A','125A'].map(t => `<button class="type-chip${s.types[0] === t ? ' active':''}" onclick="setTypeKast('${t}');event.stopPropagation()">⚡ ${t}</button>`).join('')}
+        </div>
+      </div>`;
+    }
+
     // Inline nummer inputs
     let nrHtml = '';
     if (item.hasNr && s.aantal > 0) {
@@ -849,6 +883,18 @@ function renderTabContent(tab) {
       nrHtml += `</div>`;
     }
 
+    let defectHtml = '';
+    if (item.hasDefect && s.aantal > 0) {
+      defectHtml = `<div class="item-defect-row">
+        <div class="item-defect-lbl">🗑️ waarvan stuk / weggegooid</div>
+        <div class="stepper">
+          <button class="stepper-btn minus-defect" onclick="changeStuk('${item.id}',-1)">−</button>
+          <span class="stepper-val${s.stuk > 0 ? ' defect' : ''}">${s.stuk}</span>
+          <button class="stepper-btn plus-defect" onclick="changeStuk('${item.id}',1)">+</button>
+        </div>
+      </div>`;
+    }
+
     card.innerHTML = `
       <div class="item-row">
         <div class="item-naam">${item.naam}${fotoTxt}</div>
@@ -859,7 +905,7 @@ function renderTabContent(tab) {
         </div>
         <button class="item-foto-btn${hasDetail ? ' has-detail' : ''}" id="db-${item.id}" onclick="openSheet('${item.id}')">📷</button>
       </div>
-      ${nrHtml}
+      ${typeHtml}${nrHtml}${defectHtml}
     `;
     list.appendChild(card);
   });
@@ -869,6 +915,8 @@ function changeAantal(id, delta) {
   const item = alleItems().find(i => i.id === id);
   const nieuw = Math.max(0, STATE[id].aantal + delta);
   STATE[id].aantal = nieuw;
+  // Stuk kan nooit meer zijn dan het totaal aantal
+  if (STATE[id].stuk > nieuw) STATE[id].stuk = nieuw;
   // Houd nummers array synchroon met aantal
   if (item.hasNr) {
     while (STATE[id].nummers.length < nieuw) STATE[id].nummers.push('');
@@ -876,6 +924,13 @@ function changeAantal(id, delta) {
   }
   renderTabContent(activeTab);
   renderTabs();
+  autosave();
+}
+
+function changeStuk(id, delta) {
+  const s = STATE[id];
+  STATE[id].stuk = Math.max(0, Math.min(s.aantal, (s.stuk || 0) + delta));
+  renderTabContent(activeTab);
   autosave();
 }
 
@@ -890,30 +945,25 @@ function openSheet(id) {
   sheetFotos  = STATE[id].fotos.map(f => ({...f}));
   const item        = alleItems().find(i => i.id === id);
   const s           = STATE[id];
-  const isBouwmeter = id === 'bouwmeterkast';
-
   document.getElementById('sheet-title').textContent = item.naam;
   document.getElementById('sheet-sub').textContent   = "Foto's en opmerkingen";
   document.getElementById('sheet-body').innerHTML = `
-    ${isBouwmeter ? `
-      <div style="margin-bottom:14px;">
-        <div class="sheet-foto-title">Type bouwmeterkast</div>
-        <div class="type-chips">
-          <button class="type-chip${s.types.includes('35A')  ? ' active':''}" onclick="toggleType('35A')">35A</button>
-          <button class="type-chip${s.types.includes('63A')  ? ' active':''}" onclick="toggleType('63A')">63A</button>
-          <button class="type-chip${s.types.includes('125A') ? ' active':''}" onclick="toggleType('125A')">125A</button>
-        </div>
-      </div>` : ''}
     <div class="sheet-field">
       <label>Opmerking (bijv. schade)</label>
       <input id="sf-opm" type="text" placeholder="Bijv. rechterdeur beschadigd..." value="${s.opm}">
     </div>
     <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-top:4px;">
       <div class="sheet-foto-title">Foto's toevoegen</div>
-      <label class="sheet-foto-add-btn">
-        <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addSheetFoto(event)">
-        📷 Foto toevoegen
-      </label>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <label class="sheet-foto-add-btn" style="margin-bottom:0;flex:1;">
+          <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addSheetFoto(event)">
+          📷 Camera
+        </label>
+        <label class="sheet-foto-add-btn" style="margin-bottom:0;flex:1;">
+          <input type="file" accept="image/*" style="display:none" onchange="addSheetFoto(event)">
+          🖼️ Album
+        </label>
+      </div>
       <div id="sf-foto-list"></div>
     </div>
   `;
@@ -922,12 +972,11 @@ function openSheet(id) {
   document.getElementById('bottom-sheet').classList.add('open');
 }
 
-function toggleType(type) {
-  if (!sheetItemId) return;
-  const types = STATE[sheetItemId].types;
-  const idx   = types.indexOf(type);
-  if (idx > -1) types.splice(idx, 1); else types.push(type);
-  document.querySelectorAll('.type-chip').forEach(btn => btn.classList.toggle('active', types.includes(btn.textContent.trim())));
+function setTypeKast(type) {
+  const types = STATE['bouwmeterkast'].types;
+  STATE['bouwmeterkast'].types = (types[0] === type) ? [] : [type];
+  renderTabContent(activeTab);
+  autosave();
 }
 
 async function addSheetFoto(e) {
@@ -1028,6 +1077,7 @@ function renderSummary() {
         <div>
           <div class="summary-item-naam">${item.naam}${typeLabel}</div>
           ${nrsText ? `<div class="summary-item-detail">Nr: ${nrsText}</div>` : ''}
+          ${s.stuk > 0 ? `<div class="summary-item-detail">🗑️ ${s.stuk} stuk/weggegooid</div>` : ''}
           ${s.opm ? `<div class="summary-item-detail">📝 ${s.opm}</div>` : ''}
           ${s.fotos.length ? `<div class="summary-item-detail">📷 ${s.fotos.length} foto${s.fotos.length>1?'s':''}</div>` : ''}
         </div>
@@ -1061,6 +1111,7 @@ function collectData() {
     data.onderdelen[item.id] = {
       naam:   item.naam,
       aantal: String(s.aantal),
+      stuk:   String(s.stuk || 0),
       nummers:s.nummers.join(', '),
       opm:    s.opm,
       types:  s.types.join(', '),
@@ -1073,6 +1124,19 @@ function collectData() {
    VERSTUREN
    ══════════════════════════════════════════════════════ */
 const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
+
+async function syncKlussen() {
+  try {
+    // Cache-buster zodat Cloudflare nooit een oude lijst teruggeeft
+    const res  = await fetch(WORKER_URL + '?action=klussen&t=' + Date.now(), { cache: 'no-store' });
+    const json = await res.json();
+    if (json.ok) {
+      const src = (json.klussen && json.klussen.length > 0) ? json.klussen : KLUSSEN_DEFAULT;
+      KLUSSEN.length = 0;
+      src.forEach(k => KLUSSEN.push(k));
+    }
+  } catch(e) { /* bij netwerkfout: behoud huidige lijst */ }
+}
 
 async function verstuurAlles() {
   const data = collectData();
@@ -1107,6 +1171,7 @@ function buildMailBody(data) {
       lines.push(`  ${item.naam}  ×${v.aantal}`);
       if (v.nummers) lines.push(`    Nummers: ${v.nummers}`);
       if (v.types)   lines.push(`    Type:    ${v.types}`);
+      if (v.stuk && parseInt(v.stuk) > 0) lines.push(`    Stuk/weggegooid: ${v.stuk}`);
       if (v.opm)     lines.push(`    Opmerking: ${v.opm}`);
     });
     lines.push('');
@@ -1129,9 +1194,11 @@ function showToast(msg) {
    OPSLAAN / LADEN
    ══════════════════════════════════════════════════════ */
 function autosave() {
+  const naam = document.getElementById('naam')?.value || '';
+  if (naam) localStorage.setItem('mwb_naam', naam); // onthoud naam op dit apparaat
   const velden = {
     datum:              document.getElementById('datum')?.value || '',
-    naam:               document.getElementById('naam')?.value  || '',
+    naam,
     algemeen_opmerking: document.getElementById('algemeen_opmerking')?.value || '',
   };
   const stateLight = {};
@@ -1143,7 +1210,10 @@ function laadDraft() {
   const raw = localStorage.getItem('mwb_draft'); if (!raw) return false;
   try {
     const { velden, state, beweging, stap, tab } = JSON.parse(raw);
-    if (velden) Object.entries(velden).forEach(([id,val]) => { const el = document.getElementById(id); if (el) el.value = val; });
+    if (velden) Object.entries(velden).forEach(([id,val]) => {
+      if (id === 'datum') return; // altijd vandaag, niet uit draft herstellen
+      const el = document.getElementById(id); if (el) el.value = val;
+    });
     if (state) {
       Object.entries(state).forEach(([id, s]) => {
         if (STATE[id]) {
@@ -1152,6 +1222,7 @@ function laadDraft() {
           STATE[id].opm     = s.opm     || '';
           STATE[id].types   = s.types   || [];
           STATE[id].fotos   = s.fotos   || [];
+          STATE[id].stuk    = s.stuk    || 0;
           // Zorg dat nummers array klopt met aantal
           while (STATE[id].nummers.length < STATE[id].aantal) STATE[id].nummers.push('');
           while (STATE[id].nummers.length > STATE[id].aantal) STATE[id].nummers.pop();
@@ -1203,10 +1274,15 @@ function clearDraft() { localStorage.removeItem('mwb_draft'); }
    INIT
    ══════════════════════════════════════════════════════ */
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+syncKlussen();
 initState();
-const hadDraft = laadDraft();
-if (!hadDraft) {
-  document.getElementById('datum').value = new Date().toISOString().split('T')[0];
+laadDraft();
+// Datum altijd vandaag (aanpasbaar maar standaard vandaag)
+document.getElementById('datum').value = new Date().toISOString().split('T')[0];
+// Naam onthouden op dit apparaat
+if (!document.getElementById('naam').value) {
+  const savedNaam = localStorage.getItem('mwb_naam');
+  if (savedNaam) document.getElementById('naam').value = savedNaam;
 }
 </script>
 </body>

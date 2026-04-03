@@ -234,6 +234,48 @@ header img{height:30px;object-fit:contain;}
   .stats-row{grid-template-columns:repeat(3,1fr);}
   .stat-val{font-size:20px;}
 }
+
+/* ── KLUS CARDS ───────────────────────────────────── */
+.klus-card{background:rgba(14,26,52,.70);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:border-color .2s;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.klus-card:hover{border-color:rgba(255,255,255,.18);}
+.klus-card-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;}
+.klus-card.has-mat{border-color:rgba(249,115,22,.30);background:rgba(249,115,22,.05);}
+.klus-card-body{display:none;padding:10px 14px 13px;border-top:1px solid rgba(255,255,255,.07);}
+.klus-card.open .klus-card-body{display:block;}
+.klus-card-toggle{font-size:11px;color:var(--dim);flex-shrink:0;transition:transform .2s;}
+.klus-card.open .klus-card-toggle{transform:rotate(180deg);}
+.klus-mat-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(249,115,22,.15);color:var(--oranje);border:1px solid rgba(249,115,22,.20);flex-shrink:0;}
+.klus-mat-badge.leeg{background:rgba(255,255,255,.07);color:var(--dim);border-color:rgba(255,255,255,.10);}
+.klus-mat-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+.klus-mat-row:last-child{border-bottom:none;}
+.klus-mat-naam{flex:1;font-size:13px;font-weight:600;color:var(--tekst);}
+.klus-mat-nr{font-size:11px;font-weight:700;color:var(--zacht);}
+.klus-mat-datum{font-size:10px;color:var(--dim);margin-top:1px;}
+.klus-no-mat{font-size:12px;color:var(--dim);padding:8px 0;text-align:center;}
+.klus-add-panel{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.klus-add-panel.open{max-height:130px;}
+.klus-add-panel-inner{padding:4px 16px 16px;border-top:1px solid rgba(255,255,255,.07);}
+.btn-icon-add{width:32px;height:32px;border-radius:50%;background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.30);color:var(--oranje);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;transition:all .25s;line-height:1;}
+.btn-icon-add:hover{background:rgba(249,115,22,.30);}
+.btn-icon-add.active{background:rgba(249,115,22,.30);transform:rotate(45deg);}
+
+/* ── MODAL BOTTOM SHEET ───────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:80;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-sheet{position:fixed;bottom:0;left:0;right:0;z-index:90;max-width:800px;margin:0 auto;background:rgba(10,20,42,.97);-webkit-backdrop-filter:blur(32px) saturate(180%);backdrop-filter:blur(32px) saturate(180%);border-top:1px solid rgba(255,255,255,.14);border-radius:24px 24px 0 0;padding:12px 20px 48px;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,1,.32,1);box-shadow:0 -8px 40px rgba(0,0,0,.50);}
+.modal-sheet.open{transform:translateY(0);}
+.modal-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.20);margin:0 auto 18px;}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:18px;color:#fff;}
+.modal-field{margin-bottom:14px;}
+.modal-field label{display:block;font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.modal-field input{width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--input-bg);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
+.modal-field input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
+.modal-field input::placeholder{color:var(--dim);}
+.btn-modal-save{width:100%;padding:14px;border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,rgba(249,115,22,.88),rgba(234,88,12,.93));box-shadow:0 4px 20px rgba(249,115,22,.35);-webkit-appearance:none;margin-top:4px;}
+
+/* ── KLUS DETAIL MATERIEEL ────────────────────────── */
+.klus-mat-count{font-size:13px;font-weight:800;color:var(--oranje);min-width:26px;text-align:right;flex-shrink:0;}
+.klus-mat-nrs{font-size:11px;color:var(--dim);margin-top:2px;}
 </style>
 </head>
 <body>
@@ -286,37 +328,38 @@ header img{height:30px;object-fit:contain;}
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <span class="card-icon">➕</span>
-        <div><div class="card-title">Klus toevoegen</div><div class="card-sub">Voeg een nieuw project toe aan de lijst</div></div>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="klus-add-form">
-        <input type="text" id="new-klus-naam" placeholder="Naam / adres klus" oninput="clearAddError()">
-        <input type="text" id="new-klus-nr" placeholder="Werknr.">
-        <button class="btn-add" onclick="addKlus()">+ Voeg toe</button>
-      </div>
-      <div id="add-error" style="font-size:12px;color:rgba(239,68,68,.80);display:none;margin-top:-8px;margin-bottom:8px;">Vul naam en werknummer in.</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-title-row">
         <span class="card-icon">🏗️</span>
         <div><div class="card-title">Actieve klussen</div><div class="card-sub" id="klus-count-lbl">laden...</div></div>
       </div>
+      <button class="btn-icon-add" id="btn-add-klus" onclick="openAddModal()" title="Klus toevoegen">+</button>
     </div>
-    <div class="card-body">
-      <div class="klus-list" id="klus-list"></div>
-      <div class="export-wrap">
-        <button class="btn-export" onclick="toggleExport()">📋 Exporteer code voor de app</button>
-        <div class="code-block" id="export-code"></div>
-        <button class="btn-copy" id="btn-copy" onclick="copyCode()">✓ Kopieer naar klembord</button>
-        <p style="font-size:11px;color:var(--dim);margin-top:8px;line-height:1.5;">Plak de gekopieerde code in <strong>index.html</strong> bij <code>const KLUSSEN = [...]</code> om de lijst in de app bij te werken.</p>
+    <div style="padding:0 16px 12px;">
+      <div class="search-wrap" style="margin-bottom:0;">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" placeholder="Zoek klus..." oninput="filterKlussen(this.value)">
       </div>
     </div>
+    <div class="card-body" style="padding-top:0;">
+      <div id="klus-list"></div>
+    </div>
   </div>
+</div>
+
+<!-- ══ MODAL: KLUS TOEVOEGEN ══ -->
+<div class="modal-overlay" id="klus-modal-overlay" onclick="closeAddModal()"></div>
+<div class="modal-sheet" id="klus-modal-sheet">
+  <div class="modal-handle"></div>
+  <div class="modal-title">🏗️ Nieuwe klus toevoegen</div>
+  <div class="modal-field">
+    <label>Naam / adres klus</label>
+    <input type="text" id="new-klus-naam" placeholder="Bijv. Den Haag – Laan van Poot 37" oninput="clearAddError()">
+  </div>
+  <div class="modal-field">
+    <label>Werknummer</label>
+    <input type="text" id="new-klus-nr" placeholder="Bijv. 2025-008">
+  </div>
+  <div id="add-error" style="font-size:12px;color:rgba(239,68,68,.80);display:none;margin-bottom:8px;">Vul naam en werknummer in.</div>
+  <button class="btn-modal-save" onclick="addKlus()">+ Klus toevoegen</button>
 </div>
 
 </div><!-- /main -->
@@ -426,6 +469,7 @@ async function loadData() {
   }
   renderInzendingen();
   renderMaterieel();
+  renderKlussen(klusFilter);
 }
 
 /* ══════════════════════════════════════════════════════
@@ -662,84 +706,154 @@ function filterMaterieel(q) {
 /* ══════════════════════════════════════════════════════
    KLUSSEN BEHEER TAB
    ══════════════════════════════════════════════════════ */
-function loadKlussen() {
-  const raw = localStorage.getItem('mwb_klussen');
-  return raw ? JSON.parse(raw) : [...DEFAULT_KLUSSEN];
-}
-function saveKlussen(list) {
-  localStorage.setItem('mwb_klussen', JSON.stringify(list));
+let KLUSSEN_CACHE = null;
+let klusFilter = '';
+
+async function loadKlussen(forceFresh = false) {
+  if (KLUSSEN_CACHE && !forceFresh) return KLUSSEN_CACHE;
+  try {
+    const res  = await fetch(WORKER_URL + '?action=klussen&t=' + Date.now(), { cache: 'no-store' });
+    const json = await res.json();
+    KLUSSEN_CACHE = (json.ok && json.klussen.length > 0) ? json.klussen : [...DEFAULT_KLUSSEN];
+  } catch(e) {
+    KLUSSEN_CACHE = [...DEFAULT_KLUSSEN];
+  }
+  return KLUSSEN_CACHE;
 }
 
-function renderKlussen() {
-  const list = loadKlussen();
+async function saveKlussen(list) {
+  KLUSSEN_CACHE = list;
+  await fetch(WORKER_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ action: 'klussen_opslaan', klussen: list }),
+  });
+  // Flush cache zodat de volgende loadKlussen altijd verse data ophaalt
+  KLUSSEN_CACHE = null;
+}
+
+function getMateriaalVoorKlus(klus) {
+  if (!equipmentMap || Object.keys(equipmentMap).length === 0) return [];
+  const kNaam = klus.naam.toLowerCase();
+  const kNr   = (klus.werknr || '').toLowerCase();
+  const result = [];
+  Object.values(equipmentMap).flat().forEach(item => {
+    if (item.isZaak) return;
+    const loc = item.locatie.toLowerCase();
+    const nr  = (item.naarNr || '').toLowerCase();
+    if (loc.includes(kNaam) || kNaam.includes(loc) || (kNr && nr === kNr)) {
+      result.push(item);
+    }
+  });
+  return result;
+}
+
+function groupMateriaal(mat) {
+  const grouped = {};
+  mat.forEach(item => {
+    if (!grouped[item.naam]) grouped[item.naam] = { naam: item.naam, count: 0, nummers: [] };
+    grouped[item.naam].count++;
+    if (item.nummer) grouped[item.naam].nummers.push(item.nummer);
+  });
+  return Object.values(grouped).sort((a, b) => a.naam.localeCompare(b.naam));
+}
+
+async function renderKlussen(filter = '') {
+  klusFilter = filter;
+  const list = await loadKlussen();
+  const q    = filter.toLowerCase();
+  const sorted   = [...list].sort((a,b) => a.naam.localeCompare(b.naam));
+  const filtered = q ? sorted.filter(k => k.naam.toLowerCase().includes(q) || k.werknr.toLowerCase().includes(q)) : sorted;
+
   document.getElementById('klus-count-lbl').textContent = `${list.length} klus${list.length !== 1 ? 'sen' : ''} actief`;
   const el = document.getElementById('klus-list');
-  if (list.length === 0) {
-    el.innerHTML = `<div class="leeg" style="padding:20px;">Nog geen klussen. Voeg er een toe ↑</div>`;
+
+  if (filtered.length === 0) {
+    el.innerHTML = `<div class="leeg" style="padding:20px;">${q ? '🔍 Geen klussen gevonden.' : 'Nog geen klussen. Druk op + om er een toe te voegen.'}</div>`;
     return;
   }
-  el.innerHTML = list
-    .sort((a,b) => a.naam.localeCompare(b.naam))
-    .map((k, i) => `
-      <div class="klus-row">
-        <div class="klus-naam">${k.naam}</div>
-        <div class="klus-nr">${k.werknr}</div>
-        <button class="btn-del" onclick="deleteKlus(${i})" title="Verwijder">✕</button>
-      </div>
-    `).join('');
+
+  el.innerHTML = filtered.map(k => {
+    const realIdx  = list.findIndex(x => x.naam === k.naam && x.werknr === k.werknr);
+    const mat      = getMateriaalVoorKlus(k);
+    const matCount = mat.length;
+
+    const matGrouped = groupMateriaal(mat);
+    const matRows = matCount === 0
+      ? `<div class="klus-no-mat">📦 Geen materieel op deze klus geregistreerd.</div>`
+      : matGrouped.map(g => `
+          <div class="klus-mat-row">
+            <div style="flex:1;">
+              <div class="klus-mat-naam">${g.naam}</div>
+              ${g.nummers.length > 0 ? `<div class="klus-mat-nrs">Nr: ${g.nummers.join(', ')}</div>` : ''}
+            </div>
+            <div class="klus-mat-count">×${g.count}</div>
+          </div>`).join('');
+
+    return `
+      <div class="klus-card ${matCount > 0 ? 'has-mat' : ''}" id="klus-card-${realIdx}">
+        <div class="klus-card-header" onclick="toggleKlusCard(${realIdx})">
+          <div class="klus-naam" style="flex:1;font-size:14px;font-weight:600;">${k.naam}</div>
+          <div class="klus-nr">${k.werknr}</div>
+          <div class="klus-mat-badge ${matCount === 0 ? 'leeg' : ''}">${matCount === 0 ? 'Leeg' : `${matCount} item${matCount !== 1 ? 's' : ''}`}</div>
+          <button class="btn-del" onclick="event.stopPropagation();deleteKlus(${realIdx})" title="Verwijder">✕</button>
+          <span class="klus-card-toggle">▼</span>
+        </div>
+        <div class="klus-card-body">${matRows}</div>
+      </div>`;
+  }).join('');
 }
 
-function addKlus() {
-  const naam  = document.getElementById('new-klus-naam').value.trim();
+function toggleKlusCard(idx) {
+  document.getElementById('klus-card-' + idx)?.classList.toggle('open');
+}
+
+function openAddModal() {
+  document.getElementById('klus-modal-overlay').classList.add('open');
+  document.getElementById('klus-modal-sheet').classList.add('open');
+  document.getElementById('btn-add-klus').classList.add('active');
+  setTimeout(() => document.getElementById('new-klus-naam')?.focus(), 380);
+}
+
+function closeAddModal() {
+  document.getElementById('klus-modal-overlay').classList.remove('open');
+  document.getElementById('klus-modal-sheet').classList.remove('open');
+  document.getElementById('btn-add-klus').classList.remove('active');
+}
+
+function filterKlussen(q) {
+  renderKlussen(q);
+}
+
+async function addKlus() {
+  const naam   = document.getElementById('new-klus-naam').value.trim();
   const werknr = document.getElementById('new-klus-nr').value.trim();
   if (!naam || !werknr) {
     document.getElementById('add-error').style.display = 'block';
     return;
   }
-  const list = loadKlussen();
+  const list = await loadKlussen();
   list.push({ naam, werknr });
-  saveKlussen(list);
+  await saveKlussen(list);
   document.getElementById('new-klus-naam').value = '';
-  document.getElementById('new-klus-nr').value = '';
-  renderKlussen();
+  document.getElementById('new-klus-nr').value   = '';
+  closeAddModal();
+  renderKlussen(klusFilter);
   showToast(`✓ ${naam} toegevoegd`);
 }
 
-function deleteKlus(idx) {
-  const list   = loadKlussen();
-  const sorted = [...list].sort((a,b) => a.naam.localeCompare(b.naam));
-  const item   = sorted[idx];
-  const realIdx = list.findIndex(k => k.naam === item.naam && k.werknr === item.werknr);
-  if (realIdx > -1) {
-    list.splice(realIdx, 1);
-    saveKlussen(list);
-    renderKlussen();
-    showToast(`Verwijderd: ${item.naam}`);
-    // Verberg export als die open stond
-    document.getElementById('export-code').classList.remove('show');
-    document.getElementById('btn-copy').classList.remove('show');
-  }
+async function deleteKlus(realIdx) {
+  const list = await loadKlussen();
+  if (realIdx < 0 || realIdx >= list.length) return;
+  const item = list[realIdx];
+  list.splice(realIdx, 1);
+  await saveKlussen(list);
+  renderKlussen(klusFilter);
+  showToast(`Verwijderd: ${item.naam}`);
 }
 
 function clearAddError() {
   document.getElementById('add-error').style.display = 'none';
-}
-
-function toggleExport() {
-  const codeEl = document.getElementById('export-code');
-  const copyEl = document.getElementById('btn-copy');
-  const list   = loadKlussen();
-  const code   = `const KLUSSEN = [\n${list.map(k => `  { naam:'${k.naam}', werknr:'${k.werknr}' },`).join('\n')}\n];`;
-  codeEl.textContent = code;
-  codeEl.classList.toggle('show');
-  copyEl.classList.toggle('show');
-}
-
-function copyCode() {
-  const code = document.getElementById('export-code').textContent;
-  navigator.clipboard.writeText(code)
-    .then(() => showToast('✓ Gekopieerd naar klembord'))
-    .catch(() => showToast('⚠️ Kopiëren mislukt'));
 }
 
 /* ══════════════════════════════════════════════════════
