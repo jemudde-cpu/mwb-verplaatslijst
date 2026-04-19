@@ -362,12 +362,12 @@ function renderAlles() {
   let html = '';
 
   if (zaakKeys.length) {
-    html += '<div class="sectie-header">🏭 De Zaak – Depot</div>';
+    html += '<div class="sectie-header">🏢🏭 De Zaak – Depot</div>';
     zaakKeys.forEach(k => { html += renderKlusKaart(k, true); });
   }
 
   if (klusKeys.length) {
-    if (zaakKeys.length) html += '<div class="sectie-header" style="margin-top:20px;">🏗️ Klussen</div>';
+    if (zaakKeys.length) html += '<div class="sectie-header" style="margin-top:20px;">🏗️ Bouwplaatsen</div>';
     klusKeys.forEach(k => { html += renderKlusKaart(k, false); });
   }
 

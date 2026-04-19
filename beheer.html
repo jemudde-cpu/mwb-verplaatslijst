@@ -364,7 +364,7 @@ function renderInzCard(inz) {
   const statusClass = status === 'Verwerkt' ? 'status-verwerkt' : 'status-nieuw';
   const icon = type.includes('Zaak') && type.includes('Klus') ? '📦'
              : type.includes('Klus') && type.includes('Klus') ? '🔄'
-             : '🏭';
+             : '🏢🏭';
 
   // Foto URLs uit details halen
   const fotoUrls = [];
@@ -607,7 +607,7 @@ function renderMaterieel(zoek) {
     return `<div class="mat-locatie-card ${isZaak ? 'zaak' : ''}" id="ml-${safeId}">
       <div class="mat-locatie-header" onclick="this.closest('.mat-locatie-card').classList.toggle('open')">
         <div>
-          <div class="mat-locatie-naam">${isZaak ? '🏭 ' : '🏗️ '}${loc.naam || loc.werknr}</div>
+          <div class="mat-locatie-naam">${isZaak ? '🏢🏭 ' : '🏗️ '}${loc.naam || loc.werknr}</div>
           <div class="mat-locatie-teller">${items.length} soorten · ${totaal} stuks</div>
         </div>
         ${loc.werknr && loc.werknr !== 'DE ZAAK' ? `<span class="mat-locatie-nr">${loc.werknr}</span>` : ''}
