@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Overzicht – Middelwatering Bouw</title>
+<meta name="theme-color" content="#0a1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --oranje:    #f97316;
+  --groen:     #22c55e;
+  --blauw:     #4d7cfe;
+  --tekst:     rgba(255,255,255,0.95);
+  --zacht:     rgba(255,255,255,0.55);
+  --dim:       rgba(255,255,255,0.30);
+  --glas-rand: rgba(255,255,255,0.13);
+  --glas-bg:   rgba(255,255,255,0.06);
+  --radius-lg: 20px;
+  --radius:    13px;
+  --radius-sm: 10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#060e1c;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
+
+/* ORBS */
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent);top:-150px;left:-100px;animation:d1 22s ease-in-out infinite alternate;}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent);bottom:-100px;right:-60px;animation:d2 28s ease-in-out infinite alternate;}
+.orb-4{width:240px;height:240px;background:radial-gradient(circle,rgba(249,115,22,.45),transparent 65%);top:15%;right:-60px;animation:d2 24s ease-in-out infinite alternate;}
+@keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,70px) scale(1.1)}}
+@keyframes d2{from{transform:translate(0,0)}to{transform:translate(-40px,-50px)}}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:60;background:rgba(6,14,28,.87);-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(255,255,255,.09);padding:14px 18px;box-shadow:0 4px 24px rgba(0,0,0,.35);}
+.header-row{display:flex;align-items:center;gap:12px;}
+.header-logo{width:32px;height:32px;background:var(--oranje);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.header-title{color:#fff;font-size:15px;font-weight:700;line-height:1.2;flex:1;}
+.header-title small{display:block;font-size:10px;font-weight:400;opacity:.50;}
+.header-refresh{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:var(--tekst);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:background .2s;}
+.header-refresh:active{background:rgba(249,115,22,.25);}
+
+/* MAIN */
+.main{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:16px 16px 140px;}
+
+/* ZOEKBALK */
+.search-wrap{position:relative;margin-bottom:16px;}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--zacht);pointer-events:none;}
+.search-input{width:100%;padding:13px 14px 13px 42px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
+.search-input::placeholder{color:var(--dim);}
+.search-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
+
+/* FILTER TABS */
+.filter-wrap{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px;}
+.filter-wrap::-webkit-scrollbar{display:none;}
+.filter-btn{flex-shrink:0;padding:8px 16px;border-radius:20px;font-family:inherit;font-size:12px;font-weight:700;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;white-space:nowrap;}
+.filter-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;}
+
+/* SECTIE HEADER */
+.sectie-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--zacht);padding:6px 4px 10px;border-left:3px solid var(--oranje);padding-left:12px;margin-bottom:10px;}
+
+/* KLUS KAART */
+.klus-card{background:var(--glas-bg);-webkit-backdrop-filter:brightness(1.06) blur(24px) saturate(150%);backdrop-filter:brightness(1.06) blur(24px) saturate(150%);border:1px solid var(--glas-rand);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.10);}
+.klus-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;gap:12px;}
+.klus-header:active{background:rgba(255,255,255,.03);}
+.klus-info{flex:1;min-width:0;}
+.klus-naam{font-size:14px;font-weight:700;color:var(--tekst);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.klus-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.15);border-radius:10px;flex-shrink:0;}
+.klus-teller{font-size:11px;color:var(--zacht);margin-top:2px;}
+.klus-chevron{color:var(--dim);font-size:14px;transition:transform .25s;flex-shrink:0;}
+.klus-card.open .klus-chevron{transform:rotate(90deg);}
+.klus-body{display:none;border-top:1px solid rgba(255,255,255,.07);}
+.klus-card.open .klus-body{display:block;}
+
+/* ITEM REGEL */
+.item-regel{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.05);gap:12px;}
+.item-regel:last-child{border-bottom:none;}
+.item-naam{font-size:13px;font-weight:600;color:var(--tekst);}
+.item-detail{font-size:11px;color:var(--zacht);margin-top:2px;line-height:1.4;}
+.item-badge{font-size:12px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.14);padding:3px 10px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
+
+/* DE ZAAK */
+.zaak-card{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.20);}
+.zaak-card .klus-naam{color:var(--groen);}
+.zaak-card .klus-nr{background:rgba(34,197,94,.15);color:var(--groen);}
+
+/* STATUS BANNER */
+.status-banner{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);margin-bottom:18px;}
+.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.status-dot.groen{background:var(--groen);box-shadow:0 0 6px rgba(34,197,94,.60);}
+.status-dot.oranje{background:var(--oranje);box-shadow:0 0 6px rgba(249,115,22,.60);}
+.status-banner-tekst{font-size:13px;color:var(--zacht);}
+
+/* LOADING */
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 20px;}
+.spinner{width:40px;height:40px;border:3px solid rgba(249,115,22,.20);border-top-color:var(--oranje);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;color:var(--zacht);}
+
+/* LEEG STATE */
+.leeg{text-align:center;padding:48px 20px;}
+.leeg-icon{font-size:48px;margin-bottom:12px;}
+.leeg-titel{font-size:17px;font-weight:700;margin-bottom:6px;}
+.leeg-sub{font-size:14px;color:var(--zacht);}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:55;display:flex;background:rgba(6,14,28,.96);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border-top:1px solid rgba(255,255,255,.12);height:72px;}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:var(--dim);transition:color .2s;padding:8px 0;}
+.bn-item.active{color:var(--oranje);}
+.bn-icon{font-size:22px;line-height:1;}
+.bn-label{font-size:10px;font-weight:700;letter-spacing:.3px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:400;background:rgba(15,27,54,.98);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:12px 22px;font-size:14px;font-weight:600;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-4"></div>
+
+<header>
+  <div class="header-row">
+    <div class="header-logo">📍</div>
+    <div class="header-title">
+      Materieel overzicht
+      <small>Middelwatering Bouw</small>
+    </div>
+    <button class="header-refresh" onclick="laadData()" title="Verversen">🔄</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" id="zoek" placeholder="Zoek op klus of werknummer..." oninput="filterKaarten()">
+  </div>
+
+  <div class="filter-wrap" id="filter-wrap">
+    <button class="filter-btn active" data-filter="alles" onclick="setFilter('alles',this)">Alles</button>
+    <button class="filter-btn" data-filter="keten" onclick="setFilter('keten',this)">Keten</button>
+    <button class="filter-btn" data-filter="containers" onclick="setFilter('containers',this)">Containers</button>
+    <button class="filter-btn" data-filter="lichtmasten" onclick="setFilter('lichtmasten',this)">Lichtmasten</button>
+    <button class="filter-btn" data-filter="hekken" onclick="setFilter('hekken',this)">Bouwhekken</button>
+    <button class="filter-btn" data-filter="aansluitingen" onclick="setFilter('aansluitingen',this)">Aansluitingen</button>
+  </div>
+
+  <div id="status-banner-wrap"></div>
+  <div id="content"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav class="bottom-nav">
+  <a href="index.html" class="bn-item">
+    <span class="bn-icon">📋</span>
+    <span class="bn-label">Verplaatsen</span>
+  </a>
+  <a href="overzicht.html" class="bn-item active">
+    <span class="bn-icon">📍</span>
+    <span class="bn-label">Overzicht</span>
+  </a>
+</nav>
+
+<script>
+const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
+
+// Materieel definities (zelfde als index.html)
+const SECTIES = {
+  'Aansluitingen': [
+    { id:'bouwmeterkast', naam:'Bouwmeterkast', hasNr:true },
+    { id:'waterput',      naam:'Waterput',      hasNr:true },
+    { id:'waterkraan',    naam:'Waterkraan / standvink' },
+  ],
+  'Keten': [
+    { id:'schaftkeet',      naam:'Schaftkeet',      hasNr:true },
+    { id:'uitvoerderskeet', naam:'Uitvoerderskeet',  hasNr:true },
+    { id:'pipokeet',        naam:'Pipokeet',         hasNr:true },
+    { id:'keettrap',        naam:'Keettrap (set)',   hasNr:true },
+  ],
+  'Containers': [
+    { id:'container', naam:'Materiaalcontainer', hasNr:true },
+  ],
+  'Lichtmasten': [
+    { id:'lichtmast', naam:'Lichtmast', hasNr:true },
+  ],
+  'Bouwhekken': [
+    { id:'bouwhekken',          naam:'Bouwhekken' },
+    { id:'bouwhek_voeten',      naam:'Bouwhek voeten' },
+    { id:'hekklemmen',          naam:'Hekklemmen' },
+    { id:'hekwielen',           naam:'Hekwielen' },
+    { id:'hek_schoren',         naam:'Hek schoren' },
+    { id:'kunststof_rijplaten', naam:'Kunststof rijplaten' },
+  ],
+};
+
+const FILTER_MAP = {
+  keten:        ['schaftkeet','uitvoerderskeet','pipokeet','keettrap'],
+  containers:   ['container'],
+  lichtmasten:  ['lichtmast'],
+  hekken:       ['bouwhekken','bouwhek_voeten','hekklemmen','hekwielen','hek_schoren','kunststof_rijplaten'],
+  aansluitingen:['bouwmeterkast','waterput','waterkraan'],
+};
+
+let locatieMap = {};   // klus_key → { naam, werknr, items: { itemId → { naam, aantal, nummers[] } } }
+let activeFilter = 'alles';
+let laadMoment   = null;
+
+/* ── DATA OPHALEN ─────────────────────────────────── */
+async function laadData() {
+  toonLoading();
+  try {
+    const res  = await fetch(WORKER + '?action=inzendingen');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    locatieMap = bouwLocatieMap(data.results);
+    laadMoment = new Date();
+    renderAlles();
+  } catch (e) {
+    toonFout('Kon geen data ophalen. Controleer je verbinding.');
+    console.error(e);
+  }
+}
+
+/* ── LOCATIE MAP BOUWEN ───────────────────────────── */
+function bouwLocatieMap(inzendingen) {
+  // Sorteer op datum (oud naar nieuw)
+  const gesorteerd = [...inzendingen].sort((a, b) => {
+    const da = prop(a, 'Datum')?.date?.start || '';
+    const db = prop(b, 'Datum')?.date?.start || '';
+    return da.localeCompare(db);
+  });
+
+  // Bijhouden per item-nummer: huidige locatie
+  const nummerLocatie = {};  // "itemId_nr" → locatieKey
+  const locaties = {};       // locatieKey → { naam, werknr, tellingen: { itemId → aantal } }
+
+  function getLocatieKey(naam, werknr) {
+    return werknr || naam;
+  }
+
+  function ensureLocatie(naam, werknr) {
+    const key = getLocatieKey(naam, werknr);
+    if (!locaties[key]) locaties[key] = { naam, werknr, items: {} };
+    return key;
+  }
+
+  function addItem(locKey, itemId, itemNaam, aantal, nummers) {
+    if (!locaties[locKey]) return;
+    if (!locaties[locKey].items[itemId]) {
+      locaties[locKey].items[itemId] = { naam: itemNaam, aantal: 0, nummers: [] };
+    }
+    locaties[locKey].items[itemId].aantal += aantal;
+    if (nummers) {
+      nummers.forEach(n => {
+        if (!locaties[locKey].items[itemId].nummers.includes(n)) {
+          locaties[locKey].items[itemId].nummers.push(n);
+        }
+      });
+    }
+  }
+
+  function removeItem(locKey, itemId, aantal, nummers) {
+    if (!locaties[locKey] || !locaties[locKey].items[itemId]) return;
+    locaties[locKey].items[itemId].aantal = Math.max(0, locaties[locKey].items[itemId].aantal - aantal);
+    if (nummers) {
+      nummers.forEach(n => {
+        const idx = locaties[locKey].items[itemId].nummers.indexOf(n);
+        if (idx >= 0) locaties[locKey].items[itemId].nummers.splice(idx, 1);
+      });
+    }
+    if (locaties[locKey].items[itemId].aantal <= 0 && locaties[locKey].items[itemId].nummers.length === 0) {
+      delete locaties[locKey].items[itemId];
+    }
+  }
+
+  for (const inz of gesorteerd) {
+    const details   = prop(inz, 'Details')?.rich_text?.[0]?.plain_text || '';
+    const vanNr     = prop(inz, 'Werknr. Van')?.rich_text?.[0]?.plain_text || '';
+    const naarNr    = prop(inz, 'Werknr. Naar')?.rich_text?.[0]?.plain_text || '';
+    const vanNaam   = prop(inz, 'Bouwplaats') ? '' : vanNr;
+    const naarNaam  = prop(inz, 'Bouwplaats')?.rich_text?.[0]?.plain_text || naarNr;
+    const typeLabel = prop(inz, 'Opslag / Zaak')?.rich_text?.[0]?.plain_text || '';
+
+    const vanKey    = vanNr  ? ensureLocatie(vanNr,  vanNr)  : null;
+    const naarKey   = naarNr ? ensureLocatie(naarNaam || naarNr, naarNr) : null;
+
+    if (!vanKey && !naarKey) continue;
+
+    // Parse details
+    const regelItems = parseDetails(details);
+    for (const ri of regelItems) {
+      if (vanKey)  removeItem(vanKey,  ri.id, ri.aantal, ri.nummers);
+      if (naarKey) addItem(naarKey, ri.id, ri.naam, ri.aantal, ri.nummers);
+    }
+  }
+
+  // Opruimen: lege locaties weggooien
+  for (const key of Object.keys(locaties)) {
+    if (Object.keys(locaties[key].items).length === 0) delete locaties[key];
+  }
+
+  return locaties;
+}
+
+function parseDetails(tekst) {
+  if (!tekst) return [];
+  const items = [];
+  const alle  = Object.values(SECTIES).flat();
+
+  for (const line of tekst.split('\n')) {
+    for (const item of alle) {
+      if (line.startsWith(item.naam + ':')) {
+        const aantalMatch = line.match(/:\s*(\d+)/);
+        const nummerMatch = line.match(/nr\.\s*([^)]+)/);
+        const aantal      = aantalMatch ? parseInt(aantalMatch[1]) : 0;
+        const nummers     = nummerMatch ? nummerMatch[1].split(',').map(n => n.trim()).filter(Boolean) : [];
+        if (aantal > 0) items.push({ id: item.id, naam: item.naam, aantal, nummers });
+        break;
+      }
+    }
+  }
+  return items;
+}
+
+function prop(page, name) {
+  return page?.properties?.[name];
+}
+
+/* ── RENDER ───────────────────────────────────────── */
+function renderAlles() {
+  const wrap = document.getElementById('status-banner-wrap');
+  wrap.innerHTML = laadMoment
+    ? `<div class="status-banner"><div class="status-dot groen"></div><div class="status-banner-tekst">Bijgewerkt om ${laadMoment.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} · ${Object.keys(locatieMap).length} locaties</div></div>`
+    : '';
+
+  const zoek     = document.getElementById('zoek').value.toLowerCase();
+  const locKeys  = Object.keys(locatieMap).filter(key => {
+    const loc = locatieMap[key];
+    if (zoek && !loc.naam.toLowerCase().includes(zoek) && !loc.werknr.toLowerCase().includes(zoek)) return false;
+    if (activeFilter !== 'alles') {
+      const idsInFilter = FILTER_MAP[activeFilter] || [];
+      if (!Object.keys(loc.items).some(id => idsInFilter.includes(id))) return false;
+    }
+    return true;
+  });
+
+  if (Object.keys(locatieMap).length === 0 && !laadMoment) {
+    toonLoading();
+    return;
+  }
+
+  if (locKeys.length === 0) {
+    document.getElementById('content').innerHTML = `
+      <div class="leeg">
+        <div class="leeg-icon">📭</div>
+        <div class="leeg-titel">Niets gevonden</div>
+        <div class="leeg-sub">Probeer een andere zoekterm of filter.</div>
+      </div>`;
+    return;
+  }
+
+  // De Zaak altijd bovenaan
+  const zaakKeys = locKeys.filter(k => k === 'DE ZAAK' || locatieMap[k].naam.includes('Zaak') || locatieMap[k].naam.includes('Depot'));
+  const klusKeys = locKeys.filter(k => !zaakKeys.includes(k));
+
+  let html = '';
+
+  if (zaakKeys.length) {
+    html += '<div class="sectie-header">🏭 De Zaak – Depot</div>';
+    zaakKeys.forEach(k => { html += renderKlusKaart(k, true); });
+  }
+
+  if (klusKeys.length) {
+    if (zaakKeys.length) html += '<div class="sectie-header" style="margin-top:20px;">🏗️ Klussen</div>';
+    klusKeys.forEach(k => { html += renderKlusKaart(k, false); });
+  }
+
+  document.getElementById('content').innerHTML = html;
+}
+
+function renderKlusKaart(key, isZaak) {
+  const loc = locatieMap[key];
+  const items = Object.entries(loc.items);
+  if (items.length === 0) return '';
+
+  // Filteren op activeFilter
+  const filteredItems = activeFilter === 'alles'
+    ? items
+    : items.filter(([id]) => (FILTER_MAP[activeFilter] || []).includes(id));
+  if (filteredItems.length === 0) return '';
+
+  const totaal  = filteredItems.reduce((s, [, v]) => s + v.aantal, 0);
+  const soorten = filteredItems.length;
+
+  const itemRegels = filteredItems.map(([id, v]) => {
+    const nrTekst = v.nummers && v.nummers.length
+      ? `<div class="item-detail">Nr: ${v.nummers.join(', ')}</div>`
+      : '';
+    return `<div class="item-regel">
+      <div><div class="item-naam">${v.naam}</div>${nrTekst}</div>
+      <div class="item-badge">${v.aantal}×</div>
+    </div>`;
+  }).join('');
+
+  return `<div class="klus-card ${isZaak ? 'zaak-card' : ''}" id="kc-${key.replace(/[^a-z0-9]/gi,'_')}">
+    <div class="klus-header" onclick="toggleKlus('${key.replace(/[^a-z0-9]/gi,'_')}')">
+      <div class="klus-info">
+        <div class="klus-naam">${loc.naam || loc.werknr}</div>
+        <div class="klus-teller">${soorten} soort${soorten !== 1 ? 'en' : ''} · ${totaal} stuks</div>
+      </div>
+      ${loc.werknr && loc.werknr !== 'DE ZAAK' ? `<span class="klus-nr">${loc.werknr}</span>` : ''}
+      <span class="klus-chevron">›</span>
+    </div>
+    <div class="klus-body">${itemRegels}</div>
+  </div>`;
+}
+
+function toggleKlus(safeKey) {
+  const card = document.getElementById('kc-' + safeKey);
+  if (card) card.classList.toggle('open');
+}
+
+/* ── FILTER & ZOEK ────────────────────────────────── */
+function setFilter(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAlles();
+}
+
+function filterKaarten() {
+  renderAlles();
+}
+
+/* ── HELPERS ──────────────────────────────────────── */
+function toonLoading() {
+  document.getElementById('content').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Materieel ophalen...</div>
+    </div>`;
+}
+
+function toonFout(msg) {
+  document.getElementById('content').innerHTML = `
+    <div class="leeg">
+      <div class="leeg-icon">⚠️</div>
+      <div class="leeg-titel">Ophalen mislukt</div>
+      <div class="leeg-sub">${msg}</div>
+    </div>`;
+  showToast('❌ ' + msg);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ── INIT ─────────────────────────────────────────── */
+laadData();
+</script>
+</body>
+</html>

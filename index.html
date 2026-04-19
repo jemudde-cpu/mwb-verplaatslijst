@@ -14,6 +14,7 @@
 :root {
   --oranje:    #f97316;
   --groen:     #22c55e;
+  --rood:      #ef4444;
   --tekst:     rgba(255,255,255,0.95);
   --zacht:     rgba(255,255,255,0.55);
   --dim:       rgba(255,255,255,0.30);
@@ -24,16 +25,10 @@
   --radius:    13px;
   --radius-sm: 10px;
 }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#060e1c;color:var(--tekst);min-height:100vh;overflow-x:hidden;overscroll-behavior:none;}
 
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
-
-body {
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
-  background:#060e1c; color:var(--tekst);
-  min-height:100vh; overflow-x:hidden; overscroll-behavior:none;
-}
-
-/* ── ORBS ─────────────────────────────────────────── */
+/* ORBS */
 .orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
 .orb-1{width:580px;height:580px;background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent);top:-180px;left:-120px;animation:d1 22s ease-in-out infinite alternate;}
 .orb-2{width:460px;height:460px;background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent);bottom:-120px;right:-80px;animation:d2 28s ease-in-out infinite alternate;}
@@ -44,64 +39,41 @@ body {
 @keyframes d2{from{transform:translate(0,0) scale(1.05)}to{transform:translate(-50px,-60px) scale(.95)}}
 @keyframes d3{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(1.15)}}
 
-/* ── HEADER ───────────────────────────────────────── */
-header{
-  position:sticky;top:0;z-index:60;
-  background:rgba(6,14,28,.82);
-  -webkit-backdrop-filter:blur(28px) saturate(160%);
-  backdrop-filter:blur(28px) saturate(160%);
-  border-bottom:1px solid rgba(255,255,255,.09);
-  padding:12px 18px 0;
-  box-shadow:0 4px 24px rgba(0,0,0,.35);
-}
+/* HEADER */
+header{position:sticky;top:0;z-index:60;background:rgba(6,14,28,.85);-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(255,255,255,.09);padding:12px 18px 0;box-shadow:0 4px 24px rgba(0,0,0,.35);}
 .header-top{display:flex;align-items:center;gap:12px;padding-bottom:12px;}
-header img{height:32px;object-fit:contain;}
+.header-logo{width:32px;height:32px;background:var(--oranje);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .header-title{color:#fff;font-size:15px;font-weight:700;line-height:1.2;letter-spacing:-.2px;flex:1;}
 .header-title small{display:block;font-size:10px;font-weight:400;opacity:.50;}
+.header-beheer{font-size:11px;font-weight:600;color:var(--zacht);text-decoration:none;padding:5px 12px;border:1px solid rgba(255,255,255,.15);border-radius:20px;}
 
-/* ── PROGRESS ─────────────────────────────────────── */
+/* PROGRESS */
 .progress{display:flex;align-items:center;gap:0;padding:0 4px 12px;}
 .progress-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;cursor:pointer;}
 .progress-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:rgba(255,255,255,.10);border:1.5px solid rgba(255,255,255,.15);color:var(--zacht);transition:all .3s;}
 .progress-step.active .progress-dot{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 0 12px rgba(249,115,22,.50);}
-.progress-step.done   .progress-dot{background:rgba(34,197,94,.25);border-color:var(--groen);color:var(--groen);}
+.progress-step.done .progress-dot{background:rgba(34,197,94,.25);border-color:var(--groen);color:var(--groen);}
 .progress-label{font-size:9px;font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.4px;transition:color .3s;}
 .progress-step.active .progress-label{color:var(--oranje);}
-.progress-step.done   .progress-label{color:var(--groen);}
+.progress-step.done .progress-label{color:var(--groen);}
 .progress-line{flex:1;height:1.5px;background:rgba(255,255,255,.10);margin-bottom:16px;transition:background .3s;}
 .progress-line.done{background:rgba(34,197,94,.40);}
 
-/* ── WIZARD ───────────────────────────────────────── */
+/* WIZARD */
 .wizard{position:relative;z-index:1;}
-.step{display:none;padding:16px 16px 110px;max-width:680px;margin:0 auto;animation:fadeIn .3s ease;}
+.step{display:none;padding:16px 16px 160px;max-width:680px;margin:0 auto;animation:fadeIn .3s ease;}
 .step.active{display:block;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── GLASS CARD ───────────────────────────────────── */
-.card{
-  background:var(--glas-bg);
-  -webkit-backdrop-filter:brightness(1.08) blur(28px) saturate(160%);
-  backdrop-filter:brightness(1.08) blur(28px) saturate(160%);
-  border:1px solid var(--glas-rand);
-  border-radius:var(--radius-lg);
-  margin-bottom:14px;
-  position:relative;
-  box-shadow:0 4px 28px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.12);
-}
+/* GLASS CARD */
+.card{background:var(--glas-bg);-webkit-backdrop-filter:brightness(1.08) blur(28px) saturate(160%);backdrop-filter:brightness(1.08) blur(28px) saturate(160%);border:1px solid var(--glas-rand);border-radius:var(--radius-lg);margin-bottom:14px;position:relative;box-shadow:0 4px 28px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.12);}
 .card-title{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--zacht);padding:16px 18px 0;margin-bottom:14px;border-left:3px solid var(--oranje);padding-left:14px;}
 .card-body{padding:0 18px 18px;}
 
-/* ── FIELDS ───────────────────────────────────────── */
+/* FIELDS */
 .field{margin-bottom:14px;}
 .field label{display:block;font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
-.field input,.field textarea{
-  width:100%;padding:12px 14px;
-  border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);
-  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
-  background:var(--input-bg);
-  transition:border-color .2s,background .2s,box-shadow .25s;
-  -webkit-appearance:none;
-}
+.field input,.field textarea{width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--input-bg);transition:border-color .2s,background .2s,box-shadow .25s;-webkit-appearance:none;}
 .field input::placeholder,.field textarea::placeholder{color:var(--dim);}
 .field input:focus,.field textarea:focus{outline:none;border-color:rgba(249,115,22,.60);background:rgba(255,255,255,.10);box-shadow:0 0 0 3px rgba(249,115,22,.15);}
 .field input[type="date"]{color-scheme:dark;}
@@ -110,17 +82,9 @@ header img{height:32px;object-fit:contain;}
 .step-title{font-size:22px;font-weight:800;margin-bottom:6px;letter-spacing:-.4px;}
 .step-sub{font-size:14px;color:var(--zacht);margin-bottom:20px;}
 
-/* ── BEWEGING KAARTEN ─────────────────────────────── */
+/* BEWEGING KAARTEN */
 .beweging-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-.beweging-card{
-  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);
-  border-radius:var(--radius-lg);padding:16px 10px;
-  cursor:pointer;text-align:center;
-  transition:all .25s cubic-bezier(.34,1.56,.64,1);
-  position:relative;-webkit-appearance:none;
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  box-shadow:0 2px 12px rgba(0,0,0,.18);
-}
+.beweging-card{background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.12);border-radius:var(--radius-lg);padding:16px 10px;cursor:pointer;text-align:center;transition:all .25s cubic-bezier(.34,1.56,.64,1);position:relative;-webkit-appearance:none;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 2px 12px rgba(0,0,0,.18);}
 .beweging-card:active{transform:scale(.95);}
 .beweging-card.selected{background:rgba(249,115,22,.15);border-color:var(--oranje);box-shadow:0 0 0 3px rgba(249,115,22,.20),0 8px 28px rgba(249,115,22,.25);transform:scale(1.03);}
 .bc-icon{font-size:24px;line-height:1;}
@@ -130,7 +94,7 @@ header img{height:32px;object-fit:contain;}
 .bc-check{position:absolute;top:7px;right:7px;width:17px;height:17px;border-radius:50%;background:var(--oranje);color:#fff;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;}
 .beweging-card.selected .bc-check{display:flex;}
 
-/* ── LOCATIE VELDEN ───────────────────────────────── */
+/* LOCATIE VELDEN */
 .locatie-velden{display:none;animation:fadeIn .3s ease;}
 .locatie-velden.show{display:block;}
 .locatie-label{font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
@@ -139,19 +103,11 @@ header img{height:32px;object-fit:contain;}
 .lz-title{font-size:14px;font-weight:700;color:var(--groen);}
 .lz-sub{font-size:11px;color:var(--zacht);}
 
-/* ── AUTOCOMPLETE ─────────────────────────────────── */
-/* Wrapper heeft geen overflow:hidden zodat dropdown zichtbaar is */
+/* AUTOCOMPLETE */
 .ac-wrap{position:relative;margin-bottom:16px;}
 .ac-input-row{position:relative;display:flex;align-items:center;}
 .ac-search-icon{position:absolute;left:13px;font-size:14px;color:var(--zacht);pointer-events:none;z-index:1;}
-.ac-input{
-  width:100%;padding:13px 14px 13px 40px;
-  border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);
-  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
-  background:rgba(255,255,255,.08);
-  transition:border-color .2s,background .2s,box-shadow .25s;
-  -webkit-appearance:none;
-}
+.ac-input{width:100%;padding:13px 14px 13px 40px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.08);transition:border-color .2s,background .2s,box-shadow .25s;-webkit-appearance:none;}
 .ac-input::placeholder{color:var(--dim);}
 .ac-input:focus{outline:none;border-color:rgba(249,115,22,.60);background:rgba(255,255,255,.11);box-shadow:0 0 0 3px rgba(249,115,22,.15);}
 .ac-input.selected{border-color:rgba(249,115,22,.45);background:rgba(249,115,22,.07);}
@@ -159,19 +115,7 @@ header img{height:32px;object-fit:contain;}
 .ac-input.selected ~ .ac-clear{display:flex;}
 .ac-badge{margin-top:5px;display:none;font-size:11px;font-weight:700;color:var(--oranje);padding:3px 10px;background:rgba(249,115,22,.12);border-radius:20px;width:fit-content;}
 .ac-badge.show{display:block;}
-
-/* Dropdown op body-niveau (escaped uit backdrop-filter context) */
-.ac-dropdown{
-  position:absolute;z-index:9999;
-  background:rgba(8,18,38,.98);
-  -webkit-backdrop-filter:blur(32px) saturate(180%);
-  backdrop-filter:blur(32px) saturate(180%);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:var(--radius);
-  max-height:260px;overflow-y:auto;
-  box-shadow:0 16px 48px rgba(0,0,0,.65);
-  display:none;
-}
+.ac-dropdown{position:absolute;z-index:9999;background:rgba(8,18,38,.98);-webkit-backdrop-filter:blur(32px) saturate(180%);backdrop-filter:blur(32px) saturate(180%);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius);max-height:260px;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,.65);display:none;}
 .ac-dropdown.open{display:block;}
 .ac-item{padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s;}
 .ac-item:last-child{border-bottom:none;}
@@ -180,192 +124,156 @@ header img{height:32px;object-fit:contain;}
 .ac-item-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.15);border-radius:10px;flex-shrink:0;}
 .ac-empty{padding:16px;text-align:center;font-size:13px;color:var(--dim);}
 
-/* ── TAB BAR ──────────────────────────────────────── */
-.tab-bar-wrap{
-  background:rgba(6,14,28,.60);
-  -webkit-backdrop-filter:blur(20px);
-  backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:var(--radius-lg);
-  padding:10px;margin-bottom:12px;
-  box-shadow:0 2px 16px rgba(0,0,0,.20);
-}
+/* MATERIEEL TAB BAR */
+.tab-bar-wrap{background:rgba(6,14,28,.60);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);padding:10px;margin-bottom:12px;box-shadow:0 2px 16px rgba(0,0,0,.20);}
 .tab-bar{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;}
 .tab-bar::-webkit-scrollbar{display:none;}
-.tab-btn{
-  flex-shrink:0;padding:9px 16px;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;
-  color:rgba(255,255,255,.85);cursor:pointer;transition:all .2s;white-space:nowrap;
-  display:flex;align-items:center;gap:6px;-webkit-appearance:none;
-}
-.tab-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 3px 14px rgba(249,115,22,.40);}
-.tab-badge{background:rgba(255,255,255,.28);color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;min-width:18px;text-align:center;}
+.tab-btn{flex-shrink:0;padding:9px 16px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;color:rgba(255,255,255,.85);cursor:pointer;transition:all .2s;white-space:nowrap;-webkit-appearance:none;}
+.tab-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 2px 14px rgba(249,115,22,.40);}
 
-/* ── ITEM CARDS ───────────────────────────────────── */
-.item-card{
-  background:rgba(14,26,52,.70);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:var(--radius);
-  margin-bottom:8px;
-  overflow:hidden;
-  transition:border-color .2s,background .2s;
-  box-shadow:0 2px 10px rgba(0,0,0,.18);
-}
-.item-card.has-value{border-color:rgba(249,115,22,.45);background:rgba(249,115,22,.08);}
-.item-row{display:flex;align-items:center;padding:13px 14px;gap:10px;}
-.item-naam{flex:1;font-size:14px;font-weight:600;color:rgba(255,255,255,.92);}
-.item-foto-btn{
-  width:32px;height:32px;border-radius:50%;
-  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
-  color:var(--zacht);font-size:15px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .2s;flex-shrink:0;-webkit-appearance:none;
-}
-.item-foto-btn.has-detail{border-color:var(--oranje);color:var(--oranje);background:rgba(249,115,22,.12);}
+/* ITEM ROW */
+.item-row{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);}
+.item-row:last-child{border-bottom:none;}
+.item-name{flex:1;font-size:14px;font-weight:600;line-height:1.3;}
+.item-sub{font-size:11px;color:var(--zacht);margin-top:2px;}
 
-/* ── STEPPER ──────────────────────────────────────── */
-.stepper{display:flex;align-items:center;gap:0;flex-shrink:0;}
-.stepper-btn{
-  width:34px;height:34px;border-radius:50%;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
-  color:#fff;font-size:18px;font-weight:300;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .15s;line-height:1;flex-shrink:0;-webkit-appearance:none;
-}
-.stepper-btn:active{transform:scale(.88);}
-.stepper-btn.plus{background:rgba(249,115,22,.28);border-color:rgba(249,115,22,.45);}
-.stepper-btn.plus:hover{background:rgba(249,115,22,.48);}
-.stepper-val{width:36px;text-align:center;font-size:16px;font-weight:700;color:var(--tekst);padding:0 2px;}
-.stepper-val.nonzero{color:var(--oranje);}
+/* STEPPER */
+.stepper{display:flex;align-items:center;gap:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:30px;overflow:hidden;}
+.step-btn{width:36px;height:36px;border:none;background:transparent;color:var(--tekst);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;-webkit-appearance:none;flex-shrink:0;}
+.step-btn:active{background:rgba(249,115,22,.25);}
+.step-count{min-width:32px;text-align:center;font-size:15px;font-weight:700;color:var(--tekst);}
+.stepper.active{border-color:var(--oranje);}
+.stepper.active .step-count{color:var(--oranje);}
 
-/* ── INLINE NUMMER INPUTS ─────────────────────────── */
-.item-nummers{
-  padding:0 14px 13px;
-  display:flex;flex-wrap:wrap;gap:8px;
-}
-.item-nr-input{
-  flex:1;min-width:120px;max-width:200px;
-  padding:10px 13px;
-  border:1px solid rgba(255,255,255,.14);border-radius:var(--radius-sm);
-  font-family:inherit;font-size:13px;font-weight:600;color:var(--tekst);
-  background:rgba(255,255,255,.08);-webkit-appearance:none;
-  transition:border-color .2s,box-shadow .2s;
-}
-.item-nr-input::placeholder{color:var(--dim);font-weight:400;}
-.item-nr-input:focus{outline:none;border-color:rgba(249,115,22,.55);background:rgba(255,255,255,.11);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
+/* NUMMERS INPUT */
+.nummers-wrap{margin:10px 16px 0;display:none;animation:fadeIn .2s ease;}
+.nummers-wrap.show{display:block;}
+.nummers-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.nr-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.35);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--oranje);}
+.nr-chip button{background:none;border:none;color:var(--oranje);font-size:14px;cursor:pointer;padding:0;line-height:1;}
+.nr-add-row{display:flex;gap:8px;}
+.nr-input{flex:1;padding:10px 12px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;}
+.nr-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 2px rgba(249,115,22,.15);}
+.nr-add-btn{padding:10px 16px;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.30);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:700;color:var(--oranje);cursor:pointer;white-space:nowrap;-webkit-appearance:none;}
 
-/* ── BOTTOM SHEET ─────────────────────────────────── */
-.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:80;opacity:0;pointer-events:none;transition:opacity .3s;}
+/* TYPES (bouwmeterkast) */
+.types-wrap{margin:10px 16px 0;display:none;animation:fadeIn .2s ease;}
+.types-wrap.show{display:block;}
+.types-row{display:flex;gap:8px;flex-wrap:wrap;}
+.type-chip{padding:7px 14px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.18);border-radius:20px;font-size:12px;font-weight:600;color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
+.type-chip.selected{background:rgba(249,115,22,.20);border-color:var(--oranje);color:var(--oranje);}
+
+/* DEFECT ROW */
+.defect-row{display:flex;align-items:center;gap:8px;margin:0 16px 12px;padding:10px 12px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.18);border-radius:var(--radius-sm);}
+.defect-label{font-size:12px;color:rgba(239,68,68,.80);flex:1;}
+.defect-stepper{display:flex;align-items:center;gap:0;background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);border-radius:20px;overflow:hidden;}
+.defect-stepper .step-btn{width:30px;height:30px;font-size:16px;}
+.defect-stepper .step-count{min-width:24px;font-size:13px;color:rgba(239,68,68,.90);}
+
+/* FOTO KNOP */
+.foto-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:20px;font-family:inherit;font-size:12px;font-weight:600;color:var(--zacht);cursor:pointer;white-space:nowrap;transition:all .2s;-webkit-appearance:none;margin:0 16px 12px;}
+.foto-btn:active{background:rgba(249,115,22,.15);border-color:rgba(249,115,22,.40);color:var(--oranje);}
+.foto-btn.has-foto{background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.35);color:var(--oranje);}
+.foto-thumbs{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 12px;}
+.foto-thumb{position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;border:1.5px solid rgba(255,255,255,.15);}
+.foto-thumb img{width:100%;height:100%;object-fit:cover;}
+.foto-thumb-del{position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.75);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
+
+/* NAV BAR */
+.nav-bar{position:fixed;bottom:72px;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:rgba(6,14,28,.92);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border-top:1px solid rgba(255,255,255,.10);gap:12px;max-width:680px;margin:0 auto;}
+.btn-nav{flex:1;padding:14px 20px;border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-appearance:none;}
+.btn-back{background:rgba(255,255,255,.10);color:var(--tekst);}
+.btn-next{background:var(--oranje);color:#fff;box-shadow:0 4px 20px rgba(249,115,22,.45);}
+.btn-verstuur{background:var(--groen);color:#fff;box-shadow:0 4px 20px rgba(34,197,94,.45);}
+
+/* BOTTOM NAVIGATION */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:55;display:flex;background:rgba(6,14,28,.96);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);border-top:1px solid rgba(255,255,255,.12);height:72px;}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:var(--dim);transition:color .2s;padding:8px 0;}
+.bn-item.active{color:var(--oranje);}
+.bn-icon{font-size:22px;line-height:1;}
+.bn-label{font-size:10px;font-weight:700;letter-spacing:.3px;}
+
+/* SAMENVATTING */
+.sum-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);margin-bottom:14px;overflow:hidden;}
+.sum-header{padding:14px 16px;background:rgba(249,115,22,.08);border-bottom:1px solid rgba(255,255,255,.08);}
+.sum-header-title{font-size:13px;font-weight:700;color:var(--oranje);}
+.sum-header-sub{font-size:11px;color:var(--zacht);margin-top:2px;}
+.sum-row{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05);}
+.sum-row:last-child{border-bottom:none;}
+.sum-label{font-size:12px;color:var(--zacht);}
+.sum-value{font-size:13px;font-weight:600;text-align:right;flex-shrink:0;max-width:60%;}
+.sum-foto-row{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05);}
+.sum-foto-label{font-size:12px;color:var(--zacht);margin-bottom:8px;}
+.sum-foto-thumbs{display:flex;gap:6px;flex-wrap:wrap;}
+.sum-foto-thumb{width:60px;height:60px;border-radius:8px;object-fit:cover;border:1.5px solid rgba(255,255,255,.15);}
+
+/* FOTO SHEET OVERLAY */
+.foto-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .25s;}
+.foto-overlay.open{opacity:1;pointer-events:all;}
+.foto-sheet{width:100%;max-width:680px;background:#0c1a30;border-radius:24px 24px 0 0;border:1px solid rgba(255,255,255,.14);padding:20px 20px 40px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1,.32,1);}
+.foto-overlay.open .foto-sheet{transform:translateY(0);}
+.foto-handle{width:40px;height:4px;background:rgba(255,255,255,.20);border-radius:2px;margin:0 auto 16px;}
+.foto-sheet-title{font-size:16px;font-weight:700;margin-bottom:4px;}
+.foto-sheet-sub{font-size:13px;color:var(--zacht);margin-bottom:20px;}
+.foto-preview-area{display:none;margin-bottom:16px;}
+.foto-preview-area.show{display:block;}
+.foto-preview-img{width:100%;max-height:280px;object-fit:contain;border-radius:var(--radius);border:1px solid rgba(255,255,255,.15);}
+.foto-opmerking{width:100%;padding:11px 14px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius);font-family:inherit;font-size:14px;color:var(--tekst);background:rgba(255,255,255,.07);resize:none;margin-top:10px;-webkit-appearance:none;}
+.foto-opmerking:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.15);}
+.foto-actions{display:flex;gap:10px;margin-top:16px;}
+.foto-btn-camera{flex:1;padding:14px;background:rgba(249,115,22,.15);border:1.5px solid rgba(249,115,22,.40);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:700;color:var(--oranje);cursor:pointer;-webkit-appearance:none;text-align:center;}
+.foto-btn-save{flex:1;padding:14px;background:var(--oranje);border:none;border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;display:none;}
+.foto-btn-save.show{display:block;}
+#foto-file-input{display:none;}
+
+/* BOTTOM SHEET (nummers / types) */
+.sheet-overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.65);opacity:0;pointer-events:none;transition:opacity .25s;}
 .sheet-overlay.open{opacity:1;pointer-events:all;}
-.bottom-sheet{
-  position:fixed;bottom:0;left:0;right:0;z-index:90;
-  background:rgba(10,20,42,.97);
-  -webkit-backdrop-filter:blur(32px) saturate(180%);
-  backdrop-filter:blur(32px) saturate(180%);
-  border-top:1px solid rgba(255,255,255,.14);
-  border-radius:24px 24px 0 0;
-  padding:12px 20px 40px;
-  transform:translateY(100%);transition:transform .35s cubic-bezier(.32,1,.32,1);
-  max-height:85vh;overflow-y:auto;
-  box-shadow:0 -8px 40px rgba(0,0,0,.50);
-}
+.bottom-sheet{position:fixed;bottom:0;left:0;right:0;z-index:101;max-width:680px;margin:0 auto;background:#0c1a30;border-radius:24px 24px 0 0;border:1px solid rgba(255,255,255,.14);padding:20px 20px 40px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1,.32,1);}
 .bottom-sheet.open{transform:translateY(0);}
-.sheet-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.20);margin:0 auto 16px;}
-.sheet-title{font-size:16px;font-weight:700;margin-bottom:4px;color:#fff;}
-.sheet-sub{font-size:12px;color:var(--zacht);margin-bottom:16px;}
-.sheet-field{margin-bottom:12px;}
-.sheet-field label{display:block;font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-.sheet-field input{width:100%;padding:11px 13px;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;}
-.sheet-field input::placeholder{color:var(--dim);}
-.sheet-field input:focus{outline:none;border-color:rgba(249,115,22,.55);background:rgba(255,255,255,.10);box-shadow:0 0 0 3px rgba(249,115,22,.14);}
+.sheet-handle{width:40px;height:4px;background:rgba(255,255,255,.20);border-radius:2px;margin:0 auto 16px;}
+.sheet-title{font-size:17px;font-weight:700;margin-bottom:4px;}
+.sheet-sub{font-size:13px;color:var(--zacht);margin-bottom:20px;}
+.sheet-save{width:100%;padding:15px;margin-top:16px;background:var(--oranje);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;}
 
-/* ── TYPE CHIPS ───────────────────────────────────── */
-.type-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-.type-chip{padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.70);transition:all .2s;-webkit-appearance:none;}
-.type-chip.active{background:rgba(249,115,22,.30);border-color:var(--oranje);color:#fff;box-shadow:0 2px 10px rgba(249,115,22,.30);}
+/* LOADING OVERLAY */
+.loading-overlay{position:fixed;inset:0;z-index:300;background:rgba(6,14,28,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.loading-overlay.show{opacity:1;pointer-events:all;}
+.loading-spinner{width:48px;height:48px;border:4px solid rgba(249,115,22,.20);border-top-color:var(--oranje);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:15px;font-weight:600;color:var(--zacht);}
 
-/* ── FOTO IN SHEET ────────────────────────────────── */
-.sheet-foto-title{font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
-.sheet-foto-add-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;border-radius:var(--radius-sm);background:rgba(255,255,255,.06);border:1.5px dashed rgba(255,255,255,.18);color:rgba(255,255,255,.65);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-appearance:none;margin-bottom:10px;}
-.sheet-foto-add-btn:hover{border-color:var(--oranje);color:var(--oranje);background:rgba(249,115,22,.06);}
-.sheet-foto-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
-.sheet-foto-item img{width:70px;height:70px;object-fit:cover;border-radius:10px;border:1.5px solid rgba(255,255,255,.15);flex-shrink:0;}
-.sheet-foto-item .foto-opm{flex:1;}
-.sheet-foto-item .foto-opm input{width:100%;padding:9px 11px;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;}
-.sheet-foto-item .foto-opm input::placeholder{color:var(--dim);}
-.sheet-foto-item .foto-del{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.20);border:none;color:rgba(239,68,68,.80);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;}
-.foto-indicator{font-size:10px;color:var(--oranje);font-weight:700;margin-left:4px;}
-.sheet-save{width:100%;padding:15px;border:none;border-radius:14px;margin-top:8px;font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));box-shadow:0 4px 20px rgba(249,115,22,.35);transition:all .2s;-webkit-appearance:none;}
-.sheet-save:active{transform:scale(.97);}
-
-/* ── SAMENVATTING ─────────────────────────────────── */
-.summary-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.summary-field{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius-sm);padding:10px 12px;}
-.summary-field .sf-label{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
-.summary-field .sf-val{font-size:13px;font-weight:600;color:var(--tekst);}
-.summary-item-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 12px;border-radius:var(--radius-sm);background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-bottom:6px;}
-.summary-item-naam{font-size:13px;font-weight:600;}
-.summary-item-detail{font-size:11px;color:var(--zacht);margin-top:2px;}
-.summary-item-aantal{font-size:14px;font-weight:800;color:var(--oranje);min-width:28px;text-align:right;flex-shrink:0;}
-.summary-cat-title{font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.6px;padding:10px 0 6px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:8px;}
-.empty-state{text-align:center;padding:30px;color:var(--dim);font-size:14px;}
-
-/* ── BEWEGING BLOK ────────────────────────────────── */
-.beweging-block{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.22);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px;}
-.bb-icon{font-size:26px;flex-shrink:0;}
-.bb-info{flex:1;}
-.bb-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--oranje);margin-bottom:4px;}
-.bb-naam{font-size:13px;font-weight:700;color:var(--tekst);}
-.bb-nr{font-size:11px;font-weight:600;color:var(--zacht);}
-.bb-pijl{font-size:18px;color:var(--oranje);flex-shrink:0;}
-
-/* ── NAV BUTTONS ──────────────────────────────────── */
-.nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(6,14,28,.88);-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%);border-top:1px solid rgba(255,255,255,.09);padding:12px 16px 22px;display:flex;gap:10px;box-shadow:0 -6px 28px rgba(0,0,0,.30);}
-.btn-nav{flex:1;padding:15px;border-radius:14px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);-webkit-appearance:none;}
-.btn-nav:active{transform:scale(.96);}
-.btn-back{background:rgba(255,255,255,.09);color:rgba(255,255,255,.80);border:1px solid rgba(255,255,255,.16);flex:0 0 80px;}
-.btn-next{background:linear-gradient(135deg,rgba(249,115,22,.88),rgba(234,88,12,.93));color:#fff;border:1px solid rgba(249,115,22,.40);box-shadow:0 4px 22px rgba(249,115,22,.35),inset 0 1px 0 rgba(255,255,255,.20);}
-.btn-verstuur{background:linear-gradient(135deg,rgba(34,197,94,.82),rgba(22,163,74,.88));color:#fff;border:1px solid rgba(34,197,94,.35);box-shadow:0 4px 22px rgba(34,197,94,.30),inset 0 1px 0 rgba(255,255,255,.20);}
-
-/* ── TOAST ────────────────────────────────────────── */
-.toast{position:fixed;top:74px;left:50%;transform:translateX(-50%) translateY(-14px);background:rgba(14,26,50,.93);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16);color:#fff;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:200;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.30);}
+/* TOAST */
+.toast{position:fixed;bottom:160px;left:50%;transform:translateX(-50%) translateY(20px);z-index:400;background:rgba(15,27,54,.98);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:12px 22px;font-size:14px;font-weight:600;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── INFO ROW ─────────────────────────────────────── */
-.info-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(77,124,254,.10);border:1px solid rgba(77,124,254,.22);border-radius:var(--radius);margin-bottom:16px;font-size:13px;color:var(--zacht);}
-.info-row .ir-icon{font-size:18px;flex-shrink:0;}
-
-/* ── DEFECT ROW (stuk / weggegooid) ──────────────── */
-.item-defect-row{display:flex;align-items:center;gap:10px;padding:0 14px 11px;border-top:1px solid rgba(239,68,68,.10);}
-.item-defect-lbl{flex:1;font-size:12px;font-weight:600;color:rgba(239,68,68,.75);}
-.stepper-btn.minus-defect{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.22);}
-.stepper-btn.plus-defect{background:rgba(239,68,68,.20);border-color:rgba(239,68,68,.32);}
-.stepper-val.defect{color:rgba(239,68,68,.90);}
+/* INFO ROW */
+.info-row{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(77,124,254,.08);border:1px solid rgba(77,124,254,.20);border-radius:var(--radius);margin-top:16px;}
+.ir-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.info-row span:last-child{font-size:13px;color:rgba(255,255,255,.70);line-height:1.5;}
 </style>
 </head>
 <body>
 
-<svg style="position:absolute;width:0;height:0;overflow:hidden;">
-  <filter id="liquid">
-    <feTurbulence type="turbulence" baseFrequency="0.012" numOctaves="2" result="t" seed="5"/>
-    <feDisplacementMap in="SourceGraphic" in2="t" scale="16" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-
-<div class="orb orb-1"></div><div class="orb orb-2"></div>
-<div class="orb orb-3"></div><div class="orb orb-4"></div><div class="orb orb-5"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+<div class="orb orb-5"></div>
 
 <header>
   <div class="header-top">
-    <img src="https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-wit-2018.png" alt="MWB" onerror="this.style.display='none'">
-    <div class="header-title">Verplaatslijst <small>Middelwatering Bouw</small></div>
+    <div class="header-logo">🏗️</div>
+    <div class="header-title">
+      Middelwatering Bouw
+      <small>Verplaatslijst</small>
+    </div>
+    <a href="beheer.html" class="header-beheer">⚙️ Beheer</a>
   </div>
-  <div class="progress">
-    <div class="progress-step active" id="ps-1" onclick="goToStep(1)">
+  <div class="progress" id="progress-bar">
+    <div class="progress-step" id="ps-1" onclick="goToStep(1)">
       <div class="progress-dot">1</div>
-      <div class="progress-label">Wie</div>
+      <div class="progress-label">Gegevens</div>
     </div>
     <div class="progress-line" id="pl-1"></div>
     <div class="progress-step" id="ps-2" onclick="goToStep(2)">
@@ -387,12 +295,13 @@ header img{height:32px;object-fit:contain;}
 
 <div class="wizard">
 
-<!-- ══ STAP 1 ══ -->
+<!-- STAP 1 -->
 <div class="step active" id="step-1">
-  <p class="step-title">Wie ben jij?</p>
-  <p class="step-sub">Vul je naam en de datum in.</p>
+  <p class="step-title">Jouw gegevens</p>
+  <p class="step-sub">Vul je naam in en controleer de datum.</p>
   <div class="card">
-    <div class="card-body" style="padding-top:18px;">
+    <div class="card-title">Gegevens</div>
+    <div class="card-body">
       <div class="g2">
         <div class="field" id="f-datum">
           <label>Datum</label>
@@ -400,25 +309,23 @@ header img{height:32px;object-fit:contain;}
         </div>
         <div class="field" id="f-naam">
           <label>Jouw naam</label>
-          <input type="text" id="naam" placeholder="Voornaam achternaam">
+          <input type="text" id="naam" placeholder="Voornaam achternaam" autocomplete="name">
         </div>
       </div>
     </div>
   </div>
   <div class="info-row">
     <span class="ir-icon">💡</span>
-    <span>Kies daarna het type verplaatsing, selecteer het materieel en vul het nummer in dat op het materieel staat.</span>
+    <span>Kies daarna het type verplaatsing, selecteer het materieel, vul nummers in en maak foto's bij schade.</span>
   </div>
 </div>
 
-<!-- ══ STAP 2 ══ -->
+<!-- STAP 2 -->
 <div class="step" id="step-2">
   <p class="step-title">Verplaatsing</p>
   <p class="step-sub">Hoe wordt het materieel verplaatst?</p>
-
   <div class="card" style="overflow:visible;">
     <div class="card-body" style="padding-top:18px;">
-
       <div class="beweging-grid">
         <button class="beweging-card" id="bc-zaak_klus" onclick="selectBeweging('zaak_klus')">
           <div class="bc-check">✓</div>
@@ -446,7 +353,6 @@ header img{height:32px;object-fit:contain;}
         </button>
       </div>
 
-      <!-- Van zaak → Klus -->
       <div class="locatie-velden" id="lv-zaak_klus">
         <div class="locatie-label" style="margin-bottom:6px;">Van</div>
         <div class="locatie-zaak" style="margin-bottom:16px;">
@@ -457,7 +363,7 @@ header img{height:32px;object-fit:contain;}
         <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-naar-zk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-zk',this.value)" onfocus="acOpen('naar-zk')" autocomplete="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-naar-zk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-zk',this.value)" onfocus="acOpen('naar-zk')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('naar-zk')">✕</button>
           </div>
           <div class="ac-badge" id="ac-badge-naar-zk"></div>
@@ -465,13 +371,12 @@ header img{height:32px;object-fit:contain;}
         </div>
       </div>
 
-      <!-- Klus → Klus -->
       <div class="locatie-velden" id="lv-klus_klus">
         <div class="locatie-label">Van welke klus?</div>
         <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-van-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kk',this.value)" onfocus="acOpen('van-kk')" autocomplete="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-van-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kk',this.value)" onfocus="acOpen('van-kk')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('van-kk')">✕</button>
           </div>
           <div class="ac-badge" id="ac-badge-van-kk"></div>
@@ -481,7 +386,7 @@ header img{height:32px;object-fit:contain;}
         <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-naar-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-kk',this.value)" onfocus="acOpen('naar-kk')" autocomplete="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-naar-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-kk',this.value)" onfocus="acOpen('naar-kk')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('naar-kk')">✕</button>
           </div>
           <div class="ac-badge" id="ac-badge-naar-kk"></div>
@@ -489,13 +394,12 @@ header img{height:32px;object-fit:contain;}
         </div>
       </div>
 
-      <!-- Klus → Zaak -->
       <div class="locatie-velden" id="lv-klus_zaak">
         <div class="locatie-label">Van welke klus?</div>
         <div class="ac-wrap">
           <div class="ac-input-row">
             <span class="ac-search-icon">🔍</span>
-            <input class="ac-input" id="ac-input-van-kz" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kz',this.value)" onfocus="acOpen('van-kz')" autocomplete="off" spellcheck="false">
+            <input class="ac-input" id="ac-input-van-kz" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kz',this.value)" onfocus="acOpen('van-kz')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('van-kz')">✕</button>
           </div>
           <div class="ac-badge" id="ac-badge-van-kz"></div>
@@ -507,22 +411,21 @@ header img{height:32px;object-fit:contain;}
           <div><div class="lz-title">De Zaak – Depot</div><div class="lz-sub">Bestemming: magazijn / depot</div></div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ══ STAP 3 ══ -->
+<!-- STAP 3 -->
 <div class="step" id="step-3">
   <p class="step-title">Materieel</p>
-  <p class="step-sub">Stel het aantal in en vul het nummer in van elk stuk.</p>
+  <p class="step-sub">Stel het aantal in, vul nummers in en maak foto's bij schade.</p>
   <div class="tab-bar-wrap">
     <div class="tab-bar" id="tab-bar"></div>
   </div>
   <div id="item-list"></div>
 </div>
 
-<!-- ══ STAP 4 ══ -->
+<!-- STAP 4 -->
 <div class="step" id="step-4">
   <p class="step-title">Controleer & verstuur</p>
   <p class="step-sub">Kijk alles na en tik op Verstuur.</p>
@@ -539,11 +442,30 @@ header img{height:32px;object-fit:contain;}
 
 </div><!-- /wizard -->
 
-<div class="nav-bar">
+<div class="nav-bar" id="nav-bar">
   <button class="btn-nav btn-back" id="btn-prev" onclick="prevStep()" style="display:none">← Terug</button>
   <button class="btn-nav btn-next" id="btn-next" onclick="nextStep()">Volgende →</button>
 </div>
 
+<!-- FOTO OVERLAY -->
+<div class="foto-overlay" id="foto-overlay" onclick="fotoBgClick(event)">
+  <div class="foto-sheet">
+    <div class="foto-handle"></div>
+    <div class="foto-sheet-title" id="foto-title">Foto toevoegen</div>
+    <div class="foto-sheet-sub" id="foto-sub">Maak een foto of kies er een uit</div>
+    <div class="foto-preview-area" id="foto-preview-area">
+      <img class="foto-preview-img" id="foto-preview-img" src="" alt="Preview">
+      <textarea class="foto-opmerking" id="foto-opmerking" rows="2" placeholder="Opmerking bij deze foto (bijv. schade beschrijving)..."></textarea>
+    </div>
+    <div class="foto-actions">
+      <button class="foto-btn-camera" onclick="triggerCamera()">📷 Foto maken / kiezen</button>
+      <button class="foto-btn-save show" id="foto-save-btn" onclick="fotoOpslaan()" style="display:none">Opslaan ✓</button>
+    </div>
+    <input type="file" id="foto-file-input" accept="image/*" capture="environment" onchange="fotoGekozen(event)">
+  </div>
+</div>
+
+<!-- BOTTOM SHEET (nummers) -->
 <div class="sheet-overlay" id="sheet-overlay" onclick="closeSheet()"></div>
 <div class="bottom-sheet" id="bottom-sheet">
   <div class="sheet-handle"></div>
@@ -553,12 +475,30 @@ header img{height:32px;object-fit:contain;}
   <button class="sheet-save" onclick="saveSheet()">Opslaan ✓</button>
 </div>
 
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loading-text">Bezig met versturen...</div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+  <a href="index.html" class="bn-item active">
+    <span class="bn-icon">📋</span>
+    <span class="bn-label">Verplaatsen</span>
+  </a>
+  <a href="overzicht.html" class="bn-item">
+    <span class="bn-icon">📍</span>
+    <span class="bn-label">Overzicht</span>
+  </a>
+</nav>
+
 <script>
-/* ══════════════════════════════════════════════════════
-   KLUSSEN DATABASE – pas aan met jullie actuele klussen
-   ══════════════════════════════════════════════════════ */
+const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
+
+/* ── KLUSSEN ─────────────────────────────────────── */
 const KLUSSEN_DEFAULT = [
   { naam:'Inkopen tbv voorraad',                                        werknr:'300026' },
   { naam:'Sodexo, KLM kleine werken',                                   werknr:'400126' },
@@ -632,11 +572,9 @@ const KLUSSEN_DEFAULT = [
   { naam:'Sodexo, MSD, diversen, Haarlem',                              werknr:'490326' },
   { naam:'Fam. Mujcinovic, Rotterdam, verbouwing woning',               werknr:'4904' },
 ];
-const KLUSSEN = [...KLUSSEN_DEFAULT];
+let KLUSSEN = [...KLUSSEN_DEFAULT];
 
-/* ══════════════════════════════════════════════════════
-   MATERIEEL – per soort 1 regel, nummers per stuk inline
-   ══════════════════════════════════════════════════════ */
+/* ── MATERIEEL ───────────────────────────────────── */
 const SECTIES = {
   'Aansluitingen': [
     { id:'bouwmeterkast', naam:'Bouwmeterkast', hasNr:true, hasTypes:true },
@@ -644,10 +582,10 @@ const SECTIES = {
     { id:'waterkraan',    naam:'Waterkraan / standvink' },
   ],
   'Keten': [
-    { id:'schaftkeet',     naam:'Schaftkeet',      hasNr:true },
-    { id:'uitvoerderskeet',naam:'Uitvoerderskeet',  hasNr:true },
-    { id:'pipokeet',       naam:'Pipokeet',         hasNr:true },
-    { id:'keettrap',       naam:'Keettrap (set)',   hasNr:true },
+    { id:'schaftkeet',      naam:'Schaftkeet',      hasNr:true },
+    { id:'uitvoerderskeet', naam:'Uitvoerderskeet',  hasNr:true },
+    { id:'pipokeet',        naam:'Pipokeet',         hasNr:true },
+    { id:'keettrap',        naam:'Keettrap (set)',   hasNr:true },
   ],
   'Containers': [
     { id:'container', naam:'Materiaalcontainer', hasNr:true },
@@ -665,23 +603,23 @@ const SECTIES = {
   ],
 };
 
-/* ══════════════════════════════════════════════════════
-   STATE
-   ══════════════════════════════════════════════════════ */
-const STATE   = {};
+/* ── STATE ───────────────────────────────────────── */
+const STATE = {};
 const BEWEGING = { type:'', van:{ naam:'', werknr:'' }, naar:{ naam:'', werknr:'' } };
 const AC_STATE = {};
+let activeTab = Object.keys(SECTIES)[0];
+let sheetItemId = null;
+let fotoItemId  = null;
+let fotoDataUrl = null;
 
 function initState() {
   alleItems().forEach(item => {
-    STATE[item.id] = { aantal:0, nummers:[], opm:'', types:[], fotos:[], stuk:0 };
+    STATE[item.id] = { aantal:0, nummers:[], types:[], fotos:[], stuk:0 };
   });
 }
 function alleItems() { return Object.values(SECTIES).flat(); }
 
-/* ══════════════════════════════════════════════════════
-   WIZARD
-   ══════════════════════════════════════════════════════ */
+/* ── WIZARD ──────────────────────────────────────── */
 let currentStep = 1;
 const TOTAL = 4;
 
@@ -692,7 +630,6 @@ function goToStep(n) {
   currentStep = n;
   document.getElementById('step-' + currentStep).classList.add('active');
   window.scrollTo({ top:0, behavior:'smooth' });
-  // Sluit alle dropdowns
   document.querySelectorAll('.ac-dropdown.open').forEach(d => d.classList.remove('open'));
   updateProgress(); updateNav(); autosave();
   if (currentStep === 2) syncKlussen();
@@ -720,9 +657,13 @@ function updateNav() {
   const next = document.getElementById('btn-next');
   prev.style.display = currentStep > 1 ? '' : 'none';
   if (currentStep === TOTAL) {
-    next.textContent = '✓ Verstuur'; next.className = 'btn-nav btn-verstuur'; next.onclick = verstuurAlles;
+    next.textContent = '✓ Verstuur';
+    next.className   = 'btn-nav btn-verstuur';
+    next.onclick     = verstuurAlles;
   } else {
-    next.textContent = 'Volgende →'; next.className = 'btn-nav btn-next'; next.onclick = nextStep;
+    next.textContent = 'Volgende →';
+    next.className   = 'btn-nav btn-next';
+    next.onclick     = nextStep;
   }
 }
 
@@ -732,8 +673,12 @@ function validateStep(n) {
     if (!document.getElementById('datum').value) mis.push('Datum');
     if (!document.getElementById('naam').value.trim()) mis.push('Naam');
     ['datum','naam'].forEach(id => {
-      const el = document.getElementById(id); const wrap = document.getElementById('f-' + id);
-      if (!el.value.trim()) { wrap && wrap.classList.add('error'); el.addEventListener('input', () => wrap && wrap.classList.remove('error'), {once:true}); }
+      const el = document.getElementById(id);
+      const wrap = document.getElementById('f-' + id);
+      if (!el.value.trim()) {
+        wrap && wrap.classList.add('error');
+        el.addEventListener('input', () => wrap && wrap.classList.remove('error'), { once:true });
+      }
     });
     if (mis.length) { showToast('⚠️ Vul in: ' + mis.join(', ')); return false; }
     return true;
@@ -752,9 +697,7 @@ function validateStep(n) {
   return true;
 }
 
-/* ══════════════════════════════════════════════════════
-   BEWEGING
-   ══════════════════════════════════════════════════════ */
+/* ── BEWEGING ────────────────────────────────────── */
 function selectBeweging(type) {
   BEWEGING.type = type;
   BEWEGING.van  = { naam:'', werknr:'' };
@@ -769,9 +712,7 @@ function selectBeweging(type) {
   autosave();
 }
 
-/* ══════════════════════════════════════════════════════
-   AUTOCOMPLETE – dropdown is position:fixed, altijd zichtbaar
-   ══════════════════════════════════════════════════════ */
+/* ── AUTOCOMPLETE ────────────────────────────────── */
 document.addEventListener('click', e => {
   if (!e.target.closest('.ac-wrap') && !e.target.closest('.ac-dropdown')) {
     document.querySelectorAll('.ac-dropdown.open').forEach(d => d.classList.remove('open'));
@@ -781,570 +722,504 @@ document.addEventListener('click', e => {
 function acOpen(veldId) {
   const input    = document.getElementById('ac-input-' + veldId);
   const dropdown = document.getElementById('ac-dropdown-' + veldId);
-
-  // Verplaats dropdown naar body zodat backdrop-filter op .card de positie niet verstoort
-  if (dropdown.parentElement !== document.body) {
-    document.body.appendChild(dropdown);
-  }
-
+  if (dropdown.parentElement !== document.body) document.body.appendChild(dropdown);
   const rect = input.getBoundingClientRect();
-  dropdown.style.top   = (rect.bottom + window.scrollY + 6) + 'px';
-  dropdown.style.left  = (rect.left  + window.scrollX)     + 'px';
-  dropdown.style.width = rect.width + 'px';
+  dropdown.style.top      = (rect.bottom + window.scrollY + 6) + 'px';
+  dropdown.style.left     = (rect.left + window.scrollX) + 'px';
+  dropdown.style.width    = rect.width + 'px';
   dropdown.style.position = 'absolute';
-
   acFilter(veldId, input.value);
-
-  // Sync klussen op de achtergrond; ververs dropdown als die nog open is
   syncKlussen().then(() => {
-    const dd = document.getElementById('ac-dropdown-' + veldId);
-    if (dd?.classList.contains('open')) {
-      acFilter(veldId, document.getElementById('ac-input-' + veldId)?.value || '');
-    }
+    if (dropdown.classList.contains('open')) acFilter(veldId, input.value);
   });
 }
 
-function acFilter(veldId, query) {
+function acFilter(veldId, q) {
   const dropdown = document.getElementById('ac-dropdown-' + veldId);
-  if (!dropdown) return;
-
-  // Herbereken positie bij typen (scroll kan verplaatst zijn)
-  const input = document.getElementById('ac-input-' + veldId);
-  const rect  = input.getBoundingClientRect();
-  dropdown.style.top   = (rect.bottom + window.scrollY + 6) + 'px';
-  dropdown.style.left  = (rect.left  + window.scrollX)      + 'px';
-  dropdown.style.width = rect.width + 'px';
-
-  const q = query.trim().toLowerCase();
-  const results = q === ''
-    ? KLUSSEN
-    : KLUSSEN.filter(k => k.naam.toLowerCase().includes(q) || k.werknr.toLowerCase().includes(q));
-
-  dropdown.innerHTML = '';
-  if (results.length === 0) {
-    dropdown.innerHTML = '<div class="ac-empty">Geen overeenkomsten – typ verder of kies vrij</div>';
-  } else {
-    results.forEach(k => {
-      const div = document.createElement('div');
-      div.className = 'ac-item';
-      div.innerHTML = `<span class="ac-item-naam">${k.naam}</span><span class="ac-item-nr">${k.werknr}</span>`;
-      div.onmousedown = e => { e.preventDefault(); acSelect(veldId, k); }; // mousedown zodat blur niet eerst triggert
-      dropdown.appendChild(div);
-    });
-  }
+  const term = q.toLowerCase().trim();
+  const hits  = term
+    ? KLUSSEN.filter(k => k.naam.toLowerCase().includes(term) || k.werknr.toLowerCase().includes(term))
+    : KLUSSEN;
+  dropdown.innerHTML = hits.length
+    ? hits.map(k => `<div class="ac-item" onclick="acSelect('${veldId}','${k.naam.replace(/'/g,"\\'")}','${k.werknr}')">
+        <span class="ac-item-naam">${k.naam}</span>
+        <span class="ac-item-nr">${k.werknr}</span>
+      </div>`).join('')
+    : '<div class="ac-empty">Geen klussen gevonden</div>';
   dropdown.classList.add('open');
 }
 
-function acSelect(veldId, klus) {
-  const input    = document.getElementById('ac-input-' + veldId);
-  const badge    = document.getElementById('ac-badge-' + veldId);
+function acSelect(veldId, naam, werknr) {
+  const input  = document.getElementById('ac-input-' + veldId);
+  const badge  = document.getElementById('ac-badge-' + veldId);
   const dropdown = document.getElementById('ac-dropdown-' + veldId);
-  input.value = klus.naam;
+  input.value = naam;
   input.classList.add('selected');
-  badge.textContent = 'Werknr. ' + klus.werknr;
+  badge.textContent = 'Werknr: ' + werknr;
   badge.classList.add('show');
   dropdown.classList.remove('open');
-  AC_STATE[veldId] = klus;
-  if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = { naam:klus.naam, werknr:klus.werknr };
-  else BEWEGING.van = { naam:klus.naam, werknr:klus.werknr };
+  AC_STATE[veldId] = { naam, werknr };
+  if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = { naam, werknr };
+  if (veldId === 'van-kk'  || veldId === 'van-kz')  BEWEGING.van  = { naam, werknr };
   autosave();
 }
 
 function acClear(veldId) {
   acClearSilent(veldId);
-  const isNaar = veldId === 'naar-zk' || veldId === 'naar-kk';
-  if (isNaar && BEWEGING.type !== 'klus_zaak')  BEWEGING.naar = { naam:'', werknr:'' };
-  if (!isNaar && BEWEGING.type !== 'zaak_klus') BEWEGING.van  = { naam:'', werknr:'' };
+  if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = { naam:'', werknr:'' };
+  if (veldId === 'van-kk'  || veldId === 'van-kz')  BEWEGING.van  = { naam:'', werknr:'' };
   autosave();
 }
-
 function acClearSilent(veldId) {
-  const input    = document.getElementById('ac-input-' + veldId);
-  const badge    = document.getElementById('ac-badge-'  + veldId);
-  const dropdown = document.getElementById('ac-dropdown-' + veldId);
+  const input  = document.getElementById('ac-input-' + veldId);
+  const badge  = document.getElementById('ac-badge-' + veldId);
   if (!input) return;
-  input.value = ''; input.classList.remove('selected');
-  badge.textContent = ''; badge.classList.remove('show');
-  dropdown && dropdown.classList.remove('open');
-  delete AC_STATE[veldId];
+  input.value = '';
+  input.classList.remove('selected');
+  if (badge) badge.classList.remove('show');
+  AC_STATE[veldId] = null;
 }
 
-// Vrije invoer opslaan bij verlaten veld
-['naar-zk','van-kk','naar-kk','van-kz'].forEach(veldId => {
-  const input = document.getElementById('ac-input-' + veldId);
-  if (!input) return;
-  input.addEventListener('blur', () => {
-    setTimeout(() => { const dd = document.getElementById('ac-dropdown-' + veldId); if (dd) dd.classList.remove('open'); }, 150);
-    if (!AC_STATE[veldId] && input.value.trim()) {
-      const klus = { naam:input.value.trim(), werknr:'' };
-      if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = klus;
-      else BEWEGING.van = klus;
-      autosave();
-    }
-  });
-});
-
-/* ══════════════════════════════════════════════════════
-   MATERIEEL STAP
-   ══════════════════════════════════════════════════════ */
-let activeTab = Object.keys(SECTIES)[0];
-
+/* ── MATERIEEL RENDER ────────────────────────────── */
 function renderMaterialStep() {
-  renderTabs();
-  renderTabContent(activeTab);
+  const secties = Object.keys(SECTIES);
+  const tabBar  = document.getElementById('tab-bar');
+  tabBar.innerHTML = secties.map(s =>
+    `<button class="tab-btn ${s === activeTab ? 'active' : ''}" onclick="switchTab('${s}')">${s}</button>`
+  ).join('');
+  renderItems();
 }
 
-function renderTabs() {
-  const bar = document.getElementById('tab-bar');
-  bar.innerHTML = '';
-  Object.keys(SECTIES).forEach(naam => {
-    const count = SECTIES[naam].filter(i => STATE[i.id].aantal > 0).length;
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (naam === activeTab ? ' active' : '');
-    btn.innerHTML = naam + (count ? `<span class="tab-badge">${count}</span>` : '');
-    btn.onclick = () => { activeTab = naam; renderTabs(); renderTabContent(naam); };
-    bar.appendChild(btn);
-  });
+function switchTab(s) {
+  activeTab = s;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.textContent === s));
+  renderItems();
 }
 
-function renderTabContent(tab) {
-  const list = document.getElementById('item-list');
-  list.innerHTML = '';
-  SECTIES[tab].forEach(item => {
-    const s = STATE[item.id];
-    const hasDetail = s.opm || s.fotos.length > 0 || s.types.length > 0;
-    const fotoTxt = s.fotos.length > 0 ? `<span class="foto-indicator">📷${s.fotos.length}</span>` : '';
+function renderItems() {
+  const items = SECTIES[activeTab];
+  const list  = document.getElementById('item-list');
+  list.innerHTML = items.map(item => renderItem(item)).join('');
+}
 
-    const card = document.createElement('div');
-    card.className = 'item-card' + (s.aantal > 0 ? ' has-value' : '');
-    card.id = 'card-' + item.id;
+function renderItem(item) {
+  const s = STATE[item.id];
+  const isActive = s.aantal > 0;
+  const hasFotos = s.fotos && s.fotos.length > 0;
 
-    // Inline type chips voor bouwmeterkast (eerst type kiezen, dan nummer)
-    let typeHtml = '';
-    if (item.id === 'bouwmeterkast' && s.aantal > 0) {
-      typeHtml = `<div style="padding:0 14px 10px;">
-        <div style="font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Type meterkast</div>
-        <div class="type-chips" style="margin-bottom:0;">
-          ${['35A','63A','125A'].map(t => `<button class="type-chip${s.types[0] === t ? ' active':''}" onclick="setTypeKast('${t}');event.stopPropagation()">⚡ ${t}</button>`).join('')}
-        </div>
-      </div>`;
-    }
+  let extraHtml = '';
 
-    // Inline nummer inputs
-    let nrHtml = '';
-    if (item.hasNr && s.aantal > 0) {
-      nrHtml = `<div class="item-nummers">`;
-      for (let i = 0; i < s.aantal; i++) {
-        const val = s.nummers[i] || '';
-        nrHtml += `<input class="item-nr-input"
-          placeholder="Nummer ${i + 1}"
-          value="${val.replace(/"/g,'&quot;')}"
-          oninput="STATE['${item.id}'].nummers[${i}]=this.value;autosave()">`;
-      }
-      nrHtml += `</div>`;
-    }
-
-    let defectHtml = '';
-    if (item.hasDefect && s.aantal > 0) {
-      defectHtml = `<div class="item-defect-row">
-        <div class="item-defect-lbl">🗑️ waarvan stuk / weggegooid</div>
-        <div class="stepper">
-          <button class="stepper-btn minus-defect" onclick="changeStuk('${item.id}',-1)">−</button>
-          <span class="stepper-val${s.stuk > 0 ? ' defect' : ''}">${s.stuk}</span>
-          <button class="stepper-btn plus-defect" onclick="changeStuk('${item.id}',1)">+</button>
-        </div>
-      </div>`;
-    }
-
-    card.innerHTML = `
-      <div class="item-row">
-        <div class="item-naam">${item.naam}${fotoTxt}</div>
-        <div class="stepper">
-          <button class="stepper-btn" onclick="changeAantal('${item.id}',-1)">−</button>
-          <span class="stepper-val${s.aantal > 0 ? ' nonzero' : ''}" id="sv-${item.id}">${s.aantal}</span>
-          <button class="stepper-btn plus" onclick="changeAantal('${item.id}',1)">+</button>
-        </div>
-        <button class="item-foto-btn${hasDetail ? ' has-detail' : ''}" id="db-${item.id}" onclick="openSheet('${item.id}')">📷</button>
+  // Nummers
+  if (item.hasNr && isActive) {
+    const chips = s.nummers.map((nr, i) =>
+      `<div class="nr-chip">${nr}<button onclick="verwijderNummer('${item.id}',${i})">✕</button></div>`
+    ).join('');
+    extraHtml += `<div class="nummers-wrap show" id="nw-${item.id}">
+      <div class="nummers-row" id="nr-chips-${item.id}">${chips}</div>
+      <div class="nr-add-row">
+        <input class="nr-input" type="number" id="nr-input-${item.id}" placeholder="Voer nummer in..." inputmode="numeric">
+        <button class="nr-add-btn" onclick="voegNummerToe('${item.id}')">+ Toevoegen</button>
       </div>
-      ${typeHtml}${nrHtml}${defectHtml}
-    `;
-    list.appendChild(card);
-  });
+    </div>`;
+  }
+
+  // Types (bouwmeterkast)
+  if (item.hasTypes && isActive) {
+    const types = ['35A','63A','125A'];
+    const chips = types.map(t =>
+      `<button class="type-chip ${s.types.includes(t) ? 'selected' : ''}" onclick="toggleType('${item.id}','${t}')">${t}</button>`
+    ).join('');
+    extraHtml += `<div class="types-wrap show" id="tw-${item.id}">
+      <div style="font-size:11px;color:var(--zacht);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Type aansluiting</div>
+      <div class="types-row">${chips}</div>
+    </div>`;
+  }
+
+  // Defect stepper
+  if (item.hasDefect && isActive) {
+    extraHtml += `<div class="defect-row">
+      <span class="defect-label">⚠️ Stuk / weggegooid</span>
+      <div class="defect-stepper">
+        <button class="step-btn" onclick="changeDefect('${item.id}',-1)">−</button>
+        <span class="step-count" id="defect-${item.id}">${s.stuk}</span>
+        <button class="step-btn" onclick="changeDefect('${item.id}',1)">+</button>
+      </div>
+    </div>`;
+  }
+
+  // Foto thumbnails
+  const thumbs = (s.fotos || []).map((f, i) =>
+    `<div class="foto-thumb">
+      <img src="${f.dataUrl}" alt="foto">
+      <button class="foto-thumb-del" onclick="verwijderFoto('${item.id}',${i})">✕</button>
+    </div>`
+  ).join('');
+
+  if (isActive) {
+    extraHtml += `<button class="foto-btn ${hasFotos ? 'has-foto' : ''}" onclick="openFotoSheet('${item.id}')">
+      📷 ${hasFotos ? s.fotos.length + ' foto' + (s.fotos.length > 1 ? "'s" : '') : 'Foto toevoegen'}
+    </button>`;
+    if (hasFotos) {
+      extraHtml += `<div class="foto-thumbs">${thumbs}</div>`;
+    }
+  }
+
+  return `<div class="card" style="overflow:visible;margin-bottom:10px;">
+    <div class="item-row">
+      <div>
+        <div class="item-name">${item.naam}</div>
+      </div>
+      <div class="stepper ${isActive ? 'active' : ''}" id="stepper-${item.id}">
+        <button class="step-btn" onclick="changeAantal('${item.id}',-1)">−</button>
+        <span class="step-count" id="cnt-${item.id}">${s.aantal}</span>
+        <button class="step-btn" onclick="changeAantal('${item.id}',1)">+</button>
+      </div>
+    </div>
+    ${extraHtml}
+  </div>`;
 }
 
+/* ── STEPPER ─────────────────────────────────────── */
 function changeAantal(id, delta) {
   const item = alleItems().find(i => i.id === id);
-  const nieuw = Math.max(0, STATE[id].aantal + delta);
-  STATE[id].aantal = nieuw;
-  // Stuk kan nooit meer zijn dan het totaal aantal
-  if (STATE[id].stuk > nieuw) STATE[id].stuk = nieuw;
-  // Houd nummers array synchroon met aantal
-  if (item.hasNr) {
-    while (STATE[id].nummers.length < nieuw) STATE[id].nummers.push('');
-    while (STATE[id].nummers.length > nieuw) STATE[id].nummers.pop();
-  }
-  renderTabContent(activeTab);
-  renderTabs();
+  STATE[id].aantal = Math.max(0, STATE[id].aantal + delta);
+  renderItems();
   autosave();
 }
 
-function changeStuk(id, delta) {
-  const s = STATE[id];
-  STATE[id].stuk = Math.max(0, Math.min(s.aantal, (s.stuk || 0) + delta));
-  renderTabContent(activeTab);
+function changeDefect(id, delta) {
+  STATE[id].stuk = Math.max(0, (STATE[id].stuk || 0) + delta);
+  const el = document.getElementById('defect-' + id);
+  if (el) el.textContent = STATE[id].stuk;
   autosave();
 }
 
-/* ══════════════════════════════════════════════════════
-   BOTTOM SHEET (foto + opmerking + type chips)
-   ══════════════════════════════════════════════════════ */
-let sheetItemId = null;
-let sheetFotos  = [];
-
-function openSheet(id) {
-  sheetItemId = id;
-  sheetFotos  = STATE[id].fotos.map(f => ({...f}));
-  const item        = alleItems().find(i => i.id === id);
-  const s           = STATE[id];
-  document.getElementById('sheet-title').textContent = item.naam;
-  document.getElementById('sheet-sub').textContent   = "Foto's en opmerkingen";
-  document.getElementById('sheet-body').innerHTML = `
-    <div class="sheet-field">
-      <label>Opmerking (bijv. schade)</label>
-      <input id="sf-opm" type="text" placeholder="Bijv. rechterdeur beschadigd..." value="${s.opm}">
-    </div>
-    <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-top:4px;">
-      <div class="sheet-foto-title">Foto's toevoegen</div>
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <label class="sheet-foto-add-btn" style="margin-bottom:0;flex:1;">
-          <input type="file" accept="image/*" capture="environment" style="display:none" onchange="addSheetFoto(event)">
-          📷 Camera
-        </label>
-        <label class="sheet-foto-add-btn" style="margin-bottom:0;flex:1;">
-          <input type="file" accept="image/*" style="display:none" onchange="addSheetFoto(event)">
-          🖼️ Album
-        </label>
-      </div>
-      <div id="sf-foto-list"></div>
-    </div>
-  `;
-  renderSheetFotos();
-  document.getElementById('sheet-overlay').classList.add('open');
-  document.getElementById('bottom-sheet').classList.add('open');
-}
-
-function setTypeKast(type) {
-  const types = STATE['bouwmeterkast'].types;
-  STATE['bouwmeterkast'].types = (types[0] === type) ? [] : [type];
-  renderTabContent(activeTab);
+/* ── NUMMERS ─────────────────────────────────────── */
+function voegNummerToe(id) {
+  const input = document.getElementById('nr-input-' + id);
+  const nr    = input.value.trim();
+  if (!nr) return;
+  if (!STATE[id].nummers) STATE[id].nummers = [];
+  STATE[id].nummers.push(nr);
+  input.value = '';
+  renderItems();
   autosave();
 }
 
-async function addSheetFoto(e) {
-  const file = e.target.files[0]; if (!file) return;
-  const dataUrl = await resizeImage(file);
-  sheetFotos.push({ dataUrl, opmerking:'' });
-  renderSheetFotos();
+function verwijderNummer(id, idx) {
+  STATE[id].nummers.splice(idx, 1);
+  renderItems();
+  autosave();
+}
+
+/* ── TYPES ───────────────────────────────────────── */
+function toggleType(id, type) {
+  if (!STATE[id].types) STATE[id].types = [];
+  const idx = STATE[id].types.indexOf(type);
+  if (idx >= 0) STATE[id].types.splice(idx, 1);
+  else STATE[id].types.push(type);
+  renderItems();
+  autosave();
+}
+
+/* ── FOTO ────────────────────────────────────────── */
+function openFotoSheet(itemId) {
+  fotoItemId  = itemId;
+  fotoDataUrl = null;
+  const item  = alleItems().find(i => i.id === itemId);
+  document.getElementById('foto-title').textContent = 'Foto – ' + item.naam;
+  document.getElementById('foto-sub').textContent   = 'Maak een foto bij schade of voor documentatie';
+  document.getElementById('foto-preview-area').classList.remove('show');
+  document.getElementById('foto-opmerking').value   = '';
+  const saveBtn = document.getElementById('foto-save-btn');
+  saveBtn.style.display = 'none';
+  document.getElementById('foto-overlay').classList.add('open');
+}
+
+function closeFotoSheet() {
+  document.getElementById('foto-overlay').classList.remove('open');
+  fotoItemId  = null;
+  fotoDataUrl = null;
+}
+
+function fotoBgClick(e) {
+  if (e.target === document.getElementById('foto-overlay')) closeFotoSheet();
+}
+
+function triggerCamera() {
+  document.getElementById('foto-file-input').click();
+}
+
+function fotoGekozen(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    fotoDataUrl = ev.target.result;
+    const img   = document.getElementById('foto-preview-img');
+    img.src     = fotoDataUrl;
+    document.getElementById('foto-preview-area').classList.add('show');
+    document.getElementById('foto-save-btn').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
   e.target.value = '';
 }
 
-function renderSheetFotos() {
-  const list = document.getElementById('sf-foto-list'); if (!list) return;
-  list.innerHTML = '';
-  sheetFotos.forEach((f, i) => {
-    const div = document.createElement('div');
-    div.className = 'sheet-foto-item';
-    div.innerHTML = `
-      <img src="${f.dataUrl}" alt="foto">
-      <div class="foto-opm">
-        <input type="text" placeholder="Omschrijving..." value="${f.opmerking}" oninput="sheetFotos[${i}].opmerking=this.value">
-      </div>
-      <button class="foto-del" onclick="deleteSheetFoto(${i})">✕</button>
-    `;
-    list.appendChild(div);
-  });
+function fotoOpslaan() {
+  if (!fotoDataUrl || !fotoItemId) return;
+  const opm = document.getElementById('foto-opmerking').value.trim();
+  if (!STATE[fotoItemId].fotos) STATE[fotoItemId].fotos = [];
+  STATE[fotoItemId].fotos.push({ dataUrl: fotoDataUrl, opm });
+  renderItems();
+  autosave();
+  closeFotoSheet();
+  showToast('📷 Foto opgeslagen');
 }
 
-function deleteSheetFoto(i) { sheetFotos.splice(i, 1); renderSheetFotos(); }
-
-function resizeImage(file, maxW = 900) {
-  return new Promise(resolve => {
-    const img = new Image(); const url = URL.createObjectURL(file);
-    img.onload = () => {
-      let w = img.width, h = img.height;
-      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
-      const c = document.createElement('canvas'); c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
-      URL.revokeObjectURL(url); resolve(c.toDataURL('image/jpeg', 0.75));
-    };
-    img.src = url;
-  });
+function verwijderFoto(id, idx) {
+  STATE[id].fotos.splice(idx, 1);
+  renderItems();
+  autosave();
 }
 
+/* ── SHEET (legacy – kan nog gebruikt worden) ────── */
+function openSheet(itemId) { /* niet meer in gebruik */ }
 function closeSheet() {
   document.getElementById('sheet-overlay').classList.remove('open');
   document.getElementById('bottom-sheet').classList.remove('open');
-  sheetItemId = null; sheetFotos = [];
 }
+function saveSheet() { closeSheet(); }
 
-function saveSheet() {
-  if (!sheetItemId) return;
-  STATE[sheetItemId].opm   = document.getElementById('sf-opm').value;
-  STATE[sheetItemId].fotos = [...sheetFotos];
-  renderTabContent(activeTab); autosave(); closeSheet(); showToast('Opgeslagen ✓');
-}
-
-/* ══════════════════════════════════════════════════════
-   SAMENVATTING
-   ══════════════════════════════════════════════════════ */
+/* ── SAMENVATTING ────────────────────────────────── */
 function renderSummary() {
-  const data = collectData();
-  const typeLabel = { zaak_klus:'Van de zaak naar klus', klus_klus:'Klus naar andere klus', klus_zaak:'Terug naar de zaak' }[data.beweging_type] || '–';
-  const typeIcon  = { zaak_klus:'🏭', klus_klus:'🔄', klus_zaak:'🏗️' }[data.beweging_type] || '📦';
-  let html = '';
+  const el      = document.getElementById('summary-content');
+  const geselecteerd = alleItems().filter(i => STATE[i.id].aantal > 0);
 
-  html += `<div class="beweging-block">
-    <div class="bb-icon">${typeIcon}</div>
-    <div class="bb-info">
-      <div class="bb-type">${typeLabel}</div>
-      <div class="bb-naam">${data.van_naam || '—'}</div>
-      ${data.van_werknr ? `<div class="bb-nr">Werknr. ${data.van_werknr}</div>` : ''}
+  const vanLabel  = BEWEGING.van.naam  || '—';
+  const naarLabel = BEWEGING.naar.naam || '—';
+  const typeLabel = { zaak_klus:'Van zaak → Klus', klus_klus:'Klus → Klus', klus_zaak:'Klus → Zaak' }[BEWEGING.type] || '—';
+
+  let html = `<div class="sum-card">
+    <div class="sum-header">
+      <div class="sum-header-title">${typeLabel}</div>
+      <div class="sum-header-sub">${document.getElementById('datum').value} · ${document.getElementById('naam').value}</div>
     </div>
-    <div class="bb-pijl">→</div>
-    <div class="bb-info">
-      <div class="bb-naam">${data.naar_naam || '—'}</div>
-      ${data.naar_werknr ? `<div class="bb-nr">Werknr. ${data.naar_werknr}</div>` : ''}
+    <div class="sum-row">
+      <span class="sum-label">Van</span>
+      <span class="sum-value">${vanLabel}</span>
+    </div>
+    <div class="sum-row">
+      <span class="sum-label">Naar</span>
+      <span class="sum-value">${naarLabel}</span>
     </div>
   </div>`;
 
-  html += `<div class="card"><div class="card-title">Informatie</div><div class="card-body"><div class="summary-info">`;
-  [['Datum',data.datum],['Ingevuld door',data.naam]].forEach(([l,v]) => {
-    html += `<div class="summary-field"><div class="sf-label">${l}</div><div class="sf-val">${v||'—'}</div></div>`;
-  });
-  html += `</div></div></div>`;
-
-  let heeftItems = false;
-  let iHtml = `<div class="card"><div class="card-title">Geselecteerd materieel</div><div class="card-body">`;
-  for (const [cat, items] of Object.entries(SECTIES)) {
-    const gevuld = items.filter(i => STATE[i.id].aantal > 0);
-    if (!gevuld.length) continue;
-    heeftItems = true;
-    iHtml += `<div class="summary-cat-title">${cat}</div>`;
-    gevuld.forEach(item => {
+  if (geselecteerd.length) {
+    const rows = geselecteerd.map(item => {
       const s = STATE[item.id];
-      const typeLabel = (item.id === 'bouwmeterkast' && s.types.length) ? ` – ${s.types.join(', ')}` : '';
-      const nrsText = s.nummers.filter(Boolean).join(', ');
-      iHtml += `<div class="summary-item-row">
-        <div>
-          <div class="summary-item-naam">${item.naam}${typeLabel}</div>
-          ${nrsText ? `<div class="summary-item-detail">Nr: ${nrsText}</div>` : ''}
-          ${s.stuk > 0 ? `<div class="summary-item-detail">🗑️ ${s.stuk} stuk/weggegooid</div>` : ''}
-          ${s.opm ? `<div class="summary-item-detail">📝 ${s.opm}</div>` : ''}
-          ${s.fotos.length ? `<div class="summary-item-detail">📷 ${s.fotos.length} foto${s.fotos.length>1?'s':''}</div>` : ''}
-        </div>
-        <div class="summary-item-aantal">×${s.aantal}</div>
-      </div>`;
-    });
+      let details = s.aantal + 'x';
+      if (s.nummers && s.nummers.length) details += ' · nr: ' + s.nummers.join(', ');
+      if (s.types   && s.types.length)   details += ' · ' + s.types.join(', ');
+      if (s.stuk    && s.stuk > 0)       details += ' · ⚠️ ' + s.stuk + ' stuk/weg';
+
+      const fotoHtml = (s.fotos && s.fotos.length)
+        ? `<div class="sum-foto-row">
+            <div class="sum-foto-label">📷 ${s.fotos.length} foto${s.fotos.length > 1 ? "'s" : ''}</div>
+            <div class="sum-foto-thumbs">${s.fotos.map(f => `<img class="sum-foto-thumb" src="${f.dataUrl}">`).join('')}</div>
+          </div>`
+        : '';
+
+      return `<div class="sum-row"><span class="sum-label">${item.naam}</span><span class="sum-value">${details}</span></div>${fotoHtml}`;
+    }).join('');
+
+    html += `<div class="sum-card"><div class="sum-header"><div class="sum-header-title">Materieel (${geselecteerd.length} soorten)</div></div>${rows}</div>`;
   }
-  if (!heeftItems) iHtml += `<div class="empty-state">Geen items. Ga terug naar stap 3.</div>`;
-  iHtml += `</div></div>`;
-  html += iHtml;
-  document.getElementById('summary-content').innerHTML = html;
+
+  el.innerHTML = html;
 }
 
-/* ══════════════════════════════════════════════════════
-   DATA VERZAMELEN
-   ══════════════════════════════════════════════════════ */
-function collectData() {
-  const data = {
+/* ── FOTO COMPRIMEREN ────────────────────────────── */
+function compressPhoto(dataUrl, maxSize = 1280, quality = 0.78) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  });
+}
+
+/* ── FOTO UPLOADEN ───────────────────────────────── */
+async function uploadFotos() {
+  const uploads = [];
+  for (const item of alleItems()) {
+    const s = STATE[item.id];
+    if (!s.fotos || s.fotos.length === 0) continue;
+    for (const foto of s.fotos) {
+      uploads.push({ itemId: item.id, itemNaam: item.naam, foto });
+    }
+  }
+  if (uploads.length === 0) return [];
+
+  const ts    = Date.now();
+  const urls  = [];
+  const total = uploads.length;
+
+  for (let i = 0; i < total; i++) {
+    const { itemId, itemNaam, foto } = uploads[i];
+    setLoading(`Foto ${i+1} van ${total} uploaden...`);
+    const compressed   = await compressPhoto(foto.dataUrl);
+    const bestandsnaam = `${ts}_${itemId}_${i}.jpg`;
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action:'foto_upload', bestandsnaam, data: compressed }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      urls.push({ url: data.url, item: itemNaam, opm: foto.opm });
+    }
+  }
+  return urls;
+}
+
+/* ── VERSTUUR ────────────────────────────────────── */
+async function verstuurAlles() {
+  setLoading('Foto\'s uploaden...');
+  let fotoUrls = [];
+  try {
+    fotoUrls = await uploadFotos();
+  } catch (e) {
+    console.warn('Foto upload mislukt:', e);
+  }
+
+  setLoading('Verplaatsing registreren...');
+
+  const onderdelen = {};
+  alleItems().forEach(item => {
+    const s = STATE[item.id];
+    if (s.aantal > 0) {
+      onderdelen[item.id] = {
+        naam:    item.naam,
+        aantal:  s.aantal,
+        nummers: s.nummers.join(', '),
+        types:   s.types.join(', '),
+        stuk:    s.stuk || 0,
+      };
+    }
+  });
+
+  const payload = {
+    naam:               document.getElementById('naam').value.trim(),
     datum:              document.getElementById('datum').value,
-    naam:               document.getElementById('naam').value,
     beweging_type:      BEWEGING.type,
     van_naam:           BEWEGING.van.naam,
     van_werknr:         BEWEGING.van.werknr,
     naar_naam:          BEWEGING.naar.naam,
     naar_werknr:        BEWEGING.naar.werknr,
-    algemeen_opmerking: document.getElementById('algemeen_opmerking').value,
-    onderdelen: {},
+    onderdelen,
+    foto_urls:          fotoUrls,
+    algemeen_opmerking: document.getElementById('algemeen_opmerking').value.trim(),
   };
-  alleItems().forEach(item => {
-    const s = STATE[item.id];
-    data.onderdelen[item.id] = {
-      naam:   item.naam,
-      aantal: String(s.aantal),
-      stuk:   String(s.stuk || 0),
-      nummers:s.nummers.join(', '),
-      opm:    s.opm,
-      types:  s.types.join(', '),
-    };
-  });
-  return data;
+
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await res.json();
+    hideLoading();
+    if (data.ok) {
+      localStorage.removeItem('mwb_draft');
+      showToast('✓ Verplaatsing geregistreerd!');
+      setTimeout(() => {
+        initState();
+        BEWEGING.type = ''; BEWEGING.van = { naam:'',werknr:'' }; BEWEGING.naar = { naam:'',werknr:'' };
+        goToStep(1);
+      }, 1500);
+    } else {
+      showToast('❌ Fout: ' + (data.error || 'onbekend'));
+    }
+  } catch (e) {
+    hideLoading();
+    showToast('❌ Verbindingsfout. Controleer internet.');
+  }
 }
 
-/* ══════════════════════════════════════════════════════
-   VERSTUREN
-   ══════════════════════════════════════════════════════ */
-const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
-
+/* ── KLUSSEN SYNC ────────────────────────────────── */
 async function syncKlussen() {
   try {
-    // Cache-buster zodat Cloudflare nooit een oude lijst teruggeeft
-    const res  = await fetch(WORKER_URL + '?action=klussen&t=' + Date.now(), { cache: 'no-store' });
-    const json = await res.json();
-    if (json.ok) {
-      const src = (json.klussen && json.klussen.length > 0) ? json.klussen : KLUSSEN_DEFAULT;
+    const res  = await fetch(WORKER + '?action=klussen');
+    const data = await res.json();
+    if (data.ok && data.klussen.length) {
       KLUSSEN.length = 0;
-      src.forEach(k => KLUSSEN.push(k));
+      KLUSSEN.push(...data.klussen);
     }
-  } catch(e) { /* bij netwerkfout: behoud huidige lijst */ }
+  } catch (_) {}
 }
 
-async function verstuurAlles() {
-  const data = collectData();
-  showToast('⏳ Versturen...');
+/* ── AUTOSAVE ────────────────────────────────────── */
+function autosave() {
   try {
-    const res  = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
-    const json = await res.json();
-    if (json.ok) { clearDraft(); showToast('✅ Opgeslagen in Notion!'); }
-    else showToast('⚠️ Notion mislukt – mail wordt geopend');
-  } catch(e) { showToast('⚠️ Fout – mail wordt geopend'); }
-  setTimeout(() => {
-    const onderwerp = `Verplaatslijst – ${data.naar_naam || data.van_naam || '?'} – ${data.datum}`;
-    window.location.href = `mailto:materieel@middelwateringbouw.nl?subject=${encodeURIComponent(onderwerp)}&body=${encodeURIComponent(buildMailBody(data))}`;
-  }, 1200);
+    const draft = {
+      naam:     document.getElementById('naam')?.value || '',
+      datum:    document.getElementById('datum')?.value || '',
+      beweging: BEWEGING,
+      state:    JSON.parse(JSON.stringify(STATE, (k, v) => k === 'dataUrl' ? '[foto]' : v)),
+    };
+    localStorage.setItem('mwb_draft', JSON.stringify(draft));
+  } catch(_) {}
 }
 
-function buildMailBody(data) {
-  const tl = { zaak_klus:'Van zaak naar klus', klus_klus:'Klus naar klus', klus_zaak:'Terug naar zaak' }[data.beweging_type] || '';
-  const lines = [
-    'VERPLAATSLIJST MIDDELWATERING BOUW','===================================','',
-    `Datum:         ${data.datum}`,`Ingevuld door: ${data.naam}`,
-    `Beweging:      ${tl}`,
-    `Van:           ${data.van_naam} (${data.van_werknr})`,
-    `Naar:          ${data.naar_naam} (${data.naar_werknr})`, '',
-  ];
-  for (const [cat, items] of Object.entries(SECTIES)) {
-    const gevuld = items.filter(i => parseInt(data.onderdelen[i.id]?.aantal) > 0);
-    if (!gevuld.length) continue;
-    lines.push(cat.toUpperCase(), '---');
-    gevuld.forEach(item => {
-      const v = data.onderdelen[item.id];
-      lines.push(`  ${item.naam}  ×${v.aantal}`);
-      if (v.nummers) lines.push(`    Nummers: ${v.nummers}`);
-      if (v.types)   lines.push(`    Type:    ${v.types}`);
-      if (v.stuk && parseInt(v.stuk) > 0) lines.push(`    Stuk/weggegooid: ${v.stuk}`);
-      if (v.opm)     lines.push(`    Opmerking: ${v.opm}`);
-    });
-    lines.push('');
-  }
-  if (data.algemeen_opmerking) lines.push('OPMERKINGEN','---',data.algemeen_opmerking,'');
-  lines.push('---','Verstuurd via Verplaatslijst-app MWB');
-  return lines.join('\n');
+/* ── LOADING ─────────────────────────────────────── */
+function setLoading(tekst) {
+  document.getElementById('loading-text').textContent = tekst;
+  document.getElementById('loading-overlay').classList.add('show');
+}
+function hideLoading() {
+  document.getElementById('loading-overlay').classList.remove('show');
 }
 
-/* ══════════════════════════════════════════════════════
-   TOAST
-   ══════════════════════════════════════════════════════ */
+/* ── TOAST ───────────────────────────────────────── */
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg;
+  t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ══════════════════════════════════════════════════════
-   OPSLAAN / LADEN
-   ══════════════════════════════════════════════════════ */
-function autosave() {
-  const naam = document.getElementById('naam')?.value || '';
-  if (naam) localStorage.setItem('mwb_naam', naam); // onthoud naam op dit apparaat
-  const velden = {
-    datum:              document.getElementById('datum')?.value || '',
-    naam,
-    algemeen_opmerking: document.getElementById('algemeen_opmerking')?.value || '',
-  };
-  const stateLight = {};
-  Object.entries(STATE).forEach(([k,v]) => { stateLight[k] = {...v, fotos:[]}; });
-  localStorage.setItem('mwb_draft', JSON.stringify({ velden, state:stateLight, beweging:BEWEGING, stap:currentStep, tab:activeTab }));
+/* ── INIT ────────────────────────────────────────── */
+function init() {
+  initState();
+
+  // Datum op vandaag
+  const nu = new Date();
+  const dd = nu.toISOString().slice(0,10);
+  document.getElementById('datum').value = dd;
+
+  // Naam herinneren
+  const opgeslagenNaam = localStorage.getItem('mwb_naam');
+  if (opgeslagenNaam) document.getElementById('naam').value = opgeslagenNaam;
+
+  // Naam onthouden bij wijziging
+  document.getElementById('naam').addEventListener('input', function() {
+    localStorage.setItem('mwb_naam', this.value);
+  });
+
+  updateProgress();
+  updateNav();
 }
 
-function laadDraft() {
-  const raw = localStorage.getItem('mwb_draft'); if (!raw) return false;
-  try {
-    const { velden, state, beweging, stap, tab } = JSON.parse(raw);
-    if (velden) Object.entries(velden).forEach(([id,val]) => {
-      if (id === 'datum') return; // altijd vandaag, niet uit draft herstellen
-      const el = document.getElementById(id); if (el) el.value = val;
-    });
-    if (state) {
-      Object.entries(state).forEach(([id, s]) => {
-        if (STATE[id]) {
-          STATE[id].aantal  = s.aantal  || 0;
-          STATE[id].nummers = s.nummers || [];
-          STATE[id].opm     = s.opm     || '';
-          STATE[id].types   = s.types   || [];
-          STATE[id].fotos   = s.fotos   || [];
-          STATE[id].stuk    = s.stuk    || 0;
-          // Zorg dat nummers array klopt met aantal
-          while (STATE[id].nummers.length < STATE[id].aantal) STATE[id].nummers.push('');
-          while (STATE[id].nummers.length > STATE[id].aantal) STATE[id].nummers.pop();
-        }
-      });
-    }
-    if (beweging) Object.assign(BEWEGING, beweging);
-    if (tab && SECTIES[tab]) activeTab = tab;
-
-    // Herstel beweging UI
-    if (BEWEGING.type) {
-      ['zaak_klus','klus_klus','klus_zaak'].forEach(t => {
-        document.getElementById('bc-' + t).classList.toggle('selected', t === BEWEGING.type);
-        document.getElementById('lv-' + t).classList.toggle('show', t === BEWEGING.type);
-      });
-      const herstelAC = (veldId, klus) => {
-        if (!klus?.naam) return;
-        const input = document.getElementById('ac-input-' + veldId);
-        const badge = document.getElementById('ac-badge-'  + veldId);
-        if (!input) return;
-        input.value = klus.naam; input.classList.add('selected');
-        if (klus.werknr && klus.werknr !== 'DE ZAAK') { badge.textContent = 'Werknr. ' + klus.werknr; badge.classList.add('show'); }
-        AC_STATE[veldId] = klus;
-      };
-      if (BEWEGING.type === 'zaak_klus') herstelAC('naar-zk', BEWEGING.naar);
-      if (BEWEGING.type === 'klus_klus') { herstelAC('van-kk', BEWEGING.van); herstelAC('naar-kk', BEWEGING.naar); }
-      if (BEWEGING.type === 'klus_zaak') herstelAC('van-kz', BEWEGING.van);
-    }
-
-    if (stap && stap > 1) {
-      currentStep = stap;
-      document.getElementById('step-1').classList.remove('active');
-      document.getElementById('step-' + currentStep).classList.add('active');
-      updateProgress(); updateNav();
-      if (currentStep === 3) renderMaterialStep();
-      if (currentStep === 4) renderSummary();
-    }
-    return true;
-  } catch(e) { return false; }
-}
-
-function clearDraft() { localStorage.removeItem('mwb_draft'); }
-
-['datum','naam','algemeen_opmerking'].forEach(id => {
-  const el = document.getElementById(id); if (el) el.addEventListener('input', autosave);
-});
-
-/* ══════════════════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════════════════ */
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-syncKlussen();
-initState();
-laadDraft();
-// Datum altijd vandaag (aanpasbaar maar standaard vandaag)
-document.getElementById('datum').value = new Date().toISOString().split('T')[0];
-// Naam onthouden op dit apparaat
-if (!document.getElementById('naam').value) {
-  const savedNaam = localStorage.getItem('mwb_naam');
-  if (savedNaam) document.getElementById('naam').value = savedNaam;
-}
+init();
 </script>
 </body>
 </html>

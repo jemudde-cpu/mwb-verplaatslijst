@@ -24,9 +24,9 @@
   --radius-sm: 8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:#060e1c;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#060e1c;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
 
-/* ── ORBS ─────────────────────────────────────────── */
+/* ORBS */
 .orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
 .orb-1{width:500px;height:500px;background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent);top:-150px;left:-100px;animation:d1 22s ease-in-out infinite alternate;}
 .orb-2{width:400px;height:400px;background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent);bottom:-100px;right:-60px;animation:d2 28s ease-in-out infinite alternate;}
@@ -34,37 +34,44 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 @keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,70px) scale(1.1)}}
 @keyframes d2{from{transform:translate(0,0)}to{transform:translate(-40px,-50px)}}
 
-/* ── HEADER ───────────────────────────────────────── */
-header{
-  position:sticky;top:0;z-index:60;
-  background:rgba(6,14,28,.85);
-  -webkit-backdrop-filter:blur(28px) saturate(160%);
-  backdrop-filter:blur(28px) saturate(160%);
-  border-bottom:1px solid rgba(255,255,255,.09);
-}
+/* WACHTWOORD OVERLAY */
+.pw-overlay{position:fixed;inset:0;z-index:500;background:#060e1c;display:flex;align-items:center;justify-content:center;padding:24px;}
+.pw-overlay.verborgen{display:none;}
+.pw-box{width:100%;max-width:380px;text-align:center;}
+.pw-logo{width:56px;height:56px;background:var(--oranje);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
+.pw-titel{font-size:22px;font-weight:800;margin-bottom:8px;}
+.pw-sub{font-size:14px;color:var(--zacht);margin-bottom:28px;}
+.pw-input{width:100%;padding:14px 18px;border:1.5px solid rgba(255,255,255,.18);border-radius:var(--radius);font-family:inherit;font-size:16px;font-weight:600;color:var(--tekst);background:rgba(255,255,255,.08);text-align:center;letter-spacing:4px;margin-bottom:12px;-webkit-appearance:none;}
+.pw-input:focus{outline:none;border-color:rgba(249,115,22,.60);box-shadow:0 0 0 3px rgba(249,115,22,.18);}
+.pw-input.fout{border-color:rgba(239,68,68,.70);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.pw-btn{width:100%;padding:15px;background:var(--oranje);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;}
+.pw-fout{color:rgba(239,68,68,.85);font-size:13px;margin-top:10px;min-height:20px;}
+.pw-link{font-size:13px;color:var(--zacht);margin-top:20px;}
+.pw-link a{color:var(--oranje);text-decoration:none;}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:60;background:rgba(6,14,28,.88);-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(255,255,255,.09);}
 .header-top{display:flex;align-items:center;gap:12px;padding:12px 18px;}
-header img{height:30px;object-fit:contain;}
+.header-logo{width:30px;height:30px;background:var(--oranje);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .header-title{flex:1;font-size:15px;font-weight:700;line-height:1.2;}
 .header-title small{display:block;font-size:10px;font-weight:400;opacity:.50;}
 .header-app-link{font-size:12px;font-weight:600;color:var(--oranje);text-decoration:none;padding:6px 14px;border:1px solid rgba(249,115,22,.30);border-radius:20px;background:rgba(249,115,22,.08);white-space:nowrap;}
+.header-logout{font-size:12px;font-weight:600;color:var(--zacht);padding:6px 12px;border:1px solid rgba(255,255,255,.15);border-radius:20px;background:transparent;cursor:pointer;-webkit-appearance:none;}
 
-/* ── TABS ─────────────────────────────────────────── */
+/* TABS */
 .tab-nav{display:flex;padding:0 16px 12px;gap:6px;overflow-x:auto;scrollbar-width:none;}
 .tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav-btn{
-  flex-shrink:0;padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;
-  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
-  color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;
-}
+.tab-nav-btn{flex-shrink:0;padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
 .tab-nav-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 3px 14px rgba(249,115,22,.35);}
 
-/* ── CONTENT ──────────────────────────────────────── */
+/* CONTENT */
 .main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:16px 16px 40px;}
 .tab-content{display:none;}
 .tab-content.active{display:block;animation:fadeIn .3s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── GLASS CARD ───────────────────────────────────── */
+/* GLASS CARD */
 .card{background:var(--glas-bg);-webkit-backdrop-filter:brightness(1.05) blur(24px) saturate(150%);backdrop-filter:brightness(1.05) blur(24px) saturate(150%);border:1px solid var(--glas-rand);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.10);}
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;}
 .card-title-row{display:flex;align-items:center;gap:10px;}
@@ -74,208 +81,92 @@ header img{height:30px;object-fit:contain;}
 .card-body{padding:0 16px 16px;}
 .divider{height:1px;background:rgba(255,255,255,.07);margin:12px 0;}
 
-/* ── SEARCH BAR ───────────────────────────────────── */
+/* ZOEKBALK */
 .search-wrap{position:relative;margin-bottom:14px;}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--zacht);pointer-events:none;}
-.search-input{
-  width:100%;padding:12px 14px 12px 40px;
-  border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);
-  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
-  background:rgba(255,255,255,.07);-webkit-appearance:none;
-  transition:border-color .2s,box-shadow .2s;
-}
+.search-input{width:100%;padding:12px 14px 12px 40px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
 .search-input::placeholder{color:var(--dim);}
 .search-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
 
-/* ── INZENDING CARD ───────────────────────────────── */
-.inz-card{
-  background:rgba(14,26,52,.75);border:1px solid rgba(255,255,255,.11);
-  border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;
-  box-shadow:0 2px 12px rgba(0,0,0,.22);transition:border-color .2s;
-}
+/* INZENDING KAART */
+.inz-card{background:rgba(14,26,52,.75);border:1px solid rgba(255,255,255,.11);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.22);transition:border-color .2s;}
 .inz-card:hover{border-color:rgba(255,255,255,.18);}
-.inz-header{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 16px;cursor:pointer;
-}
-.inz-date{font-size:12px;font-weight:700;color:var(--oranje);flex-shrink:0;}
-.inz-title{flex:1;min-width:0;}
-.inz-naam{font-size:14px;font-weight:700;color:var(--tekst);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.inz-person{font-size:11px;color:var(--zacht);margin-top:1px;}
-.inz-toggle{font-size:12px;color:var(--dim);flex-shrink:0;transition:transform .2s;}
-.inz-card.open .inz-toggle{transform:rotate(180deg);}
+.inz-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;}
+.inz-icon{font-size:22px;flex-shrink:0;}
+.inz-info{flex:1;min-width:0;}
+.inz-naam{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.inz-meta{font-size:11px;color:var(--zacht);margin-top:2px;}
+.inz-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;flex-shrink:0;}
+.status-nieuw{background:rgba(249,115,22,.18);color:var(--oranje);}
+.status-verwerkt{background:rgba(34,197,94,.18);color:var(--groen);}
+.inz-chevron{color:var(--dim);font-size:14px;flex-shrink:0;transition:transform .25s;}
+.inz-card.open .inz-chevron{transform:rotate(90deg);}
 .inz-body{display:none;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,.07);}
 .inz-card.open .inz-body{display:block;}
+.inz-detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--zacht);margin:12px 0 6px;}
+.inz-detail-tekst{font-size:13px;color:var(--tekst);line-height:1.6;white-space:pre-wrap;}
+.inz-fotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.inz-foto{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1.5px solid rgba(255,255,255,.15);cursor:pointer;transition:transform .2s;}
+.inz-foto:active{transform:scale(.95);}
 
-/* Beweging pill */
-.beweging-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:16px;font-size:11px;font-weight:700;margin-bottom:10px;margin-top:10px;}
-.bp-zaak_klus{background:rgba(77,124,254,.15);border:1px solid rgba(77,124,254,.30);color:#7aa4ff;}
-.bp-klus_klus{background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.28);color:var(--oranje);}
-.bp-klus_zaak{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.28);color:var(--groen);}
+/* FOTO LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.lightbox.open{opacity:1;pointer-events:all;}
+.lightbox img{max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;}
+.lightbox-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
 
-/* Route */
-.route-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-.route-loc{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-sm);padding:7px 12px;}
-.rl-label{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
-.rl-naam{font-size:13px;font-weight:700;color:var(--tekst);}
-.rl-nr{font-size:10px;color:var(--zacht);}
-.route-arrow{font-size:18px;color:var(--oranje);flex-shrink:0;}
+/* KLUS KAARTEN */
+.klus-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s;}
+.klus-item:last-child{border-bottom:none;}
+.klus-item:hover{background:rgba(255,255,255,.03);}
+.klus-naam{flex:1;font-size:14px;font-weight:600;}
+.klus-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.12);border-radius:10px;flex-shrink:0;}
+.klus-acties{display:flex;gap:6px;flex-shrink:0;}
+.klus-btn{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;-webkit-appearance:none;transition:background .15s;}
+.klus-btn-del{background:rgba(239,68,68,.15);color:rgba(239,68,68,.80);}
+.klus-btn-del:active{background:rgba(239,68,68,.30);}
 
-/* Items tabel */
-.items-table{width:100%;border-collapse:collapse;}
-.items-table th{font-size:9px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;padding:6px 8px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);}
-.items-table td{font-size:13px;padding:7px 8px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--tekst);}
-.items-table tr:last-child td{border-bottom:none;}
-.items-table .nr{color:var(--zacht);font-size:11px;}
+/* ADD KLUS */
+.add-klus-wrap{padding:14px 16px;}
+.add-klus-row{display:flex;gap:8px;}
+.add-klus-input{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;}
+.add-klus-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 2px rgba(249,115,22,.13);}
+.add-klus-btn{padding:11px 18px;background:var(--oranje);border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;white-space:nowrap;}
 
-/* ── MATERIEEL OVERZICHT ──────────────────────────── */
-.mat-section{margin-bottom:20px;}
-.mat-section-title{
-  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
-  color:var(--oranje);padding:10px 0 8px;
-  border-bottom:1px solid rgba(249,115,22,.20);margin-bottom:10px;
-  display:flex;align-items:center;gap:8px;
-}
-.mat-items{display:flex;flex-direction:column;gap:6px;}
-.mat-item{
-  display:flex;align-items:center;gap:12px;
-  padding:11px 14px;
-  background:rgba(14,26,52,.70);border:1px solid rgba(255,255,255,.10);
-  border-radius:var(--radius);
-}
-.mat-naam{flex:1;font-size:13px;font-weight:600;color:var(--tekst);}
-.mat-nr{font-size:11px;font-weight:700;color:var(--zacht);}
-.mat-locatie{font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
-.mat-locatie.zaak{background:rgba(34,197,94,.14);color:var(--groen);border:1px solid rgba(34,197,94,.25);}
-.mat-locatie.klus{background:rgba(249,115,22,.14);color:var(--oranje);border:1px solid rgba(249,115,22,.25);}
-.mat-datum{font-size:10px;color:var(--dim);margin-top:1px;}
+/* MATERIEEL OVERZICHT */
+.mat-locatie-card{background:rgba(14,26,52,.65);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;}
+.mat-locatie-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;gap:12px;}
+.mat-locatie-naam{font-size:14px;font-weight:700;}
+.mat-locatie-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.12);border-radius:10px;}
+.mat-locatie-teller{font-size:11px;color:var(--zacht);margin-top:2px;}
+.mat-chevron{color:var(--dim);font-size:14px;transition:transform .25s;}
+.mat-locatie-card.open .mat-chevron{transform:rotate(90deg);}
+.mat-body{display:none;border-top:1px solid rgba(255,255,255,.07);}
+.mat-locatie-card.open .mat-body{display:block;}
+.mat-item-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05);}
+.mat-item-row:last-child{border-bottom:none;}
+.mat-item-naam{font-size:13px;font-weight:600;}
+.mat-item-nrs{font-size:11px;color:var(--zacht);margin-top:2px;}
+.mat-item-badge{font-size:12px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.12);padding:3px 10px;border-radius:10px;}
 
-/* Geen data */
-.leeg{text-align:center;padding:32px 20px;color:var(--dim);font-size:14px;}
-.leeg .leeg-icon{font-size:32px;display:block;margin-bottom:8px;}
+/* OPSLAAN BTN */
+.opslaan-btn{width:100%;padding:15px;background:var(--groen);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;margin-top:16px;transition:opacity .2s;}
+.opslaan-btn:active{opacity:.85;}
 
-/* ── KLUSSEN BEHEER ───────────────────────────────── */
-.klus-add-form{display:grid;grid-template-columns:1fr 120px auto;gap:8px;margin-bottom:16px;}
-.klus-add-form input{
-  padding:11px 13px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius-sm);
-  font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);
-  background:var(--input-bg);-webkit-appearance:none;
-  transition:border-color .2s,box-shadow .2s;
-}
-.klus-add-form input::placeholder{color:var(--dim);}
-.klus-add-form input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
-.btn-add{
-  padding:11px 16px;border:none;border-radius:var(--radius-sm);
-  font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;
-  background:linear-gradient(135deg,rgba(249,115,22,.85),rgba(234,88,12,.90));
-  box-shadow:0 3px 14px rgba(249,115,22,.30);-webkit-appearance:none;white-space:nowrap;
-}
-.klus-list{display:flex;flex-direction:column;gap:6px;}
-.klus-row{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;
-  background:rgba(14,26,52,.70);border:1px solid rgba(255,255,255,.10);
-  border-radius:var(--radius);
-}
-.klus-naam{flex:1;font-size:14px;font-weight:600;color:var(--tekst);}
-.klus-nr{font-size:12px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.20);border-radius:10px;padding:2px 10px;flex-shrink:0;}
-.btn-del{width:28px;height:28px;border-radius:50%;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.25);color:rgba(239,68,68,.80);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;transition:all .15s;}
-.btn-del:hover{background:rgba(239,68,68,.30);}
-.export-wrap{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08);}
-.btn-export{
-  width:100%;padding:13px;border:none;border-radius:var(--radius-sm);
-  font-family:inherit;font-size:14px;font-weight:700;color:#fff;cursor:pointer;
-  background:rgba(77,124,254,.25);border:1px solid rgba(77,124,254,.30);
-  -webkit-appearance:none;transition:all .2s;
-}
-.btn-export:hover{background:rgba(77,124,254,.35);}
-.code-block{
-  margin-top:12px;padding:14px;border-radius:var(--radius-sm);
-  background:rgba(0,0,0,.40);border:1px solid rgba(255,255,255,.10);
-  font-family:'Courier New',monospace;font-size:11px;color:rgba(255,255,255,.75);
-  white-space:pre-wrap;word-break:break-all;max-height:200px;overflow-y:auto;
-  display:none;
-}
-.code-block.show{display:block;}
-.btn-copy{
-  width:100%;padding:11px;margin-top:8px;border:none;border-radius:var(--radius-sm);
-  font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;
-  background:rgba(34,197,94,.22);border:1px solid rgba(34,197,94,.28);
-  -webkit-appearance:none;display:none;
-}
-.btn-copy.show{display:block;}
-
-/* ── STATS ROW ────────────────────────────────────── */
-.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
-.stat-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);padding:12px 14px;text-align:center;}
-.stat-val{font-size:26px;font-weight:800;color:var(--oranje);line-height:1;}
-.stat-lbl{font-size:10px;font-weight:600;color:var(--zacht);text-transform:uppercase;letter-spacing:.4px;margin-top:4px;}
-
-/* ── LOADING / ERROR ──────────────────────────────── */
-.loader{text-align:center;padding:40px 20px;}
-.loader-spinner{width:32px;height:32px;border:3px solid rgba(255,255,255,.10);border-top-color:var(--oranje);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 12px;}
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;gap:12px;padding:40px 20px;color:var(--zacht);font-size:14px;}
+.spinner{width:24px;height:24px;border:3px solid rgba(249,115,22,.20);border-top-color:var(--oranje);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loader-txt{font-size:14px;color:var(--zacht);}
-.error-box{background:rgba(239,68,68,.10);border:1px solid rgba(239,68,68,.25);border-radius:var(--radius);padding:14px 16px;font-size:13px;color:rgba(239,68,68,.90);}
 
-/* ── TOAST ────────────────────────────────────────── */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:rgba(14,26,50,.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.16);color:#fff;padding:11px 20px;border-radius:28px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s,transform .3s;z-index:200;pointer-events:none;white-space:nowrap;box-shadow:0 8px 28px rgba(0,0,0,.30);}
+/* LEEG */
+.leeg{text-align:center;padding:40px 20px;color:var(--zacht);font-size:14px;}
+
+/* BADGE TELLERS */
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:rgba(249,115,22,.25);color:var(--oranje);font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:9px;padding:0 5px;margin-left:6px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;background:rgba(15,27,54,.98);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:12px 22px;font-size:14px;font-weight:600;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ── FOTO BADGE ───────────────────────────────────── */
-.foto-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.12);border-radius:8px;padding:2px 7px;margin-left:6px;}
-
-/* ── STATUS BADGE ─────────────────────────────────── */
-.status-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.08);color:var(--zacht);}
-.status-badge.nieuw{background:rgba(249,115,22,.15);color:var(--oranje);}
-
-@media(max-width:480px){
-  .klus-add-form{grid-template-columns:1fr 90px auto;}
-  .stats-row{grid-template-columns:repeat(3,1fr);}
-  .stat-val{font-size:20px;}
-}
-
-/* ── KLUS CARDS ───────────────────────────────────── */
-.klus-card{background:rgba(14,26,52,.70);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:border-color .2s;box-shadow:0 2px 10px rgba(0,0,0,.18);}
-.klus-card:hover{border-color:rgba(255,255,255,.18);}
-.klus-card-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;}
-.klus-card.has-mat{border-color:rgba(249,115,22,.30);background:rgba(249,115,22,.05);}
-.klus-card-body{display:none;padding:10px 14px 13px;border-top:1px solid rgba(255,255,255,.07);}
-.klus-card.open .klus-card-body{display:block;}
-.klus-card-toggle{font-size:11px;color:var(--dim);flex-shrink:0;transition:transform .2s;}
-.klus-card.open .klus-card-toggle{transform:rotate(180deg);}
-.klus-mat-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(249,115,22,.15);color:var(--oranje);border:1px solid rgba(249,115,22,.20);flex-shrink:0;}
-.klus-mat-badge.leeg{background:rgba(255,255,255,.07);color:var(--dim);border-color:rgba(255,255,255,.10);}
-.klus-mat-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);}
-.klus-mat-row:last-child{border-bottom:none;}
-.klus-mat-naam{flex:1;font-size:13px;font-weight:600;color:var(--tekst);}
-.klus-mat-nr{font-size:11px;font-weight:700;color:var(--zacht);}
-.klus-mat-datum{font-size:10px;color:var(--dim);margin-top:1px;}
-.klus-no-mat{font-size:12px;color:var(--dim);padding:8px 0;text-align:center;}
-.klus-add-panel{max-height:0;overflow:hidden;transition:max-height .35s ease;}
-.klus-add-panel.open{max-height:130px;}
-.klus-add-panel-inner{padding:4px 16px 16px;border-top:1px solid rgba(255,255,255,.07);}
-.btn-icon-add{width:32px;height:32px;border-radius:50%;background:rgba(249,115,22,.18);border:1px solid rgba(249,115,22,.30);color:var(--oranje);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;transition:all .25s;line-height:1;}
-.btn-icon-add:hover{background:rgba(249,115,22,.30);}
-.btn-icon-add.active{background:rgba(249,115,22,.30);transform:rotate(45deg);}
-
-/* ── MODAL BOTTOM SHEET ───────────────────────────── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);z-index:80;opacity:0;pointer-events:none;transition:opacity .3s;}
-.modal-overlay.open{opacity:1;pointer-events:all;}
-.modal-sheet{position:fixed;bottom:0;left:0;right:0;z-index:90;max-width:800px;margin:0 auto;background:rgba(10,20,42,.97);-webkit-backdrop-filter:blur(32px) saturate(180%);backdrop-filter:blur(32px) saturate(180%);border-top:1px solid rgba(255,255,255,.14);border-radius:24px 24px 0 0;padding:12px 20px 48px;transform:translateY(100%);transition:transform .35s cubic-bezier(.32,1,.32,1);box-shadow:0 -8px 40px rgba(0,0,0,.50);}
-.modal-sheet.open{transform:translateY(0);}
-.modal-handle{width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,.20);margin:0 auto 18px;}
-.modal-title{font-size:16px;font-weight:700;margin-bottom:18px;color:#fff;}
-.modal-field{margin-bottom:14px;}
-.modal-field label{display:block;font-size:10px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.modal-field input{width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--input-bg);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
-.modal-field input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
-.modal-field input::placeholder{color:var(--dim);}
-.btn-modal-save{width:100%;padding:14px;border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(135deg,rgba(249,115,22,.88),rgba(234,88,12,.93));box-shadow:0 4px 20px rgba(249,115,22,.35);-webkit-appearance:none;margin-top:4px;}
-
-/* ── KLUS DETAIL MATERIEEL ────────────────────────── */
-.klus-mat-count{font-size:13px;font-weight:800;color:var(--oranje);min-width:26px;text-align:right;flex-shrink:0;}
-.klus-mat-nrs{font-size:11px;color:var(--dim);margin-top:2px;}
 </style>
 </head>
 <body>
@@ -284,653 +175,505 @@ header img{height:30px;object-fit:contain;}
 <div class="orb orb-2"></div>
 <div class="orb orb-4"></div>
 
+<!-- WACHTWOORD OVERLAY -->
+<div class="pw-overlay" id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-logo">⚙️</div>
+    <div class="pw-titel">Beheer</div>
+    <div class="pw-sub">Voer het beheerderswachtwoord in om toegang te krijgen.</div>
+    <input class="pw-input" type="password" id="pw-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Inloggen →</button>
+    <div class="pw-fout" id="pw-fout"></div>
+    <div class="pw-link">Terug naar de <a href="index.html">app</a></div>
+  </div>
+</div>
+
 <header>
   <div class="header-top">
-    <img src="https://www.middelwateringbouw.nl/images/logo-middelwateringbouw-wit-2018.png" alt="MWB" onerror="this.style.display='none'">
-    <div class="header-title">Beheercentrum <small>Middelwatering Bouw</small></div>
-    <a href="index.html" class="header-app-link">← Naar app</a>
+    <div class="header-logo">⚙️</div>
+    <div class="header-title">
+      Beheer
+      <small>Middelwatering Bouw</small>
+    </div>
+    <a href="index.html" class="header-app-link">← App</a>
+    <button class="header-logout" onclick="uitloggen()">Uitloggen</button>
   </div>
-  <div class="tab-nav">
-    <button class="tab-nav-btn active" onclick="showTab('materieel')" id="tn-materieel">📍 Materieel</button>
-    <button class="tab-nav-btn" onclick="showTab('inzendingen')" id="tn-inzendingen">📋 Inzendingen</button>
-    <button class="tab-nav-btn" onclick="showTab('klussen')" id="tn-klussen">🏗️ Klussen</button>
-  </div>
+  <nav class="tab-nav">
+    <button class="tab-nav-btn active" onclick="tabSwitch('materieel',this)">📍 Materieel</button>
+    <button class="tab-nav-btn" onclick="tabSwitch('inzendingen',this)">📋 Inzendingen <span class="tab-badge" id="badge-inz">0</span></button>
+    <button class="tab-nav-btn" onclick="tabSwitch('klussen',this)">🏗️ Klussen <span class="tab-badge" id="badge-kl">0</span></button>
+  </nav>
 </header>
 
-<div class="main">
-
-<!-- ══ TAB: MATERIEEL OVERZICHT ══ -->
-<div class="tab-content active" id="tab-materieel">
+<!-- TAB: MATERIEEL -->
+<div class="main tab-content active" id="tab-materieel">
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input class="search-input" id="search-mat" type="text" placeholder="Zoek op materieel, nummer of locatie..." oninput="filterMaterieel(this.value)">
+    <input class="search-input" type="text" id="zoek-mat" placeholder="Zoek op klus of werknummer..." oninput="filterMaterieel()">
   </div>
-  <div id="mat-stats" class="stats-row" style="display:none"></div>
-  <div id="mat-content">
-    <div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen uit Notion...</div></div>
+  <div id="materieel-content">
+    <div class="loading"><div class="spinner"></div> Laden...</div>
   </div>
 </div>
 
-<!-- ══ TAB: INZENDINGEN ══ -->
-<div class="tab-content" id="tab-inzendingen">
+<!-- TAB: INZENDINGEN -->
+<div class="main tab-content" id="tab-inzendingen">
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input class="search-input" id="search-inz" type="text" placeholder="Zoek op naam, locatie, datum of persoon..." oninput="filterInzendingen(this.value)">
+    <input class="search-input" type="text" id="zoek-inz" placeholder="Zoek op naam of klus..." oninput="filterInzendingen()">
   </div>
-  <div id="inz-stats" class="stats-row" style="display:none"></div>
-  <div id="inz-content">
-    <div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen uit Notion...</div></div>
+  <div id="inzendingen-content">
+    <div class="loading"><div class="spinner"></div> Laden...</div>
   </div>
 </div>
 
-<!-- ══ TAB: KLUSSEN BEHEER ══ -->
-<div class="tab-content" id="tab-klussen">
+<!-- TAB: KLUSSEN -->
+<div class="main tab-content" id="tab-klussen">
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <span class="card-icon">🏗️</span>
-        <div><div class="card-title">Actieve klussen</div><div class="card-sub" id="klus-count-lbl">laden...</div></div>
+        <span class="card-icon">➕</span>
+        <div>
+          <div class="card-title">Klus toevoegen</div>
+          <div class="card-sub">Naam en werknummer</div>
+        </div>
       </div>
-      <button class="btn-icon-add" id="btn-add-klus" onclick="openAddModal()" title="Klus toevoegen">+</button>
     </div>
-    <div style="padding:0 16px 12px;">
-      <div class="search-wrap" style="margin-bottom:0;">
-        <span class="search-icon">🔍</span>
-        <input class="search-input" type="text" placeholder="Zoek klus..." oninput="filterKlussen(this.value)">
+    <div class="add-klus-wrap">
+      <div class="add-klus-row" style="margin-bottom:8px;">
+        <input class="add-klus-input" type="text" id="nieuw-klus-naam" placeholder="Klusnaam..." style="flex:2;">
+        <input class="add-klus-input" type="text" id="nieuw-klus-nr" placeholder="Werknr." style="flex:1;">
       </div>
+      <button class="add-klus-btn" style="width:100%;" onclick="voegKlusToe()">+ Klus toevoegen</button>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" id="zoek-klus" placeholder="Zoek op naam of werknummer..." oninput="filterKlussen()">
+  </div>
+
+  <div class="card" id="klussen-lijst-card">
+    <div id="klussen-content">
+      <div class="loading"><div class="spinner"></div> Laden...</div>
     </div>
     <div class="card-body" style="padding-top:0;">
-      <div id="klus-list"></div>
+      <button class="opslaan-btn" onclick="slaKlussenOp()">💾 Wijzigingen opslaan</button>
     </div>
   </div>
 </div>
 
-<!-- ══ MODAL: KLUS TOEVOEGEN ══ -->
-<div class="modal-overlay" id="klus-modal-overlay" onclick="closeAddModal()"></div>
-<div class="modal-sheet" id="klus-modal-sheet">
-  <div class="modal-handle"></div>
-  <div class="modal-title">🏗️ Nieuwe klus toevoegen</div>
-  <div class="modal-field">
-    <label>Naam / adres klus</label>
-    <input type="text" id="new-klus-naam" placeholder="Bijv. Den Haag – Laan van Poot 37" oninput="clearAddError()">
-  </div>
-  <div class="modal-field">
-    <label>Werknummer</label>
-    <input type="text" id="new-klus-nr" placeholder="Bijv. 2025-008">
-  </div>
-  <div id="add-error" style="font-size:12px;color:rgba(239,68,68,.80);display:none;margin-bottom:8px;">Vul naam en werknummer in.</div>
-  <button class="btn-modal-save" onclick="addKlus()">+ Klus toevoegen</button>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
 </div>
-
-</div><!-- /main -->
 
 <div class="toast" id="toast"></div>
 
 <script>
-const WORKER_URL = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
+const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
+const WACHTWOORD = 'mwb2024';  // ← Pas dit aan om het wachtwoord te wijzigen
 
-/* ══════════════════════════════════════════════════════
-   STANDAARD KLUSSEN (synchroniseer met index.html)
-   ══════════════════════════════════════════════════════ */
-const DEFAULT_KLUSSEN = [
-  { naam:'Inkopen tbv voorraad',                                        werknr:'300026' },
-  { naam:'Sodexo, KLM kleine werken',                                   werknr:'400126' },
-  { naam:'Sodexo, Janssen, Leiden',                                     werknr:'401026' },
-  { naam:'Sodexo, Unilever, Rotterdam',                                 werknr:'401126' },
-  { naam:'Garantiewerken, diverse projecten',                           werknr:'401226' },
-  { naam:'Facilicom/Hitachi, kleine werken',                            werknr:'401326' },
-  { naam:'Anovi',                                                       werknr:'401426' },
-  { naam:'Particulieren kleine werken',                                 werknr:'410026' },
-  { naam:'Sineth Builing Maintenance',                                  werknr:'435226' },
-  { naam:'Wartburg, diverse onderhoudsklusjes',                         werknr:'477026' },
-  { naam:'Willebrordusshof Rotterdam, nwbouw 11 won',                   werknr:'4783' },
-  { naam:'Nieuwbouw 11 woningen, Middelharnis',                         werknr:'4807' },
-  { naam:'IKC, De 2 Wieken, Zwijndrecht, nieuwbouw',                   werknr:'4837' },
-  { naam:'Stephanusschool, Rotterdam, nieuwbouw',                       werknr:'4838' },
-  { naam:'Babypark, diverse adressen',                                  werknr:'484326' },
-  { naam:'Boor, OBS Bloemhof en Pantarijn, Rotterdam',                  werknr:'4846' },
-  { naam:'Middelburgseweg 3C, Waddinxveen, nwbouw woning',              werknr:'4847' },
-  { naam:'Maassluissedijk Vlaardingen, nwbouw 4 woningen',              werknr:'4848' },
-  { naam:'Fortune Coffee, Zoetermeer, uitbreiding',                     werknr:'4849' },
-  { naam:'Evides, service en onderhoud, Spijkenisse',                   werknr:'485026' },
-  { naam:'Zwart-Wit Bedrijfsverzamelgebouw, nwbouw',                    werknr:'4851' },
-  { naam:'RVKO, Nicolaasschool, Rotterdam, nwbouw',                     werknr:'4852' },
-  { naam:'Ouderenkliniek, Poortmolen, Capelle, nwbouw',                 werknr:'4854' },
-  { naam:'Hoornbeeck Rotterdam, renovatie',                             werknr:'4855' },
-  { naam:'Hoornbeeck, div locaties',                                    werknr:'485626' },
-  { naam:'Gebouwonderhoud, div. locaties',                              werknr:'485726' },
-  { naam:'Skadi renovatie clubgebouw, Rotterdam',                       werknr:'4860' },
-  { naam:'Hitachi, Amsterdam, hal B, aanp staalconstr',                 werknr:'4861' },
-  { naam:'MY College, Spijkenisse, nieuwbouw',                          werknr:'4862' },
-  { naam:'Kleine Prins, Rotterdam, uitbreiding',                        werknr:'4863' },
-  { naam:'Evides, Beerenplaat, div werkz RWTP',                        werknr:'4864' },
-  { naam:'Scheurleer, Ouddorp, nwbouw schuur',                          werknr:'4865' },
-  { naam:'Lammers, Voorburg, verbouwing woning',                        werknr:'4866' },
-  { naam:'Hitachi, Amsterdam, hal A, trappentoren',                     werknr:'4867' },
-  { naam:'Brekelmans, Den Haag, gevelrenovatie',                        werknr:'4868' },
-  { naam:'Evides, project deuren, diverse locaties',                    werknr:'4869' },
-  { naam:'Vd Starre, Nieuw Lekkerland, herstel woning',                 werknr:'4870' },
-  { naam:'Fam. Bentum, Voorschoten, verbouw woning',                    werknr:'4871' },
-  { naam:'Orange, Zoetermeer, transformatie',                           werknr:'4872' },
-  { naam:'Janssen, kantine geb B, Leiden',                              werknr:'4873' },
-  { naam:'ABS Lansingerland, nieuwbouw',                                werknr:'4874' },
-  { naam:'Janssen, geb K1 tm K3, vervangen tapijt',                    werknr:'4875' },
-  { naam:'Fam. Folkerts, Nieuwerkerk, aanbouw',                         werknr:'4876' },
-  { naam:'Fam. Slingerland, Nieuwerkerk, verbouw',                      werknr:'4877' },
-  { naam:'Interfilter Hellevoetsluis',                                  werknr:'4878' },
-  { naam:'DHG, Smartlog, Rotterdam, nieuwbouw',                         werknr:'4879' },
-  { naam:'IKC Driemaster, Ridderkerk, nieuwbouw',                       werknr:'4880' },
-  { naam:'Fam. Servais, Oostvoorne, verbouwing woning',                 werknr:'4881' },
-  { naam:'Fam. Folkerts, Waddinxveen, nieuwbouw',                       werknr:'4882' },
-  { naam:'KLM H 11',                                                    werknr:'4883' },
-  { naam:'Nebula Airbus Netherlands, herinrichting',                    werknr:'4884' },
-  { naam:'GB Butaanweg, terrein, Hoogvliet',                            werknr:'4885' },
-  { naam:'OBS De Margriet, Rotterdam, nieuwbouw',                       werknr:'4886' },
-  { naam:'Kesper College, Gouda, uitbreiding en renovatie',             werknr:'4887' },
-  { naam:'Westhoff en Hofwijck, Rijswijk, verbouw en uitbreiding',      werknr:'4888' },
-  { naam:'J&J, herindeling ktr L-Building, Sassenheim',                 werknr:'4889' },
-  { naam:'Visser, Capelle ad IJssel, verbouwing kantoor',               werknr:'4890' },
-  { naam:'Riverenland/Peer, herstel woning en nwb schuur',              werknr:'4891' },
-  { naam:'Vivere, zorgstudio, nieuwbouw, Moordrecht',                   werknr:'4892' },
-  { naam:'Viku, Huize Kinderdijk, verbouwing',                          werknr:'4893' },
-  { naam:'Fam. Graafland, Nieuwerkerk, verbouwing woning',              werknr:'4894' },
-  { naam:'Zorgstede, Moordrecht, nieuwbouw woon-zorgcomplex',           werknr:'4895' },
-  { naam:'Plomp, Ringvaartpark 51, Capelle, aanbouw',                   werknr:'4896' },
-  { naam:'DOM, Den Hoorn, nieuwbouw bedrijfsgebouw',                    werknr:'4897' },
-  { naam:'Driestar Leiden, uitbreiding',                                werknr:'4898' },
-  { naam:'Fam. Toet, Ouddorp, verbouwing woning',                       werknr:'4899' },
-  { naam:'VvE Woningen Westerlaan 21 tm 65, Rotterdam',                 werknr:'4900' },
-  { naam:'Evides, Civielwerk, Berenplaat',                              werknr:'4901' },
-  { naam:'Schuurbiers, Zuurbes 21, Rotterdam, ver-aanbouw woning',      werknr:'4902' },
-  { naam:'Sodexo, MSD, diversen, Haarlem',                              werknr:'490326' },
-  { naam:'Fam. Mujcinovic, Rotterdam, verbouwing woning',               werknr:'4904' },
-];
+let alleInzendingen = [];
+let alleKlussen     = [];
+let locatieMap      = {};
 
-/* ══════════════════════════════════════════════════════
-   TABS
-   ══════════════════════════════════════════════════════ */
-function showTab(name) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-nav-btn').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  document.getElementById('tn-' + name).classList.add('active');
+/* ── WACHTWOORD ───────────────────────────────────── */
+function checkPw() {
+  const input = document.getElementById('pw-input');
+  const fout  = document.getElementById('pw-fout');
+  if (input.value === WACHTWOORD) {
+    const exp = Date.now() + 8 * 60 * 60 * 1000;
+    localStorage.setItem('mwb_beheer_exp', exp);
+    document.getElementById('pw-overlay').classList.add('verborgen');
+    init();
+  } else {
+    input.classList.add('fout');
+    fout.textContent = 'Onjuist wachtwoord.';
+    setTimeout(() => { input.classList.remove('fout'); input.value = ''; }, 600);
+  }
 }
 
-/* ══════════════════════════════════════════════════════
-   NOTION HELPER
-   ══════════════════════════════════════════════════════ */
-function getProp(props, key) {
-  const p = props?.[key];
-  if (!p) return '';
-  if (p.type === 'title')     return p.title?.map(t => t.plain_text).join('') || '';
-  if (p.type === 'rich_text') return p.rich_text?.map(t => t.plain_text).join('') || '';
-  if (p.type === 'select')    return p.select?.name || '';
-  if (p.type === 'date')      return p.date?.start  || '';
-  return '';
+function uitloggen() {
+  localStorage.removeItem('mwb_beheer_exp');
+  location.reload();
 }
 
-function parseSubmission(page) {
-  const p = page.properties;
-  return {
-    id:           page.id,
-    naam:         getProp(p, 'Naam'),
-    datum:        getProp(p, 'Datum'),
-    persoon:      getProp(p, 'Ingevuld door'),
-    bouwplaats:   getProp(p, 'Bouwplaats'),
-    vanNr:        getProp(p, 'Werknr. Van'),
-    naarNr:       getProp(p, 'Werknr. Naar'),
-    bewegingType: getProp(p, 'Opslag / Zaak'), // bevat typeLabel
-    details:      getProp(p, 'Details'),
-    opmerkingen:  getProp(p, 'Opmerkingen'),
-    status:       getProp(p, 'Status'),
-  };
+function checkAuth() {
+  const exp = parseInt(localStorage.getItem('mwb_beheer_exp') || '0');
+  if (exp > Date.now()) {
+    document.getElementById('pw-overlay').classList.add('verborgen');
+    return true;
+  }
+  return false;
 }
 
-// Bewegingstype label → key
-function typeKey(label) {
-  if (label.includes('Zaak → Klus') || label.includes('zaak_klus')) return 'zaak_klus';
-  if (label.includes('Klus → Klus') || label.includes('klus_klus')) return 'klus_klus';
-  if (label.includes('Klus → Zaak') || label.includes('klus_zaak')) return 'klus_zaak';
-  return '';
+/* ── TABS ─────────────────────────────────────────── */
+function tabSwitch(naam, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + naam).classList.add('active');
+  btn.classList.add('active');
 }
 
-// Details tekst → array van items
-function parseDetails(details) {
-  if (!details) return [];
-  return details.split('\n').filter(Boolean).map(line => {
-    // "Schaftkeet: 2 (nr. SK-01, SK-02) [35A] – beschadigd"
-    const m = line.match(/^(.+?):\s*(\d+)(?:\s*\(nr\.\s*([^)]+)\))?(?:\s*\[([^\]]+)\])?(?:\s*[–-]\s*(.+))?/);
-    if (!m) return { raw: line };
-    return {
-      naam:    m[1].trim(),
-      aantal:  parseInt(m[2]),
-      nummers: m[3] ? m[3].split(',').map(s => s.trim()) : [],
-      types:   m[4] || '',
-      opm:     m[5] || '',
-    };
-  });
+/* ── INIT ─────────────────────────────────────────── */
+function init() {
+  laadInzendingen();
+  laadKlussen();
 }
 
-/* ══════════════════════════════════════════════════════
-   DATA OPHALEN
-   ══════════════════════════════════════════════════════ */
-let allSubmissions = [];
-let dataLoaded = false;
-let dataError  = false;
-
-async function loadData() {
+/* ── INZENDINGEN ──────────────────────────────────── */
+async function laadInzendingen() {
+  document.getElementById('inzendingen-content').innerHTML = '<div class="loading"><div class="spinner"></div> Inzendingen laden...</div>';
+  document.getElementById('materieel-content').innerHTML   = '<div class="loading"><div class="spinner"></div> Materieel berekenen...</div>';
   try {
-    const res  = await fetch(WORKER_URL + '?action=inzendingen');
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error);
-    allSubmissions = json.results.map(parseSubmission);
-    dataLoaded = true;
-  } catch(e) {
-    dataError = e.message;
+    const res  = await fetch(WORKER + '?action=inzendingen');
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    alleInzendingen = data.results;
+    document.getElementById('badge-inz').textContent = alleInzendingen.length;
+    renderInzendingen();
+    locatieMap = bouwLocatieMap(alleInzendingen);
+    renderMaterieel();
+  } catch (e) {
+    document.getElementById('inzendingen-content').innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+    document.getElementById('materieel-content').innerHTML   = `<div class="leeg">❌ ${e.message}</div>`;
   }
-  renderInzendingen();
-  renderMaterieel();
-  renderKlussen(klusFilter);
 }
 
-/* ══════════════════════════════════════════════════════
-   INZENDINGEN TAB
-   ══════════════════════════════════════════════════════ */
-function renderInzendingen(filter = '') {
-  const content = document.getElementById('inz-content');
-  const stats   = document.getElementById('inz-stats');
+function renderInzendingen(zoek) {
+  const term = (zoek || document.getElementById('zoek-inz').value).toLowerCase();
+  const lijst = alleInzendingen.filter(inz => {
+    if (!term) return true;
+    const naam    = prop(inz,'Naam')?.title?.[0]?.plain_text || '';
+    const bp      = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
+    const invuld  = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || '';
+    return naam.toLowerCase().includes(term) || bp.toLowerCase().includes(term) || invuld.toLowerCase().includes(term);
+  });
 
-  if (dataError) {
-    content.innerHTML = `<div class="error-box">⚠️ Kon data niet ophalen: ${dataError}<br><small>Controleer of de worker correct is geconfigureerd.</small></div>`;
+  if (!lijst.length) {
+    document.getElementById('inzendingen-content').innerHTML = '<div class="leeg">Geen inzendingen gevonden.</div>';
     return;
   }
-  if (!dataLoaded) {
-    content.innerHTML = `<div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen...</div></div>`;
-    return;
-  }
 
-  const q = filter.toLowerCase();
-  const gefilterd = allSubmissions.filter(s =>
-    !q ||
-    s.naam.toLowerCase().includes(q) ||
-    s.persoon.toLowerCase().includes(q) ||
-    s.bouwplaats.toLowerCase().includes(q) ||
-    s.vanNr.toLowerCase().includes(q) ||
-    s.naarNr.toLowerCase().includes(q) ||
-    s.datum.includes(q) ||
-    s.details.toLowerCase().includes(q)
+  document.getElementById('inzendingen-content').innerHTML = lijst.map(inz => renderInzCard(inz)).join('');
+}
+
+function renderInzCard(inz) {
+  const naam    = prop(inz,'Naam')?.title?.[0]?.plain_text || '—';
+  const bp      = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
+  const vanNr   = prop(inz,'Werknr. Van')?.rich_text?.[0]?.plain_text || '';
+  const naarNr  = prop(inz,'Werknr. Naar')?.rich_text?.[0]?.plain_text || '';
+  const invuld  = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || '—';
+  const datum   = prop(inz,'Datum')?.date?.start || '';
+  const details = prop(inz,'Details')?.rich_text?.[0]?.plain_text || '';
+  const opm     = prop(inz,'Opmerkingen')?.rich_text?.[0]?.plain_text || '';
+  const status  = prop(inz,'Status')?.select?.name || 'Nieuw';
+  const type    = prop(inz,'Opslag / Zaak')?.rich_text?.[0]?.plain_text || '';
+  const id      = inz.id.replace(/-/g,'');
+
+  const statusClass = status === 'Verwerkt' ? 'status-verwerkt' : 'status-nieuw';
+  const icon = type.includes('Zaak') && type.includes('Klus') ? '📦'
+             : type.includes('Klus') && type.includes('Klus') ? '🔄'
+             : '🏭';
+
+  // Foto URLs uit details halen
+  const fotoUrls = [];
+  const fotoRegex = /(https:\/\/[^\s]+)/g;
+  let m;
+  while ((m = fotoRegex.exec(details)) !== null) fotoUrls.push(m[1]);
+
+  const fotoHtml = fotoUrls.length
+    ? `<div class="inz-fotos">${fotoUrls.map(url =>
+        `<img class="inz-foto" src="${url}" alt="foto" onclick="openLightbox('${url}')" loading="lazy">`
+      ).join('')}</div>`
+    : '';
+
+  const detailsTekst = details.replace(/\n?Foto's.*$/s, '').trim();
+
+  return `<div class="inz-card" id="inz-${id}">
+    <div class="inz-header" onclick="toggleInz('${id}')">
+      <span class="inz-icon">${icon}</span>
+      <div class="inz-info">
+        <div class="inz-naam">${naam}</div>
+        <div class="inz-meta">${datum} · ${invuld}</div>
+      </div>
+      <span class="inz-status ${statusClass}">${status}</span>
+      <span class="inz-chevron">›</span>
+    </div>
+    <div class="inz-body">
+      <div class="inz-detail-label">Route</div>
+      <div class="inz-detail-tekst">${type || '—'}\n${vanNr || '—'} → ${bp || naarNr || '—'}</div>
+      ${detailsTekst ? `<div class="inz-detail-label">Materieel</div><div class="inz-detail-tekst">${detailsTekst}</div>` : ''}
+      ${opm ? `<div class="inz-detail-label">Opmerking</div><div class="inz-detail-tekst">${opm}</div>` : ''}
+      ${fotoHtml}
+    </div>
+  </div>`;
+}
+
+function toggleInz(id) {
+  document.getElementById('inz-' + id)?.classList.toggle('open');
+}
+
+function filterInzendingen() {
+  renderInzendingen();
+}
+
+/* ── KLUSSEN ──────────────────────────────────────── */
+async function laadKlussen() {
+  try {
+    const res  = await fetch(WORKER + '?action=klussen');
+    const data = await res.json();
+    alleKlussen = data.ok && data.klussen.length ? data.klussen : KLUSSEN_DEFAULT;
+    document.getElementById('badge-kl').textContent = alleKlussen.length;
+    renderKlussen();
+  } catch (e) {
+    alleKlussen = [...KLUSSEN_DEFAULT];
+    renderKlussen();
+  }
+}
+
+function renderKlussen(zoek) {
+  const term  = (zoek || document.getElementById('zoek-klus').value).toLowerCase();
+  const lijst = alleKlussen.filter(k =>
+    !term || k.naam.toLowerCase().includes(term) || k.werknr.toLowerCase().includes(term)
   );
 
-  // Stats
-  stats.style.display = 'grid';
-  const vandaag = new Date().toISOString().split('T')[0];
-  const vandaagAantal = allSubmissions.filter(s => s.datum === vandaag).length;
-  stats.innerHTML = `
-    <div class="stat-card"><div class="stat-val">${allSubmissions.length}</div><div class="stat-lbl">Totaal</div></div>
-    <div class="stat-card"><div class="stat-val">${vandaagAantal}</div><div class="stat-lbl">Vandaag</div></div>
-    <div class="stat-card"><div class="stat-val">${gefilterd.length}</div><div class="stat-lbl">Gevonden</div></div>
-  `;
-
-  if (gefilterd.length === 0) {
-    content.innerHTML = `<div class="leeg"><span class="leeg-icon">🔍</span>Geen inzendingen gevonden.</div>`;
+  if (!lijst.length) {
+    document.getElementById('klussen-content').innerHTML = '<div class="leeg">Geen klussen gevonden.</div>';
     return;
   }
 
-  content.innerHTML = gefilterd.map((s, idx) => {
-    const tk      = typeKey(s.bewegingType);
-    const pillCls = tk ? `bp-${tk}` : '';
-    const pillTxt = s.bewegingType || '–';
-    const items   = parseDetails(s.details);
-    const totItems = items.reduce((sum, i) => sum + (i.aantal || 0), 0);
-
-    const vanTxt  = s.vanNr  || '—';
-    const naarTxt = s.naarNr || '—';
-
-    const routeHtml = `
-      <div class="route-row">
-        <div class="route-loc">
-          <div class="rl-label">Van</div>
-          <div class="rl-naam">${s.naam.split(' – ')[0] || vanTxt}</div>
-          <div class="rl-nr">${vanTxt}</div>
-        </div>
-        <div class="route-arrow">→</div>
-        <div class="route-loc">
-          <div class="rl-label">Naar</div>
-          <div class="rl-naam">${s.bouwplaats || naarTxt}</div>
-          <div class="rl-nr">${naarTxt}</div>
-        </div>
-      </div>`;
-
-    const itemsHtml = items.length > 0 ? `
-      <table class="items-table">
-        <tr><th>Item</th><th>Aantal</th><th>Nummer(s)</th></tr>
-        ${items.map(i => `
-          <tr>
-            <td>${i.naam || i.raw || '?'}${i.types ? ` <span style="font-size:10px;color:var(--zacht)">[${i.types}]</span>` : ''}</td>
-            <td>${i.aantal || '–'}</td>
-            <td class="nr">${i.nummers?.join(', ') || '–'}</td>
-          </tr>
-          ${i.opm ? `<tr><td colspan="3" style="font-size:11px;color:var(--zacht);padding-top:0;">💬 ${i.opm}</td></tr>` : ''}
-        `).join('')}
-      </table>` : '';
-
-    const opmHtml = s.opmerkingen ? `<div style="margin-top:10px;padding:10px 12px;background:rgba(255,255,255,.04);border-radius:var(--radius-sm);font-size:13px;color:var(--zacht);">💬 ${s.opmerkingen}</div>` : '';
-
-    return `
-      <div class="inz-card" id="inz-${idx}">
-        <div class="inz-header" onclick="toggleInz(${idx})">
-          <div class="inz-date">${formatDate(s.datum)}</div>
-          <div class="inz-title">
-            <div class="inz-naam">${s.bouwplaats || s.naam}</div>
-            <div class="inz-person">👤 ${s.persoon || '–'} · ${totItems} item${totItems !== 1 ? 's' : ''}</div>
-          </div>
-          <span class="status-badge ${s.status?.toLowerCase() === 'nieuw' ? 'nieuw' : ''}">${s.status || '–'}</span>
-          <span class="inz-toggle">▼</span>
-        </div>
-        <div class="inz-body">
-          <span class="beweging-pill ${pillCls}">${pillTxt}</span>
-          ${routeHtml}
-          ${itemsHtml}
-          ${opmHtml}
-        </div>
-      </div>`;
+  document.getElementById('klussen-content').innerHTML = lijst.map((k, i) => {
+    const realIdx = alleKlussen.indexOf(k);
+    return `<div class="klus-item">
+      <div class="klus-naam">${k.naam}</div>
+      <span class="klus-nr">${k.werknr}</span>
+      <div class="klus-acties">
+        <button class="klus-btn klus-btn-del" title="Verwijderen" onclick="verwijderKlus(${realIdx})">🗑</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
-function toggleInz(idx) {
-  document.getElementById('inz-' + idx)?.classList.toggle('open');
+function filterKlussen() {
+  renderKlussen();
 }
 
-function filterInzendingen(q) {
-  renderInzendingen(q);
+function voegKlusToe() {
+  const naam = document.getElementById('nieuw-klus-naam').value.trim();
+  const nr   = document.getElementById('nieuw-klus-nr').value.trim();
+  if (!naam || !nr) { showToast('⚠️ Vul naam en werknummer in'); return; }
+  alleKlussen.unshift({ naam, werknr: nr });
+  document.getElementById('nieuw-klus-naam').value = '';
+  document.getElementById('nieuw-klus-nr').value   = '';
+  document.getElementById('badge-kl').textContent  = alleKlussen.length;
+  renderKlussen();
+  showToast('✓ Klus toegevoegd');
 }
 
-function formatDate(iso) {
-  if (!iso) return '–';
-  const d = new Date(iso + 'T00:00:00');
-  return d.toLocaleDateString('nl-NL', { day:'numeric', month:'short', year:'numeric' });
+function verwijderKlus(idx) {
+  if (!confirm(`Verwijder "${alleKlussen[idx].naam}"?`)) return;
+  alleKlussen.splice(idx, 1);
+  document.getElementById('badge-kl').textContent = alleKlussen.length;
+  renderKlussen();
 }
 
-/* ══════════════════════════════════════════════════════
-   MATERIEEL OVERZICHT TAB
-   ══════════════════════════════════════════════════════ */
-// Verwerkt submissions om laatste bekende locatie per item te bepalen
-function buildEquipmentMap() {
-  const tracker = {}; // key: "Schaftkeet||SK-01" → { naam, nummer, locatie, datum }
-
-  // Verwerk van oud naar nieuw
-  [...allSubmissions].reverse().forEach(s => {
-    const naar  = s.bouwplaats || s.naarNr || 'Onbekend';
-    const datum = s.datum;
-    const items = parseDetails(s.details);
-    items.forEach(item => {
-      if (!item.naam) return;
-      const nrs = item.nummers?.length > 0 ? item.nummers : ['*'];
-      nrs.forEach(nr => {
-        tracker[`${item.naam}||${nr}`] = {
-          naam:    item.naam,
-          nummer:  nr === '*' ? null : nr,
-          locatie: naar,
-          isZaak:  naar.toLowerCase().includes('zaak') || naar.toLowerCase().includes('depot'),
-          datum,
-          naarNr:  s.naarNr,
-        };
-      });
-    });
-  });
-
-  // Groepeer op naam
-  const grouped = {};
-  Object.values(tracker).forEach(v => {
-    if (!grouped[v.naam]) grouped[v.naam] = [];
-    grouped[v.naam].push(v);
-  });
-  return grouped;
-}
-
-let equipmentMap = {};
-let matFilter = '';
-
-function renderMaterieel(filter = '') {
-  matFilter = filter;
-  const content = document.getElementById('mat-content');
-  const stats   = document.getElementById('mat-stats');
-
-  if (dataError) {
-    content.innerHTML = `<div class="error-box">⚠️ Kon data niet ophalen: ${dataError}</div>`;
-    return;
-  }
-  if (!dataLoaded) {
-    content.innerHTML = `<div class="loader"><div class="loader-spinner"></div><div class="loader-txt">Data ophalen...</div></div>`;
-    return;
-  }
-
-  equipmentMap = buildEquipmentMap();
-  const q = filter.toLowerCase();
-
-  // Stats
-  const allItems    = Object.values(equipmentMap).flat();
-  const opZaak      = allItems.filter(i => i.isZaak).length;
-  const opKlus      = allItems.filter(i => !i.isZaak).length;
-  stats.style.display = 'grid';
-  stats.innerHTML = `
-    <div class="stat-card"><div class="stat-val">${allItems.length}</div><div class="stat-lbl">Getrackt</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:var(--groen)">${opZaak}</div><div class="stat-lbl">Op zaak</div></div>
-    <div class="stat-card"><div class="stat-val">${opKlus}</div><div class="stat-lbl">Op klus</div></div>
-  `;
-
-  if (Object.keys(equipmentMap).length === 0) {
-    content.innerHTML = `<div class="leeg"><span class="leeg-icon">📦</span>Nog geen verplaatsingen ingestuurd.<br>Zodra mensen materieel insturen, zie je hier de locaties.</div>`;
-    return;
-  }
-
-  let html = '';
-  Object.entries(equipmentMap)
-    .filter(([naam, items]) => {
-      if (!q) return true;
-      return naam.toLowerCase().includes(q) ||
-        items.some(i => (i.nummer||'').toLowerCase().includes(q) || i.locatie.toLowerCase().includes(q));
-    })
-    .sort(([a],[b]) => a.localeCompare(b))
-    .forEach(([naam, items]) => {
-      const filteredItems = q
-        ? items.filter(i => naam.toLowerCase().includes(q) || (i.nummer||'').toLowerCase().includes(q) || i.locatie.toLowerCase().includes(q))
-        : items;
-      if (filteredItems.length === 0) return;
-
-      html += `<div class="mat-section">
-        <div class="mat-section-title">📦 ${naam} <span style="font-size:10px;color:var(--zacht);font-weight:400">${filteredItems.length} item${filteredItems.length!==1?'s':''}</span></div>
-        <div class="mat-items">
-          ${filteredItems.sort((a,b)=>(a.nummer||'').localeCompare(b.nummer||'')).map(item => `
-            <div class="mat-item">
-              <div style="flex:1;">
-                <div class="mat-naam">${item.nummer ? `Nr. ${item.nummer}` : naam}</div>
-                ${item.datum ? `<div class="mat-datum">Bijgewerkt ${formatDate(item.datum)}</div>` : ''}
-              </div>
-              <div>
-                <div class="mat-locatie ${item.isZaak ? 'zaak' : 'klus'}">${item.isZaak ? '🏭 De Zaak' : `🏗️ ${item.locatie}`}</div>
-                ${item.naarNr && !item.isZaak ? `<div style="font-size:10px;color:var(--dim);text-align:right;margin-top:2px;">${item.naarNr}</div>` : ''}
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      </div>`;
-    });
-
-  content.innerHTML = html || `<div class="leeg"><span class="leeg-icon">🔍</span>Geen materieel gevonden.</div>`;
-}
-
-function filterMaterieel(q) {
-  renderMaterieel(q);
-}
-
-/* ══════════════════════════════════════════════════════
-   KLUSSEN BEHEER TAB
-   ══════════════════════════════════════════════════════ */
-let KLUSSEN_CACHE = null;
-let klusFilter = '';
-
-async function loadKlussen(forceFresh = false) {
-  if (KLUSSEN_CACHE && !forceFresh) return KLUSSEN_CACHE;
+async function slaKlussenOp() {
   try {
-    const res  = await fetch(WORKER_URL + '?action=klussen&t=' + Date.now(), { cache: 'no-store' });
-    const json = await res.json();
-    KLUSSEN_CACHE = (json.ok && json.klussen.length > 0) ? json.klussen : [...DEFAULT_KLUSSEN];
-  } catch(e) {
-    KLUSSEN_CACHE = [...DEFAULT_KLUSSEN];
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'klussen_opslaan', klussen: alleKlussen }),
+    });
+    const data = await res.json();
+    if (data.ok) showToast('✓ Klussen opgeslagen');
+    else showToast('❌ Fout: ' + data.error);
+  } catch (e) {
+    showToast('❌ Verbindingsfout');
   }
-  return KLUSSEN_CACHE;
 }
 
-async function saveKlussen(list) {
-  KLUSSEN_CACHE = list;
-  await fetch(WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action: 'klussen_opslaan', klussen: list }),
+/* ── MATERIEEL OVERZICHT ──────────────────────────── */
+const SECTIES = {
+  'Aansluitingen': [
+    { id:'bouwmeterkast', naam:'Bouwmeterkast' },
+    { id:'waterput',      naam:'Waterput' },
+    { id:'waterkraan',    naam:'Waterkraan / standvink' },
+  ],
+  'Keten': [
+    { id:'schaftkeet',      naam:'Schaftkeet' },
+    { id:'uitvoerderskeet', naam:'Uitvoerderskeet' },
+    { id:'pipokeet',        naam:'Pipokeet' },
+    { id:'keettrap',        naam:'Keettrap (set)' },
+  ],
+  'Containers': [{ id:'container', naam:'Materiaalcontainer' }],
+  'Lichtmasten': [{ id:'lichtmast', naam:'Lichtmast' }],
+  'Bouwhekken': [
+    { id:'bouwhekken',          naam:'Bouwhekken' },
+    { id:'bouwhek_voeten',      naam:'Bouwhek voeten' },
+    { id:'hekklemmen',          naam:'Hekklemmen' },
+    { id:'hekwielen',           naam:'Hekwielen' },
+    { id:'hek_schoren',         naam:'Hek schoren' },
+    { id:'kunststof_rijplaten', naam:'Kunststof rijplaten' },
+  ],
+};
+
+function bouwLocatieMap(inzendingen) {
+  const gesorteerd = [...inzendingen].sort((a, b) => {
+    const da = prop(a,'Datum')?.date?.start || '';
+    const db = prop(b,'Datum')?.date?.start || '';
+    return da.localeCompare(db);
   });
-  // Flush cache zodat de volgende loadKlussen altijd verse data ophaalt
-  KLUSSEN_CACHE = null;
-}
 
-function getMateriaalVoorKlus(klus) {
-  if (!equipmentMap || Object.keys(equipmentMap).length === 0) return [];
-  const kNaam = klus.naam.toLowerCase();
-  const kNr   = (klus.werknr || '').toLowerCase();
-  const result = [];
-  Object.values(equipmentMap).flat().forEach(item => {
-    if (item.isZaak) return;
-    const loc = item.locatie.toLowerCase();
-    const nr  = (item.naarNr || '').toLowerCase();
-    if (loc.includes(kNaam) || kNaam.includes(loc) || (kNr && nr === kNr)) {
-      result.push(item);
+  const locaties = {};
+  function ensureLocatie(naam, werknr) {
+    const key = werknr || naam;
+    if (!locaties[key]) locaties[key] = { naam, werknr, items: {} };
+    return key;
+  }
+  function addItem(locKey, itemId, itemNaam, aantal, nummers) {
+    if (!locaties[locKey]) return;
+    if (!locaties[locKey].items[itemId]) locaties[locKey].items[itemId] = { naam: itemNaam, aantal: 0, nummers: [] };
+    locaties[locKey].items[itemId].aantal += aantal;
+    if (nummers) nummers.forEach(n => { if (!locaties[locKey].items[itemId].nummers.includes(n)) locaties[locKey].items[itemId].nummers.push(n); });
+  }
+  function removeItem(locKey, itemId, aantal, nummers) {
+    if (!locaties[locKey]?.items[itemId]) return;
+    locaties[locKey].items[itemId].aantal = Math.max(0, locaties[locKey].items[itemId].aantal - aantal);
+    if (nummers) nummers.forEach(n => { const i = locaties[locKey].items[itemId].nummers.indexOf(n); if (i >= 0) locaties[locKey].items[itemId].nummers.splice(i,1); });
+  }
+
+  for (const inz of gesorteerd) {
+    const details = prop(inz,'Details')?.rich_text?.[0]?.plain_text || '';
+    const vanNr   = prop(inz,'Werknr. Van')?.rich_text?.[0]?.plain_text || '';
+    const naarNr  = prop(inz,'Werknr. Naar')?.rich_text?.[0]?.plain_text || '';
+    const naarNm  = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || naarNr;
+    if (!vanNr && !naarNr) continue;
+    const vanKey  = vanNr  ? ensureLocatie(vanNr, vanNr)   : null;
+    const naarKey = naarNr ? ensureLocatie(naarNm, naarNr) : null;
+    const items = parseDetails(details);
+    for (const ri of items) {
+      if (vanKey)  removeItem(vanKey, ri.id, ri.aantal, ri.nummers);
+      if (naarKey) addItem(naarKey, ri.id, ri.naam, ri.aantal, ri.nummers);
     }
-  });
-  return result;
+  }
+  for (const key of Object.keys(locaties)) {
+    if (Object.keys(locaties[key].items).length === 0) delete locaties[key];
+  }
+  return locaties;
 }
 
-function groupMateriaal(mat) {
-  const grouped = {};
-  mat.forEach(item => {
-    if (!grouped[item.naam]) grouped[item.naam] = { naam: item.naam, count: 0, nummers: [] };
-    grouped[item.naam].count++;
-    if (item.nummer) grouped[item.naam].nummers.push(item.nummer);
-  });
-  return Object.values(grouped).sort((a, b) => a.naam.localeCompare(b.naam));
+function parseDetails(tekst) {
+  if (!tekst) return [];
+  const items = [];
+  const alle  = Object.values(SECTIES).flat();
+  for (const line of tekst.split('\n')) {
+    for (const item of alle) {
+      if (line.startsWith(item.naam + ':')) {
+        const aantalMatch = line.match(/:\s*(\d+)/);
+        const nummerMatch = line.match(/nr\.\s*([^)]+)/);
+        const aantal      = aantalMatch ? parseInt(aantalMatch[1]) : 0;
+        const nummers     = nummerMatch ? nummerMatch[1].split(',').map(n => n.trim()).filter(Boolean) : [];
+        if (aantal > 0) items.push({ id: item.id, naam: item.naam, aantal, nummers });
+        break;
+      }
+    }
+  }
+  return items;
 }
 
-async function renderKlussen(filter = '') {
-  klusFilter = filter;
-  const list = await loadKlussen();
-  const q    = filter.toLowerCase();
-  const sorted   = [...list].sort((a,b) => a.naam.localeCompare(b.naam));
-  const filtered = q ? sorted.filter(k => k.naam.toLowerCase().includes(q) || k.werknr.toLowerCase().includes(q)) : sorted;
+function renderMaterieel(zoek) {
+  const term   = (zoek || document.getElementById('zoek-mat').value).toLowerCase();
+  const locKeys = Object.keys(locatieMap).filter(k => {
+    const loc = locatieMap[k];
+    return !term || loc.naam.toLowerCase().includes(term) || loc.werknr.toLowerCase().includes(term);
+  });
 
-  document.getElementById('klus-count-lbl').textContent = `${list.length} klus${list.length !== 1 ? 'sen' : ''} actief`;
-  const el = document.getElementById('klus-list');
-
-  if (filtered.length === 0) {
-    el.innerHTML = `<div class="leeg" style="padding:20px;">${q ? '🔍 Geen klussen gevonden.' : 'Nog geen klussen. Druk op + om er een toe te voegen.'}</div>`;
+  if (locKeys.length === 0) {
+    document.getElementById('materieel-content').innerHTML = '<div class="leeg">Geen materieel gevonden.</div>';
     return;
   }
 
-  el.innerHTML = filtered.map(k => {
-    const realIdx  = list.findIndex(x => x.naam === k.naam && x.werknr === k.werknr);
-    const mat      = getMateriaalVoorKlus(k);
-    const matCount = mat.length;
+  const zaakKeys = locKeys.filter(k => k === 'DE ZAAK' || locatieMap[k].naam.includes('Zaak'));
+  const klusKeys = locKeys.filter(k => !zaakKeys.includes(k));
+  const gesorteerd = [...zaakKeys, ...klusKeys];
 
-    const matGrouped = groupMateriaal(mat);
-    const matRows = matCount === 0
-      ? `<div class="klus-no-mat">📦 Geen materieel op deze klus geregistreerd.</div>`
-      : matGrouped.map(g => `
-          <div class="klus-mat-row">
-            <div style="flex:1;">
-              <div class="klus-mat-naam">${g.naam}</div>
-              ${g.nummers.length > 0 ? `<div class="klus-mat-nrs">Nr: ${g.nummers.join(', ')}</div>` : ''}
-            </div>
-            <div class="klus-mat-count">×${g.count}</div>
-          </div>`).join('');
+  document.getElementById('materieel-content').innerHTML = gesorteerd.map(k => {
+    const loc   = locatieMap[k];
+    const items = Object.entries(loc.items);
+    const totaal = items.reduce((s, [,v]) => s + v.aantal, 0);
+    const safeId = k.replace(/[^a-z0-9]/gi,'_');
+    const isZaak = zaakKeys.includes(k);
 
-    return `
-      <div class="klus-card ${matCount > 0 ? 'has-mat' : ''}" id="klus-card-${realIdx}">
-        <div class="klus-card-header" onclick="toggleKlusCard(${realIdx})">
-          <div class="klus-naam" style="flex:1;font-size:14px;font-weight:600;">${k.naam}</div>
-          <div class="klus-nr">${k.werknr}</div>
-          <div class="klus-mat-badge ${matCount === 0 ? 'leeg' : ''}">${matCount === 0 ? 'Leeg' : `${matCount} item${matCount !== 1 ? 's' : ''}`}</div>
-          <button class="btn-del" onclick="event.stopPropagation();deleteKlus(${realIdx})" title="Verwijder">✕</button>
-          <span class="klus-card-toggle">▼</span>
-        </div>
-        <div class="klus-card-body">${matRows}</div>
+    const itemRegels = items.map(([id, v]) => {
+      const nrTekst = v.nummers?.length ? `<div class="mat-item-nrs">Nr: ${v.nummers.join(', ')}</div>` : '';
+      return `<div class="mat-item-row">
+        <div><div class="mat-item-naam">${v.naam}</div>${nrTekst}</div>
+        <div class="mat-item-badge">${v.aantal}×</div>
       </div>`;
+    }).join('');
+
+    return `<div class="mat-locatie-card ${isZaak ? 'zaak' : ''}" id="ml-${safeId}">
+      <div class="mat-locatie-header" onclick="this.closest('.mat-locatie-card').classList.toggle('open')">
+        <div>
+          <div class="mat-locatie-naam">${isZaak ? '🏭 ' : '🏗️ '}${loc.naam || loc.werknr}</div>
+          <div class="mat-locatie-teller">${items.length} soorten · ${totaal} stuks</div>
+        </div>
+        ${loc.werknr && loc.werknr !== 'DE ZAAK' ? `<span class="mat-locatie-nr">${loc.werknr}</span>` : ''}
+        <span class="mat-chevron">›</span>
+      </div>
+      <div class="mat-body">${itemRegels}</div>
+    </div>`;
   }).join('');
 }
 
-function toggleKlusCard(idx) {
-  document.getElementById('klus-card-' + idx)?.classList.toggle('open');
+function filterMaterieel() {
+  renderMaterieel();
 }
 
-function openAddModal() {
-  document.getElementById('klus-modal-overlay').classList.add('open');
-  document.getElementById('klus-modal-sheet').classList.add('open');
-  document.getElementById('btn-add-klus').classList.add('active');
-  setTimeout(() => document.getElementById('new-klus-naam')?.focus(), 380);
+/* ── LIGHTBOX ─────────────────────────────────────── */
+function openLightbox(url) {
+  document.getElementById('lightbox-img').src = url;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
 }
 
-function closeAddModal() {
-  document.getElementById('klus-modal-overlay').classList.remove('open');
-  document.getElementById('klus-modal-sheet').classList.remove('open');
-  document.getElementById('btn-add-klus').classList.remove('active');
+/* ── HELPERS ──────────────────────────────────────── */
+function prop(page, name) {
+  return page?.properties?.[name];
 }
 
-function filterKlussen(q) {
-  renderKlussen(q);
-}
-
-async function addKlus() {
-  const naam   = document.getElementById('new-klus-naam').value.trim();
-  const werknr = document.getElementById('new-klus-nr').value.trim();
-  if (!naam || !werknr) {
-    document.getElementById('add-error').style.display = 'block';
-    return;
-  }
-  const list = await loadKlussen();
-  list.push({ naam, werknr });
-  await saveKlussen(list);
-  document.getElementById('new-klus-naam').value = '';
-  document.getElementById('new-klus-nr').value   = '';
-  closeAddModal();
-  renderKlussen(klusFilter);
-  showToast(`✓ ${naam} toegevoegd`);
-}
-
-async function deleteKlus(realIdx) {
-  const list = await loadKlussen();
-  if (realIdx < 0 || realIdx >= list.length) return;
-  const item = list[realIdx];
-  list.splice(realIdx, 1);
-  await saveKlussen(list);
-  renderKlussen(klusFilter);
-  showToast(`Verwijderd: ${item.naam}`);
-}
-
-function clearAddError() {
-  document.getElementById('add-error').style.display = 'none';
-}
-
-/* ══════════════════════════════════════════════════════
-   TOAST
-   ══════════════════════════════════════════════════════ */
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-/* ══════════════════════════════════════════════════════
-   INIT
-   ══════════════════════════════════════════════════════ */
-renderKlussen();
-loadData();
+/* ── DEFAULT KLUSSEN ─────────────────────────────── */
+const KLUSSEN_DEFAULT = [
+  { naam:'Inkopen tbv voorraad', werknr:'300026' },
+  { naam:'Sodexo, KLM kleine werken', werknr:'400126' },
+  { naam:'Willebrordusshof Rotterdam, nwbouw 11 won', werknr:'4783' },
+  { naam:'Nieuwbouw 11 woningen, Middelharnis', werknr:'4807' },
+  { naam:'IKC, De 2 Wieken, Zwijndrecht, nieuwbouw', werknr:'4837' },
+  { naam:'Stephanusschool, Rotterdam, nieuwbouw', werknr:'4838' },
+  { naam:'MY College, Spijkenisse, nieuwbouw', werknr:'4862' },
+  { naam:'IKC Driemaster, Ridderkerk, nieuwbouw', werknr:'4880' },
+  { naam:'OBS De Margriet, Rotterdam, nieuwbouw', werknr:'4886' },
+  { naam:'Kesper College, Gouda, uitbreiding en renovatie', werknr:'4887' },
+  { naam:'ABS Lansingerland, nieuwbouw', werknr:'4874' },
+  { naam:'Zorgstede, Moordrecht, nieuwbouw woon-zorgcomplex', werknr:'4895' },
+];
+
+/* ── START ────────────────────────────────────────── */
+if (checkAuth()) {
+  init();
+}
 </script>
 </body>
 </html>
