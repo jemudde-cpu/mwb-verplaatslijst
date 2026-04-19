@@ -4,36 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Overzicht – Middelwatering Bouw</title>
-<meta name="theme-color" content="#0d0d0d">
+<meta name="theme-color" content="#111111">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --accent:    #2563eb;
+  --accent:    #ff6b00;
   --groen:     #22c55e;
-  --tekst:     #f2f2f2;
+  --tekst:     #f0f0f0;
   --zacht:     #888888;
-  --dim:       #555555;
-  --border:    #252525;
-  --border-2:  #333333;
-  --surface:   #161616;
-  --surface-2: #1e1e1e;
-  --radius-lg: 16px;
-  --radius:    12px;
-  --radius-sm: 8px;
+  --dim:       #4a4a4a;
+  --border:    #2a2a2a;
+  --border-2:  #383838;
+  --surface:   #1a1a1a;
+  --surface-2: #222222;
+  --radius-lg: 8px;
+  --radius:    6px;
+  --radius-sm: 4px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Inter',-apple-system,sans-serif;background:#0d0d0d;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#111111;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
 
 /* HEADER */
-header{position:sticky;top:0;z-index:60;background:#0d0d0d;border-bottom:1px solid var(--border);padding:14px 18px;}
+header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px solid var(--border-2);padding:14px 18px;}
 .header-row{display:flex;align-items:center;gap:12px;}
-.header-logo{width:32px;height:32px;background:#1a2a55;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.header-title{color:#fff;font-size:15px;font-weight:700;line-height:1.2;flex:1;}
-.header-title small{display:block;font-size:10px;font-weight:400;color:var(--zacht);}
-.header-refresh{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border-2);color:var(--tekst);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:border-color .2s;}
+.header-logo{width:32px;height:32px;background:var(--accent);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.header-title{color:#fff;font-size:15px;font-weight:800;line-height:1.2;flex:1;text-transform:uppercase;letter-spacing:.5px;}
+.header-title small{display:block;font-size:10px;font-weight:400;color:var(--zacht);text-transform:none;letter-spacing:0;}
+.header-refresh{width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border-2);color:var(--tekst);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:border-color .2s;}
 .header-refresh:active{border-color:var(--accent);}
 
 /* MAIN */
@@ -44,16 +44,16 @@ header{position:sticky;top:0;z-index:60;background:#0d0d0d;border-bottom:1px sol
 .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--zacht);pointer-events:none;}
 .search-input{width:100%;padding:13px 14px 13px 42px;border:1px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--surface);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
 .search-input::placeholder{color:var(--dim);}
-.search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.13);}
+.search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,0,.13);}
 
 /* FILTER TABS */
 .filter-wrap{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:2px;}
 .filter-wrap::-webkit-scrollbar{display:none;}
-.filter-btn{flex-shrink:0;padding:8px 16px;border-radius:20px;font-family:inherit;font-size:12px;font-weight:700;background:transparent;border:1px solid var(--border-2);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;white-space:nowrap;}
+.filter-btn{flex-shrink:0;padding:8px 14px;border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;background:transparent;border:1px solid var(--border-2);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;white-space:nowrap;}
 .filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 
 /* SECTIE HEADER */
-.sectie-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--zacht);padding:6px 4px 10px;border-left:2px solid var(--accent);padding-left:12px;margin-bottom:10px;}
+.sectie-header{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--zacht);padding:6px 4px 10px;border-left:2px solid var(--accent);padding-left:12px;margin-bottom:10px;}
 
 /* KLUS KAART */
 .klus-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;}
@@ -61,7 +61,7 @@ header{position:sticky;top:0;z-index:60;background:#0d0d0d;border-bottom:1px sol
 .klus-header:active{background:rgba(255,255,255,.03);}
 .klus-info{flex:1;min-width:0;}
 .klus-naam{font-size:14px;font-weight:700;color:var(--tekst);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.klus-nr{font-size:11px;font-weight:700;color:var(--accent);padding:3px 9px;background:rgba(37,99,235,.12);border-radius:10px;flex-shrink:0;}
+.klus-nr{font-size:11px;font-weight:800;color:var(--accent);padding:3px 9px;background:rgba(255,107,0,.12);border-radius:var(--radius-sm);flex-shrink:0;}
 .klus-teller{font-size:11px;color:var(--zacht);margin-top:2px;}
 .klus-chevron{color:var(--dim);font-size:14px;transition:transform .25s;flex-shrink:0;}
 .klus-card.open .klus-chevron{transform:rotate(90deg);}
@@ -73,7 +73,7 @@ header{position:sticky;top:0;z-index:60;background:#0d0d0d;border-bottom:1px sol
 .item-regel:last-child{border-bottom:none;}
 .item-naam{font-size:13px;font-weight:600;color:var(--tekst);}
 .item-detail{font-size:11px;color:var(--zacht);margin-top:2px;line-height:1.4;}
-.item-badge{font-size:12px;font-weight:700;color:var(--accent);background:rgba(37,99,235,.12);padding:3px 10px;border-radius:12px;white-space:nowrap;flex-shrink:0;}
+.item-badge{font-size:12px;font-weight:800;color:var(--accent);background:rgba(255,107,0,.12);padding:3px 10px;border-radius:var(--radius-sm);white-space:nowrap;flex-shrink:0;}
 
 /* DE ZAAK */
 .zaak-card{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.18);}
@@ -96,18 +96,18 @@ header{position:sticky;top:0;z-index:60;background:#0d0d0d;border-bottom:1px sol
 /* LEEG STATE */
 .leeg{text-align:center;padding:48px 20px;}
 .leeg-icon{font-size:48px;margin-bottom:12px;}
-.leeg-titel{font-size:17px;font-weight:700;margin-bottom:6px;}
+.leeg-titel{font-size:17px;font-weight:800;margin-bottom:6px;}
 .leeg-sub{font-size:14px;color:var(--zacht);}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:55;display:flex;background:#0d0d0d;border-top:1px solid var(--border);height:72px;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:55;display:flex;background:#111111;border-top:2px solid var(--border-2);height:72px;}
 .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:var(--dim);transition:color .2s;padding:8px 0;}
 .bn-item.active{color:var(--accent);}
 .bn-icon{font-size:22px;line-height:1;}
-.bn-label{font-size:10px;font-weight:700;letter-spacing:.3px;}
+.bn-label{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;}
 
 /* TOAST */
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:400;background:#1a1a1a;border:1px solid var(--border-2);border-radius:30px;padding:12px 22px;font-size:14px;font-weight:600;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);z-index:400;background:#1a1a1a;border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 22px;font-size:14px;font-weight:700;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
