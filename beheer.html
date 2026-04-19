@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beheer – Middelwatering Bouw</title>
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#111111" id="theme-meta">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('mwb_theme')||'dark');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -159,6 +160,20 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;background:#1a1a1a;border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 22px;font-size:14px;font-weight:700;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* THEME TOGGLE */
+.theme-toggle{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border-2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;flex-shrink:0;transition:border-color .2s;}
+.theme-toggle:active{border-color:var(--accent);}
+
+/* LIGHT THEME */
+[data-theme="light"]{--tekst:#111111;--zacht:#666666;--dim:#bbbbbb;--border:#e5e5e5;--border-2:#d0d0d0;--surface:#ffffff;--surface-2:#f5f5f5;}
+[data-theme="light"] body{background:#f0f0f0;}
+[data-theme="light"] header{background:#f0f0f0;}
+[data-theme="light"] .pw-overlay{background:#f0f0f0;}
+[data-theme="light"] .toast{background:#ffffff;}
+[data-theme="light"] .lightbox{background:rgba(255,255,255,.97);}
+[data-theme="light"] .lightbox img{box-shadow:0 8px 40px rgba(0,0,0,.15);}
+[data-theme="light"] .pw-titel{color:#111111;}
 </style>
 </head>
 <body>
@@ -184,6 +199,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <small>Middelwatering Bouw</small>
     </div>
     <a href="index.html" class="header-app-link">← App</a>
+    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Licht/donker"></button>
     <button class="header-logout" onclick="uitloggen()">Uitloggen</button>
   </div>
   <nav class="tab-nav">
@@ -261,7 +277,20 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <script>
 const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
-const WACHTWOORD = 'mwb2024';  // ← Pas dit aan om het wachtwoord te wijzigen
+const WACHTWOORD = 'mwb2024';
+
+/* ── THEMA ───────────────────────────────────────── */
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('mwb_theme', t);
+  const btn = document.getElementById('theme-toggle');
+  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀️';
+  document.getElementById('theme-meta').content = t === 'light' ? '#f0f0f0' : '#111111';
+}
+function toggleTheme() {
+  setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+}
+document.addEventListener('DOMContentLoaded', () => { setTheme(localStorage.getItem('mwb_theme') || 'dark'); });  // ← Pas dit aan om het wachtwoord te wijzigen
 
 let alleInzendingen = [];
 let alleKlussen     = [];
