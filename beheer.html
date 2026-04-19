@@ -4,150 +4,142 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Beheer – Middelwatering Bouw</title>
-<meta name="theme-color" content="#0a1628">
+<meta name="theme-color" content="#0d0d0d">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --oranje:    #f97316;
+  --accent:    #2563eb;
   --groen:     #22c55e;
   --rood:      #ef4444;
-  --blauw:     #4d7cfe;
-  --tekst:     rgba(255,255,255,0.95);
-  --zacht:     rgba(255,255,255,0.55);
-  --dim:       rgba(255,255,255,0.30);
-  --glas-rand: rgba(255,255,255,0.13);
-  --glas-bg:   rgba(255,255,255,0.06);
-  --input-bg:  rgba(255,255,255,0.07);
-  --radius-lg: 18px;
+  --tekst:     #f2f2f2;
+  --zacht:     #888888;
+  --dim:       #555555;
+  --border:    #252525;
+  --border-2:  #333333;
+  --surface:   #161616;
+  --surface-2: #1e1e1e;
+  --radius-lg: 16px;
   --radius:    12px;
   --radius-sm: 8px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Inter',-apple-system,sans-serif;background:#060e1c;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
-
-/* ORBS */
-.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;}
-.orb-1{width:500px;height:500px;background:radial-gradient(circle,#1a3a9f,#0d1f5a 60%,transparent);top:-150px;left:-100px;animation:d1 22s ease-in-out infinite alternate;}
-.orb-2{width:400px;height:400px;background:radial-gradient(circle,#2d5be3,#0a1f6e 60%,transparent);bottom:-100px;right:-60px;animation:d2 28s ease-in-out infinite alternate;}
-.orb-4{width:220px;height:220px;background:radial-gradient(circle,rgba(249,115,22,.45),transparent 65%);top:15%;right:-50px;animation:d2 24s ease-in-out infinite alternate;}
-@keyframes d1{from{transform:translate(0,0) scale(1)}to{transform:translate(50px,70px) scale(1.1)}}
-@keyframes d2{from{transform:translate(0,0)}to{transform:translate(-40px,-50px)}}
+body{font-family:'Inter',-apple-system,sans-serif;background:#0d0d0d;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
 
 /* WACHTWOORD OVERLAY */
-.pw-overlay{position:fixed;inset:0;z-index:500;background:#060e1c;display:flex;align-items:center;justify-content:center;padding:24px;}
+.pw-overlay{position:fixed;inset:0;z-index:500;background:#0d0d0d;display:flex;align-items:center;justify-content:center;padding:24px;}
 .pw-overlay.verborgen{display:none;}
-.pw-box{width:100%;max-width:380px;text-align:center;}
-.pw-logo{width:56px;height:56px;background:var(--oranje);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
+.pw-box{width:100%;max-width:360px;text-align:center;}
+.pw-logo{width:56px;height:56px;background:#1a2a55;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
 .pw-titel{font-size:22px;font-weight:800;margin-bottom:8px;}
 .pw-sub{font-size:14px;color:var(--zacht);margin-bottom:28px;}
-.pw-input{width:100%;padding:14px 18px;border:1.5px solid rgba(255,255,255,.18);border-radius:var(--radius);font-family:inherit;font-size:16px;font-weight:600;color:var(--tekst);background:rgba(255,255,255,.08);text-align:center;letter-spacing:4px;margin-bottom:12px;-webkit-appearance:none;}
-.pw-input:focus{outline:none;border-color:rgba(249,115,22,.60);box-shadow:0 0 0 3px rgba(249,115,22,.18);}
-.pw-input.fout{border-color:rgba(239,68,68,.70);animation:shake .3s ease;}
+.pw-input{width:100%;padding:14px 18px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:16px;font-weight:600;color:var(--tekst);background:var(--surface);text-align:center;letter-spacing:4px;margin-bottom:12px;-webkit-appearance:none;}
+.pw-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.18);}
+.pw-input.fout{border-color:var(--rood);animation:shake .3s ease;}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.pw-btn{width:100%;padding:15px;background:var(--oranje);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;}
-.pw-fout{color:rgba(239,68,68,.85);font-size:13px;margin-top:10px;min-height:20px;}
+.pw-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;}
+.pw-fout{color:var(--rood);font-size:13px;margin-top:10px;min-height:20px;}
 .pw-link{font-size:13px;color:var(--zacht);margin-top:20px;}
-.pw-link a{color:var(--oranje);text-decoration:none;}
+.pw-link a{color:var(--accent);text-decoration:none;}
 
 /* HEADER */
-header{position:sticky;top:0;z-index:60;background:rgba(6,14,28,.88);-webkit-backdrop-filter:blur(28px) saturate(160%);backdrop-filter:blur(28px) saturate(160%);border-bottom:1px solid rgba(255,255,255,.09);}
+header{position:sticky;top:0;z-index:60;background:#0d0d0d;border-bottom:1px solid var(--border);}
 .header-top{display:flex;align-items:center;gap:12px;padding:12px 18px;}
-.header-logo{width:30px;height:30px;background:var(--oranje);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.header-logo{width:30px;height:30px;background:#1a2a55;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .header-title{flex:1;font-size:15px;font-weight:700;line-height:1.2;}
-.header-title small{display:block;font-size:10px;font-weight:400;opacity:.50;}
-.header-app-link{font-size:12px;font-weight:600;color:var(--oranje);text-decoration:none;padding:6px 14px;border:1px solid rgba(249,115,22,.30);border-radius:20px;background:rgba(249,115,22,.08);white-space:nowrap;}
-.header-logout{font-size:12px;font-weight:600;color:var(--zacht);padding:6px 12px;border:1px solid rgba(255,255,255,.15);border-radius:20px;background:transparent;cursor:pointer;-webkit-appearance:none;}
+.header-title small{display:block;font-size:10px;font-weight:400;color:var(--zacht);}
+.header-app-link{font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;padding:6px 14px;border:1px solid rgba(37,99,235,.30);border-radius:20px;white-space:nowrap;}
+.header-logout{font-size:12px;font-weight:600;color:var(--zacht);padding:6px 12px;border:1px solid var(--border-2);border-radius:20px;background:transparent;cursor:pointer;-webkit-appearance:none;}
 
 /* TABS */
 .tab-nav{display:flex;padding:0 16px 12px;gap:6px;overflow-x:auto;scrollbar-width:none;}
 .tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav-btn{flex-shrink:0;padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
-.tab-nav-btn.active{background:var(--oranje);border-color:var(--oranje);color:#fff;box-shadow:0 3px 14px rgba(249,115,22,.35);}
+.tab-nav-btn{flex-shrink:0;padding:9px 18px;border-radius:30px;font-family:inherit;font-size:13px;font-weight:600;background:transparent;border:1px solid var(--border-2);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
+.tab-nav-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 
 /* CONTENT */
-.main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:16px 16px 40px;}
+.main{position:relative;max-width:800px;margin:0 auto;padding:16px 16px 40px;}
 .tab-content{display:none;}
-.tab-content.active{display:block;animation:fadeIn .3s ease;}
+.tab-content.active{display:block;animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* GLASS CARD */
-.card{background:var(--glas-bg);-webkit-backdrop-filter:brightness(1.05) blur(24px) saturate(150%);backdrop-filter:brightness(1.05) blur(24px) saturate(150%);border:1px solid var(--glas-rand);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.10);}
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:12px;overflow:hidden;}
 .card-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;}
 .card-title-row{display:flex;align-items:center;gap:10px;}
 .card-icon{font-size:20px;flex-shrink:0;}
 .card-title{font-size:14px;font-weight:700;color:var(--tekst);}
 .card-sub{font-size:11px;color:var(--zacht);margin-top:2px;}
 .card-body{padding:0 16px 16px;}
-.divider{height:1px;background:rgba(255,255,255,.07);margin:12px 0;}
+.divider{height:1px;background:var(--border);margin:12px 0;}
 
 /* ZOEKBALK */
 .search-wrap{position:relative;margin-bottom:14px;}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--zacht);pointer-events:none;}
-.search-input{width:100%;padding:12px 14px 12px 40px;border:1px solid rgba(255,255,255,.13);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
+.search-input{width:100%;padding:12px 14px 12px 40px;border:1px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--surface);-webkit-appearance:none;transition:border-color .2s,box-shadow .2s;}
 .search-input::placeholder{color:var(--dim);}
-.search-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 3px rgba(249,115,22,.13);}
+.search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.13);}
 
 /* INZENDING KAART */
-.inz-card{background:rgba(14,26,52,.75);border:1px solid rgba(255,255,255,.11);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.22);transition:border-color .2s;}
-.inz-card:hover{border-color:rgba(255,255,255,.18);}
+.inz-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;transition:border-color .2s;}
+.inz-card:hover{border-color:var(--border-2);}
 .inz-header{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;}
 .inz-icon{font-size:22px;flex-shrink:0;}
 .inz-info{flex:1;min-width:0;}
 .inz-naam{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .inz-meta{font-size:11px;color:var(--zacht);margin-top:2px;}
 .inz-status{font-size:11px;font-weight:700;padding:4px 10px;border-radius:12px;flex-shrink:0;}
-.status-nieuw{background:rgba(249,115,22,.18);color:var(--oranje);}
-.status-verwerkt{background:rgba(34,197,94,.18);color:var(--groen);}
+.status-nieuw{background:rgba(37,99,235,.15);color:var(--accent);}
+.status-verwerkt{background:rgba(34,197,94,.15);color:var(--groen);}
 .inz-chevron{color:var(--dim);font-size:14px;flex-shrink:0;transition:transform .25s;}
 .inz-card.open .inz-chevron{transform:rotate(90deg);}
-.inz-body{display:none;padding:0 16px 16px;border-top:1px solid rgba(255,255,255,.07);}
+.inz-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border);}
 .inz-card.open .inz-body{display:block;}
 .inz-detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--zacht);margin:12px 0 6px;}
 .inz-detail-tekst{font-size:13px;color:var(--tekst);line-height:1.6;white-space:pre-wrap;}
 .inz-fotos{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.inz-foto{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1.5px solid rgba(255,255,255,.15);cursor:pointer;transition:transform .2s;}
-.inz-foto:active{transform:scale(.95);}
+.inz-foto{width:80px;height:80px;border-radius:10px;object-fit:cover;border:1.5px solid var(--border-2);cursor:pointer;transition:opacity .2s;}
+.inz-foto:active{opacity:.75;}
 
 /* FOTO LIGHTBOX */
-.lightbox{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.lightbox{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
 .lightbox.open{opacity:1;pointer-events:all;}
 .lightbox img{max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;}
-.lightbox-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
+.lightbox-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border-2);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
 
 /* KLUS KAARTEN */
-.klus-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s;}
+.klus-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);transition:background .15s;}
 .klus-item:last-child{border-bottom:none;}
-.klus-item:hover{background:rgba(255,255,255,.03);}
+.klus-item:hover{background:rgba(255,255,255,.02);}
 .klus-naam{flex:1;font-size:14px;font-weight:600;}
-.klus-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.12);border-radius:10px;flex-shrink:0;}
+.klus-nr{font-size:11px;font-weight:700;color:var(--accent);padding:3px 9px;background:rgba(37,99,235,.12);border-radius:10px;flex-shrink:0;}
 .klus-acties{display:flex;gap:6px;flex-shrink:0;}
 .klus-btn{width:30px;height:30px;border-radius:8px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;-webkit-appearance:none;transition:background .15s;}
-.klus-btn-del{background:rgba(239,68,68,.15);color:rgba(239,68,68,.80);}
-.klus-btn-del:active{background:rgba(239,68,68,.30);}
+.klus-btn-del{background:rgba(239,68,68,.12);color:rgba(239,68,68,.80);}
+.klus-btn-del:active{background:rgba(239,68,68,.25);}
 
 /* ADD KLUS */
 .add-klus-wrap{padding:14px 16px;}
 .add-klus-row{display:flex;gap:8px;}
-.add-klus-input{flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:rgba(255,255,255,.07);-webkit-appearance:none;}
-.add-klus-input:focus{outline:none;border-color:rgba(249,115,22,.55);box-shadow:0 0 0 2px rgba(249,115,22,.13);}
-.add-klus-btn{padding:11px 18px;background:var(--oranje);border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;white-space:nowrap;}
+.add-klus-input{flex:1;padding:11px 14px;border:1px solid var(--border-2);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--surface-2);-webkit-appearance:none;}
+.add-klus-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.13);}
+.add-klus-btn{padding:11px 18px;background:var(--accent);border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;white-space:nowrap;}
 
 /* MATERIEEL OVERZICHT */
-.mat-locatie-card{background:rgba(14,26,52,.65);border:1px solid rgba(255,255,255,.10);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;}
+.mat-locatie-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;}
 .mat-locatie-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;gap:12px;}
 .mat-locatie-naam{font-size:14px;font-weight:700;}
-.mat-locatie-nr{font-size:11px;font-weight:700;color:var(--oranje);padding:3px 9px;background:rgba(249,115,22,.12);border-radius:10px;}
+.mat-locatie-nr{font-size:11px;font-weight:700;color:var(--accent);padding:3px 9px;background:rgba(37,99,235,.12);border-radius:10px;}
 .mat-locatie-teller{font-size:11px;color:var(--zacht);margin-top:2px;}
 .mat-chevron{color:var(--dim);font-size:14px;transition:transform .25s;}
 .mat-locatie-card.open .mat-chevron{transform:rotate(90deg);}
-.mat-body{display:none;border-top:1px solid rgba(255,255,255,.07);}
+.mat-body{display:none;border-top:1px solid var(--border);}
 .mat-locatie-card.open .mat-body{display:block;}
-.mat-item-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.05);}
+.mat-item-row{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);}
 .mat-item-row:last-child{border-bottom:none;}
 .mat-item-naam{font-size:13px;font-weight:600;}
 .mat-item-nrs{font-size:11px;color:var(--zacht);margin-top:2px;}
-.mat-item-badge{font-size:12px;font-weight:700;color:var(--oranje);background:rgba(249,115,22,.12);padding:3px 10px;border-radius:10px;}
+.mat-item-badge{font-size:12px;font-weight:700;color:var(--accent);background:rgba(37,99,235,.12);padding:3px 10px;border-radius:10px;}
 
 /* OPSLAAN BTN */
 .opslaan-btn{width:100%;padding:15px;background:var(--groen);border:none;border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:700;color:#fff;cursor:pointer;-webkit-appearance:none;margin-top:16px;transition:opacity .2s;}
@@ -155,25 +147,21 @@ header{position:sticky;top:0;z-index:60;background:rgba(6,14,28,.88);-webkit-bac
 
 /* LOADING */
 .loading{display:flex;align-items:center;justify-content:center;gap:12px;padding:40px 20px;color:var(--zacht);font-size:14px;}
-.spinner{width:24px;height:24px;border:3px solid rgba(249,115,22,.20);border-top-color:var(--oranje);border-radius:50%;animation:spin .8s linear infinite;}
+.spinner{width:24px;height:24px;border:2px solid var(--border-2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* LEEG */
 .leeg{text-align:center;padding:40px 20px;color:var(--zacht);font-size:14px;}
 
 /* BADGE TELLERS */
-.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:rgba(249,115,22,.25);color:var(--oranje);font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:9px;padding:0 5px;margin-left:6px;}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:rgba(37,99,235,.20);color:var(--accent);font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:9px;padding:0 5px;margin-left:6px;}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;background:rgba(15,27,54,.98);border:1px solid rgba(255,255,255,.18);border-radius:30px;padding:12px 22px;font-size:14px;font-weight:600;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;background:#1a1a1a;border:1px solid var(--border-2);border-radius:30px;padding:12px 22px;font-size:14px;font-weight:600;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
 </head>
 <body>
-
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-4"></div>
 
 <!-- WACHTWOORD OVERLAY -->
 <div class="pw-overlay" id="pw-overlay">
@@ -425,7 +413,7 @@ async function laadKlussen() {
   try {
     const res  = await fetch(WORKER + '?action=klussen');
     const data = await res.json();
-    alleKlussen = data.ok && data.klussen.length ? data.klussen : KLUSSEN_DEFAULT;
+    alleKlussen = data.ok && data.klussen.length ? data.klussen : [...KLUSSEN_DEFAULT];
     document.getElementById('badge-kl').textContent = alleKlussen.length;
     renderKlussen();
   } catch (e) {
@@ -470,7 +458,7 @@ function voegKlusToe() {
   document.getElementById('nieuw-klus-nr').value   = '';
   document.getElementById('badge-kl').textContent  = alleKlussen.length;
   renderKlussen();
-  showToast('✓ Klus toegevoegd');
+  slaKlussenOp(true);
 }
 
 function verwijderKlus(idx) {
@@ -478,9 +466,10 @@ function verwijderKlus(idx) {
   alleKlussen.splice(idx, 1);
   document.getElementById('badge-kl').textContent = alleKlussen.length;
   renderKlussen();
+  slaKlussenOp(true);
 }
 
-async function slaKlussenOp() {
+async function slaKlussenOp(silent = false) {
   try {
     const res  = await fetch(WORKER, {
       method: 'POST',
@@ -488,10 +477,10 @@ async function slaKlussenOp() {
       body: JSON.stringify({ action: 'klussen_opslaan', klussen: alleKlussen }),
     });
     const data = await res.json();
-    if (data.ok) showToast('✓ Klussen opgeslagen');
-    else showToast('❌ Fout: ' + data.error);
+    if (data.ok) { if (!silent) showToast('✓ Klussen opgeslagen'); else showToast('✓ Opgeslagen'); }
+    else showToast('❌ Opslaan mislukt: ' + data.error);
   } catch (e) {
-    showToast('❌ Verbindingsfout');
+    showToast('❌ Verbindingsfout – klus niet opgeslagen');
   }
 }
 
@@ -656,18 +645,77 @@ function showToast(msg) {
 
 /* ── DEFAULT KLUSSEN ─────────────────────────────── */
 const KLUSSEN_DEFAULT = [
-  { naam:'Inkopen tbv voorraad', werknr:'300026' },
-  { naam:'Sodexo, KLM kleine werken', werknr:'400126' },
-  { naam:'Willebrordusshof Rotterdam, nwbouw 11 won', werknr:'4783' },
-  { naam:'Nieuwbouw 11 woningen, Middelharnis', werknr:'4807' },
-  { naam:'IKC, De 2 Wieken, Zwijndrecht, nieuwbouw', werknr:'4837' },
-  { naam:'Stephanusschool, Rotterdam, nieuwbouw', werknr:'4838' },
-  { naam:'MY College, Spijkenisse, nieuwbouw', werknr:'4862' },
-  { naam:'IKC Driemaster, Ridderkerk, nieuwbouw', werknr:'4880' },
-  { naam:'OBS De Margriet, Rotterdam, nieuwbouw', werknr:'4886' },
-  { naam:'Kesper College, Gouda, uitbreiding en renovatie', werknr:'4887' },
-  { naam:'ABS Lansingerland, nieuwbouw', werknr:'4874' },
-  { naam:'Zorgstede, Moordrecht, nieuwbouw woon-zorgcomplex', werknr:'4895' },
+  { naam:'Inkopen tbv voorraad',                                        werknr:'300026' },
+  { naam:'Sodexo, KLM kleine werken',                                   werknr:'400126' },
+  { naam:'Sodexo, Janssen, Leiden',                                     werknr:'401026' },
+  { naam:'Sodexo, Unilever, Rotterdam',                                 werknr:'401126' },
+  { naam:'Garantiewerken, diverse projecten',                           werknr:'401226' },
+  { naam:'Facilicom/Hitachi, kleine werken',                            werknr:'401326' },
+  { naam:'Anovi',                                                       werknr:'401426' },
+  { naam:'Particulieren kleine werken',                                 werknr:'410026' },
+  { naam:'Sineth Builing Maintenance',                                  werknr:'435226' },
+  { naam:'Wartburg, diverse onderhoudsklusjes',                         werknr:'477026' },
+  { naam:'Willebrordusshof Rotterdam, nwbouw 11 won',                   werknr:'4783' },
+  { naam:'Nieuwbouw 11 woningen, Middelharnis',                         werknr:'4807' },
+  { naam:'IKC, De 2 Wieken, Zwijndrecht, nieuwbouw',                   werknr:'4837' },
+  { naam:'Stephanusschool, Rotterdam, nieuwbouw',                       werknr:'4838' },
+  { naam:'Babypark, diverse adressen',                                  werknr:'484326' },
+  { naam:'Boor, OBS Bloemhof en Pantarijn, Rotterdam',                  werknr:'4846' },
+  { naam:'Middelburgseweg 3C, Waddinxveen, nwbouw woning',              werknr:'4847' },
+  { naam:'Maassluissedijk Vlaardingen, nwbouw 4 woningen',              werknr:'4848' },
+  { naam:'Fortune Coffee, Zoetermeer, uitbreiding',                     werknr:'4849' },
+  { naam:'Evides, service en onderhoud, Spijkenisse',                   werknr:'485026' },
+  { naam:'Zwart-Wit Bedrijfsverzamelgebouw, nwbouw',                    werknr:'4851' },
+  { naam:'RVKO, Nicolaasschool, Rotterdam, nwbouw',                     werknr:'4852' },
+  { naam:'Ouderenkliniek, Poortmolen, Capelle, nwbouw',                 werknr:'4854' },
+  { naam:'Hoornbeeck Rotterdam, renovatie',                             werknr:'4855' },
+  { naam:'Hoornbeeck, div locaties',                                    werknr:'485626' },
+  { naam:'Gebouwonderhoud, div. locaties',                              werknr:'485726' },
+  { naam:'Skadi renovatie clubgebouw, Rotterdam',                       werknr:'4860' },
+  { naam:'Hitachi, Amsterdam, hal B, aanp staalconstr',                 werknr:'4861' },
+  { naam:'MY College, Spijkenisse, nieuwbouw',                          werknr:'4862' },
+  { naam:'Kleine Prins, Rotterdam, uitbreiding',                        werknr:'4863' },
+  { naam:'Evides, Beerenplaat, div werkz RWTP',                        werknr:'4864' },
+  { naam:'Scheurleer, Ouddorp, nwbouw schuur',                          werknr:'4865' },
+  { naam:'Lammers, Voorburg, verbouwing woning',                        werknr:'4866' },
+  { naam:'Hitachi, Amsterdam, hal A, trappentoren',                     werknr:'4867' },
+  { naam:'Brekelmans, Den Haag, gevelrenovatie',                        werknr:'4868' },
+  { naam:'Evides, project deuren, diverse locaties',                    werknr:'4869' },
+  { naam:'Vd Starre, Nieuw Lekkerland, herstel woning',                 werknr:'4870' },
+  { naam:'Fam. Bentum, Voorschoten, verbouw woning',                    werknr:'4871' },
+  { naam:'Orange, Zoetermeer, transformatie',                           werknr:'4872' },
+  { naam:'Janssen, kantine geb B, Leiden',                              werknr:'4873' },
+  { naam:'ABS Lansingerland, nieuwbouw',                                werknr:'4874' },
+  { naam:'Janssen, geb K1 tm K3, vervangen tapijt',                    werknr:'4875' },
+  { naam:'Fam. Folkerts, Nieuwerkerk, aanbouw',                         werknr:'4876' },
+  { naam:'Fam. Slingerland, Nieuwerkerk, verbouw',                      werknr:'4877' },
+  { naam:'Interfilter Hellevoetsluis',                                  werknr:'4878' },
+  { naam:'DHG, Smartlog, Rotterdam, nieuwbouw',                         werknr:'4879' },
+  { naam:'IKC Driemaster, Ridderkerk, nieuwbouw',                       werknr:'4880' },
+  { naam:'Fam. Servais, Oostvoorne, verbouwing woning',                 werknr:'4881' },
+  { naam:'Fam. Folkerts, Waddinxveen, nieuwbouw',                       werknr:'4882' },
+  { naam:'KLM H 11',                                                    werknr:'4883' },
+  { naam:'Nebula Airbus Netherlands, herinrichting',                    werknr:'4884' },
+  { naam:'GB Butaanweg, terrein, Hoogvliet',                            werknr:'4885' },
+  { naam:'OBS De Margriet, Rotterdam, nieuwbouw',                       werknr:'4886' },
+  { naam:'Kesper College, Gouda, uitbreiding en renovatie',             werknr:'4887' },
+  { naam:'Westhoff en Hofwijck, Rijswijk, verbouw en uitbreiding',      werknr:'4888' },
+  { naam:'J&J, herindeling ktr L-Building, Sassenheim',                 werknr:'4889' },
+  { naam:'Visser, Capelle ad IJssel, verbouwing kantoor',               werknr:'4890' },
+  { naam:'Riverenland/Peer, herstel woning en nwb schuur',              werknr:'4891' },
+  { naam:'Vivere, zorgstudio, nieuwbouw, Moordrecht',                   werknr:'4892' },
+  { naam:'Viku, Huize Kinderdijk, verbouwing',                          werknr:'4893' },
+  { naam:'Fam. Graafland, Nieuwerkerk, verbouwing woning',              werknr:'4894' },
+  { naam:'Zorgstede, Moordrecht, nieuwbouw woon-zorgcomplex',           werknr:'4895' },
+  { naam:'Plomp, Ringvaartpark 51, Capelle, aanbouw',                   werknr:'4896' },
+  { naam:'DOM, Den Hoorn, nieuwbouw bedrijfsgebouw',                    werknr:'4897' },
+  { naam:'Driestar Leiden, uitbreiding',                                werknr:'4898' },
+  { naam:'Fam. Toet, Ouddorp, verbouwing woning',                       werknr:'4899' },
+  { naam:'VvE Woningen Westerlaan 21 tm 65, Rotterdam',                 werknr:'4900' },
+  { naam:'Evides, Civielwerk, Berenplaat',                              werknr:'4901' },
+  { naam:'Schuurbiers, Zuurbes 21, Rotterdam, ver-aanbouw woning',      werknr:'4902' },
+  { naam:'Sodexo, MSD, diversen, Haarlem',                              werknr:'490326' },
+  { naam:'Fam. Mujcinovic, Rotterdam, verbouwing woning',               werknr:'4904' },
 ];
 
 /* ── START ────────────────────────────────────────── */
