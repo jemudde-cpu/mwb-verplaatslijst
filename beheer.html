@@ -27,21 +27,41 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Inter',-apple-system,sans-serif;background:#111111;color:var(--tekst);min-height:100vh;overflow-x:hidden;}
 
-/* WACHTWOORD OVERLAY */
+/* LOGIN OVERLAY */
 .pw-overlay{position:fixed;inset:0;z-index:500;background:#111111;display:flex;align-items:center;justify-content:center;padding:24px;}
 .pw-overlay.verborgen{display:none;}
 .pw-box{width:100%;max-width:360px;text-align:center;}
 .pw-logo{width:56px;height:56px;background:var(--accent);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
 .pw-titel{font-size:22px;font-weight:900;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;}
-.pw-sub{font-size:14px;color:var(--zacht);margin-bottom:28px;}
-.pw-input{width:100%;padding:14px 18px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:16px;font-weight:600;color:var(--tekst);background:var(--surface);text-align:center;letter-spacing:4px;margin-bottom:12px;-webkit-appearance:none;}
+.pw-sub{font-size:14px;color:var(--zacht);margin-bottom:28px;line-height:1.5;}
+.pw-input{width:100%;padding:14px 18px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:600;color:var(--tekst);background:var(--surface);margin-bottom:10px;-webkit-appearance:none;text-align:left;}
 .pw-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,0,.18);}
 .pw-input.fout{border-color:var(--rood);animation:shake .3s ease;}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.pw-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#fff;cursor:pointer;-webkit-appearance:none;}
-.pw-fout{color:var(--rood);font-size:13px;margin-top:10px;min-height:20px;}
+.pw-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#fff;cursor:pointer;-webkit-appearance:none;margin-top:4px;}
+.pw-fout{color:var(--rood);font-size:13px;margin-top:10px;min-height:20px;font-weight:600;}
 .pw-link{font-size:13px;color:var(--zacht);margin-top:20px;}
 .pw-link a{color:var(--accent);text-decoration:none;}
+
+/* GEBRUIKERS TAB */
+.gb-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);}
+.gb-row:last-child{border-bottom:none;}
+.gb-naam{flex:1;font-size:14px;font-weight:600;}
+.gb-sub{font-size:11px;color:var(--zacht);margin-top:1px;}
+.gb-role{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 9px;border-radius:var(--radius-sm);}
+.gb-role-admin{background:rgba(255,107,0,.15);color:var(--accent);}
+.gb-role-user{background:var(--surface-2);color:var(--zacht);}
+.gb-del{width:30px;height:30px;border-radius:var(--radius-sm);border:none;background:rgba(239,68,68,.12);color:rgba(239,68,68,.80);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;flex-shrink:0;}
+.gb-del:active{background:rgba(239,68,68,.25);}
+.gb-add-wrap{padding:14px 16px;}
+.gb-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.gb-add-input{padding:11px 14px;border:1px solid var(--border-2);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--surface-2);-webkit-appearance:none;}
+.gb-add-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,107,0,.13);}
+.gb-role-select{padding:11px 14px;border:1px solid var(--border-2);border-radius:var(--radius-sm);font-family:inherit;font-size:14px;font-weight:600;color:var(--tekst);background:var(--surface-2);-webkit-appearance:none;cursor:pointer;}
+.gb-role-select:focus{outline:none;border-color:var(--accent);}
+.gb-add-btn{width:100%;padding:11px;background:var(--accent);border:none;border-radius:var(--radius-sm);font-family:inherit;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#fff;cursor:pointer;-webkit-appearance:none;}
+.gb-pw-row{display:flex;gap:8px;margin-bottom:8px;}
+.gb-pw-row .gb-add-input{flex:1;}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px solid var(--border-2);}
@@ -178,16 +198,38 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 </head>
 <body>
 
-<!-- WACHTWOORD OVERLAY -->
+<!-- LOGIN OVERLAY -->
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
     <div class="pw-logo">⚙️</div>
-    <div class="pw-titel">Beheer</div>
-    <div class="pw-sub">Voer het beheerderswachtwoord in om toegang te krijgen.</div>
-    <input class="pw-input" type="password" id="pw-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="pw-btn" onclick="checkPw()">Inloggen →</button>
-    <div class="pw-fout" id="pw-fout"></div>
-    <div class="pw-link">Terug naar de <a href="index.html">app</a></div>
+
+    <!-- Normaal inloggen (standaard zichtbaar) -->
+    <div id="login-form">
+      <div class="pw-titel">Beheer</div>
+      <div class="pw-sub">Log in als beheerder om toegang te krijgen.</div>
+      <input class="pw-input" type="text" id="pw-gebruiker" placeholder="Gebruikersnaam"
+        autocomplete="username" autocapitalize="none" spellcheck="false"
+        onkeydown="if(event.key==='Enter')document.getElementById('pw-ww').focus()">
+      <input class="pw-input" type="password" id="pw-ww" placeholder="Wachtwoord"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')checkPw()">
+      <button class="pw-btn" id="pw-btn" onclick="checkPw()">Inloggen →</button>
+      <div class="pw-fout" id="pw-fout"></div>
+      <div class="pw-link">Terug naar de <a href="index.html">app</a></div>
+    </div>
+
+    <!-- Eerste keer setup (verborgen totdat we weten dat er geen gebruikers zijn) -->
+    <div id="setup-form" style="display:none">
+      <div class="pw-titel">Eerste Setup</div>
+      <div class="pw-sub">Maak het eerste beheerdersaccount aan.</div>
+      <input class="pw-input" type="text" id="setup-naam" placeholder="Volledige naam" autocomplete="name">
+      <input class="pw-input" type="text" id="setup-gebruiker" placeholder="Gebruikersnaam (login)"
+        autocapitalize="none" spellcheck="false">
+      <input class="pw-input" type="password" id="setup-ww" placeholder="Wachtwoord (min. 8 tekens)"
+        onkeydown="if(event.key==='Enter')doSetup()">
+      <button class="pw-btn" id="setup-btn" onclick="doSetup()">Account aanmaken →</button>
+      <div class="pw-fout" id="setup-fout"></div>
+    </div>
   </div>
 </div>
 
@@ -206,6 +248,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     <button class="tab-nav-btn active" onclick="tabSwitch('materieel',this)">📍 Materieel</button>
     <button class="tab-nav-btn" onclick="tabSwitch('inzendingen',this)">📋 Inzendingen <span class="tab-badge" id="badge-inz">0</span></button>
     <button class="tab-nav-btn" onclick="tabSwitch('klussen',this)">🏗️ Klussen <span class="tab-badge" id="badge-kl">0</span></button>
+    <button class="tab-nav-btn" onclick="tabSwitch('gebruikers',this)">👥 Gebruikers</button>
   </nav>
 </header>
 
@@ -267,6 +310,50 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   </div>
 </div>
 
+<!-- TAB: GEBRUIKERS -->
+<div class="main tab-content" id="tab-gebruikers">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-icon">➕</span>
+        <div>
+          <div class="card-title">Account aanmaken</div>
+          <div class="card-sub">Naam, gebruikersnaam, wachtwoord en rol</div>
+        </div>
+      </div>
+    </div>
+    <div class="gb-add-wrap">
+      <div class="gb-add-grid">
+        <input class="gb-add-input" type="text" id="gb-naam" placeholder="Volledige naam">
+        <input class="gb-add-input" type="text" id="gb-gebruiker" placeholder="Gebruikersnaam" autocapitalize="none" spellcheck="false">
+      </div>
+      <div class="gb-pw-row">
+        <input class="gb-add-input" type="password" id="gb-ww" placeholder="Wachtwoord (min. 6 tekens)">
+        <select class="gb-role-select" id="gb-role">
+          <option value="user">Medewerker</option>
+          <option value="admin">Beheerder</option>
+        </select>
+      </div>
+      <button class="gb-add-btn" onclick="voegGebruikerToe()">+ Account aanmaken</button>
+    </div>
+  </div>
+
+  <div class="card" id="gebruikers-lijst-card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-icon">👥</span>
+        <div>
+          <div class="card-title">Accounts</div>
+          <div class="card-sub" id="gb-teller">Laden...</div>
+        </div>
+      </div>
+    </div>
+    <div id="gebruikers-content">
+      <div class="loading"><div class="spinner"></div> Laden...</div>
+    </div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
@@ -277,7 +364,6 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <script>
 const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
-const WACHTWOORD = 'mwb2024';
 
 /* ── THEMA ───────────────────────────────────────── */
 function setTheme(t) {
@@ -296,33 +382,119 @@ let alleInzendingen = [];
 let alleKlussen     = [];
 let locatieMap      = {};
 
-/* ── WACHTWOORD ───────────────────────────────────── */
-function checkPw() {
-  const input = document.getElementById('pw-input');
-  const fout  = document.getElementById('pw-fout');
-  if (input.value === WACHTWOORD) {
-    const exp = Date.now() + 8 * 60 * 60 * 1000;
-    localStorage.setItem('mwb_beheer_exp', exp);
-    document.getElementById('pw-overlay').classList.add('verborgen');
-    init();
-  } else {
-    input.classList.add('fout');
-    fout.textContent = 'Onjuist wachtwoord.';
-    setTimeout(() => { input.classList.remove('fout'); input.value = ''; }, 600);
+/* ── AUTH HELPERS ─────────────────────────────────── */
+function getBeheerToken() {
+  return localStorage.getItem('mwb_beheer_token') || '';
+}
+
+function getBeheerPayload() {
+  const token = getBeheerToken();
+  if (!token) return null;
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (payload.exp < Math.floor(Date.now() / 1000)) return null;
+    return payload;
+  } catch { return null; }
+}
+
+function authHeaders() {
+  return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getBeheerToken() };
+}
+
+/* ── LOGIN ────────────────────────────────────────── */
+async function checkPw() {
+  const gebruiker  = document.getElementById('pw-gebruiker').value.trim();
+  const wachtwoord = document.getElementById('pw-ww').value;
+  const fout       = document.getElementById('pw-fout');
+  const btn        = document.getElementById('pw-btn');
+
+  if (!gebruiker || !wachtwoord) { fout.textContent = 'Vul gebruikersnaam en wachtwoord in.'; return; }
+
+  btn.textContent = 'Bezig...'; btn.disabled = true; fout.textContent = '';
+
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', gebruikersnaam: gebruiker, wachtwoord }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      if (data.role !== 'admin') {
+        fout.textContent = 'Alleen beheerders hebben toegang.';
+        return;
+      }
+      localStorage.setItem('mwb_beheer_token', data.token);
+      document.getElementById('pw-overlay').classList.add('verborgen');
+      init();
+    } else {
+      fout.textContent = data.error || 'Inloggen mislukt.';
+      document.getElementById('pw-ww').classList.add('fout');
+      setTimeout(() => document.getElementById('pw-ww').classList.remove('fout'), 600);
+    }
+  } catch (e) {
+    fout.textContent = 'Verbindingsfout. Controleer internet.';
+  } finally {
+    btn.textContent = 'Inloggen →'; btn.disabled = false;
+  }
+}
+
+/* ── SETUP (eerste keer, geen gebruikers) ─────────── */
+async function doSetup() {
+  const naam       = document.getElementById('setup-naam').value.trim();
+  const gebruiker  = document.getElementById('setup-gebruiker').value.trim();
+  const wachtwoord = document.getElementById('setup-ww').value;
+  const fout       = document.getElementById('setup-fout');
+  const btn        = document.getElementById('setup-btn');
+
+  if (!naam || !gebruiker || wachtwoord.length < 8) {
+    fout.textContent = 'Vul alle velden in (wachtwoord min. 8 tekens).'; return;
+  }
+  btn.textContent = 'Bezig...'; btn.disabled = true; fout.textContent = '';
+
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'setup', naam, gebruikersnaam: gebruiker, wachtwoord }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      localStorage.setItem('mwb_beheer_token', data.token);
+      document.getElementById('pw-overlay').classList.add('verborgen');
+      init();
+    } else {
+      fout.textContent = data.error || 'Setup mislukt.';
+    }
+  } catch (e) {
+    fout.textContent = 'Verbindingsfout.';
+  } finally {
+    btn.textContent = 'Account aanmaken →'; btn.disabled = false;
   }
 }
 
 function uitloggen() {
-  localStorage.removeItem('mwb_beheer_exp');
+  localStorage.removeItem('mwb_beheer_token');
   location.reload();
 }
 
-function checkAuth() {
-  const exp = parseInt(localStorage.getItem('mwb_beheer_exp') || '0');
-  if (exp > Date.now()) {
+async function checkAuth() {
+  const payload = getBeheerPayload();
+  if (payload && payload.role === 'admin') {
     document.getElementById('pw-overlay').classList.add('verborgen');
     return true;
   }
+  // Controleer of er al gebruikers zijn (setup vs login)
+  try {
+    const res  = await fetch(WORKER + '?action=setup_status');
+    const data = await res.json();
+    if (data.ok && !data.hasUsers) {
+      document.getElementById('login-form').style.display  = 'none';
+      document.getElementById('setup-form').style.display  = '';
+    }
+  } catch (_) {}
   return false;
 }
 
@@ -345,7 +517,7 @@ async function laadInzendingen() {
   document.getElementById('inzendingen-content').innerHTML = '<div class="loading"><div class="spinner"></div> Inzendingen laden...</div>';
   document.getElementById('materieel-content').innerHTML   = '<div class="loading"><div class="spinner"></div> Materieel berekenen...</div>';
   try {
-    const res  = await fetch(WORKER + '?action=inzendingen');
+    const res  = await fetch(WORKER + '?action=inzendingen', { headers: authHeaders() });
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     alleInzendingen = data.results;
@@ -502,7 +674,7 @@ async function slaKlussenOp(silent = false) {
   try {
     const res  = await fetch(WORKER, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders(),
       body: JSON.stringify({ action: 'klussen_opslaan', klussen: alleKlussen }),
     });
     const data = await res.json();
@@ -747,10 +919,94 @@ const KLUSSEN_DEFAULT = [
   { naam:'Fam. Mujcinovic, Rotterdam, verbouwing woning',               werknr:'4904' },
 ];
 
-/* ── START ────────────────────────────────────────── */
-if (checkAuth()) {
-  init();
+/* ── GEBRUIKERS ───────────────────────────────────── */
+async function laadGebruikers() {
+  document.getElementById('gebruikers-content').innerHTML = '<div class="loading"><div class="spinner"></div> Laden...</div>';
+  try {
+    const res  = await fetch(WORKER + '?action=gebruikers', { headers: authHeaders() });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    renderGebruikers(data.gebruikers);
+  } catch (e) {
+    document.getElementById('gebruikers-content').innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+  }
 }
+
+function renderGebruikers(lijst) {
+  document.getElementById('gb-teller').textContent = lijst.length + ' account' + (lijst.length !== 1 ? 's' : '');
+  if (!lijst.length) {
+    document.getElementById('gebruikers-content').innerHTML = '<div class="leeg">Nog geen accounts.</div>';
+    return;
+  }
+  const ikzelf = getBeheerPayload()?.sub || '';
+  document.getElementById('gebruikers-content').innerHTML = lijst.map(u => `
+    <div class="gb-row">
+      <div class="flex-1">
+        <div class="gb-naam">${u.naam}</div>
+        <div class="gb-sub">${u.gebruikersnaam}</div>
+      </div>
+      <span class="gb-role ${u.role === 'admin' ? 'gb-role-admin' : 'gb-role-user'}">${u.role === 'admin' ? 'Beheerder' : 'Medewerker'}</span>
+      ${u.gebruikersnaam !== ikzelf
+        ? `<button class="gb-del" title="Verwijderen" onclick="verwijderGebruiker('${u.gebruikersnaam}','${u.naam}')">🗑</button>`
+        : '<div style="width:30px"></div>'}
+    </div>`).join('');
+}
+
+async function voegGebruikerToe() {
+  const naam       = document.getElementById('gb-naam').value.trim();
+  const gebruiker  = document.getElementById('gb-gebruiker').value.trim();
+  const wachtwoord = document.getElementById('gb-ww').value;
+  const role       = document.getElementById('gb-role').value;
+
+  if (!naam || !gebruiker || wachtwoord.length < 6) {
+    showToast('⚠️ Vul alle velden in (wachtwoord min. 6 tekens)'); return;
+  }
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ action: 'gebruiker_aanmaken', naam, gebruikersnaam: gebruiker, wachtwoord, role }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast('✓ Account aangemaakt');
+      document.getElementById('gb-naam').value     = '';
+      document.getElementById('gb-gebruiker').value = '';
+      document.getElementById('gb-ww').value        = '';
+      laadGebruikers();
+    } else {
+      showToast('❌ ' + (data.error || 'Mislukt'));
+    }
+  } catch (e) {
+    showToast('❌ Verbindingsfout');
+  }
+}
+
+async function verwijderGebruiker(gebruikersnaam, naam) {
+  if (!confirm(`Account "${naam}" (${gebruikersnaam}) verwijderen?`)) return;
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ action: 'gebruiker_verwijderen', gebruikersnaam }),
+    });
+    const data = await res.json();
+    if (data.ok) { showToast('✓ Account verwijderd'); laadGebruikers(); }
+    else showToast('❌ ' + (data.error || 'Mislukt'));
+  } catch (e) {
+    showToast('❌ Verbindingsfout');
+  }
+}
+
+/* ── TABS (uitgebreid) ────────────────────────────── */
+const origTabSwitch = tabSwitch;
+function tabSwitch(naam, btn) {
+  origTabSwitch(naam, btn);
+  if (naam === 'gebruikers') laadGebruikers();
+}
+
+/* ── START ────────────────────────────────────────── */
+checkAuth().then(ok => { if (ok) init(); });
 </script>
 </body>
 </html>

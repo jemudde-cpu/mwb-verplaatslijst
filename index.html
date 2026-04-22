@@ -259,9 +259,53 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 [data-theme="light"] .ac-dropdown{background:#ffffff;box-shadow:0 8px 24px rgba(0,0,0,.10);}
 [data-theme="light"] .field input[type="date"]{color-scheme:light;}
 [data-theme="light"] .info-row span:last-child{color:#555555;}
+
+/* LOGIN OVERLAY */
+.login-overlay{position:fixed;inset:0;z-index:500;background:#111111;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-overlay.verborgen{display:none;}
+.login-box{width:100%;max-width:360px;text-align:center;}
+.login-logo{width:56px;height:56px;background:var(--accent);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px;}
+.login-titel{font-size:22px;font-weight:900;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.login-sub{font-size:14px;color:var(--zacht);margin-bottom:28px;line-height:1.5;}
+.login-input{width:100%;padding:14px 18px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:600;color:var(--tekst);background:var(--surface);margin-bottom:10px;-webkit-appearance:none;}
+.login-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,0,.18);}
+.login-input.fout{border-color:var(--rood);animation:shake .3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.login-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#fff;cursor:pointer;-webkit-appearance:none;margin-top:4px;}
+.login-fout{color:var(--rood);font-size:13px;margin-top:10px;min-height:20px;font-weight:600;}
+[data-theme="light"] .login-overlay{background:#f0f0f0;}
+[data-theme="light"] .login-titel{color:#111111;}
+
+/* WELKOM ROW (stap 1) */
+.welkom-row{display:flex;align-items:center;gap:14px;padding:14px 18px;}
+.welkom-icon{width:40px;height:40px;background:rgba(255,107,0,.12);border:1.5px solid rgba(255,107,0,.30);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.welkom-naam{font-size:16px;font-weight:800;color:var(--tekst);}
+.welkom-rol{font-size:11px;color:var(--zacht);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+
+/* HEADER USER INFO */
+.header-user{display:flex;align-items:center;gap:8px;}
+.header-logout{font-size:10px;font-weight:800;color:var(--zacht);padding:5px 11px;border:1.5px solid var(--border-2);border-radius:var(--radius-sm);text-transform:uppercase;letter-spacing:.5px;background:transparent;cursor:pointer;-webkit-appearance:none;}
+.header-logout:active{border-color:var(--accent);color:var(--accent);}
 </style>
 </head>
 <body>
+
+<!-- LOGIN OVERLAY -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">🏗️</div>
+    <div class="login-titel">Middelwatering Bouw</div>
+    <div class="login-sub">Log in om verplaatsingen te registreren.</div>
+    <input class="login-input" type="text" id="login-gebruiker" placeholder="Gebruikersnaam"
+      autocomplete="username" autocapitalize="none" spellcheck="false"
+      onkeydown="if(event.key==='Enter')document.getElementById('login-ww').focus()">
+    <input class="login-input" type="password" id="login-ww" placeholder="Wachtwoord"
+      autocomplete="current-password"
+      onkeydown="if(event.key==='Enter')loginUser()">
+    <button class="login-btn" onclick="loginUser()">Inloggen →</button>
+    <div class="login-fout" id="login-fout"></div>
+  </div>
+</div>
 
 <header>
   <div class="header-top">
@@ -271,7 +315,8 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <small>Verplaatslijst</small>
     </div>
     <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Licht/donker"></button>
-    <a href="beheer.html" class="header-beheer">⚙️ Beheer</a>
+    <a href="beheer.html" class="header-beheer" id="header-beheer-link" style="display:none">⚙️ Beheer</a>
+    <button class="header-logout" onclick="uitloggen()">Uitloggen</button>
   </div>
   <div class="progress" id="progress-bar">
     <div class="progress-step" id="ps-1" onclick="goToStep(1)">
@@ -301,19 +346,23 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- STAP 1 -->
 <div class="step active" id="step-1">
   <p class="step-title">Jouw gegevens</p>
-  <p class="step-sub">Vul je naam in en controleer de datum.</p>
+  <p class="step-sub">Controleer de datum en begin.</p>
   <div class="card">
-    <div class="card-title">Gegevens</div>
+    <div class="card-title">Ingelogd als</div>
+    <div class="welkom-row">
+      <div class="welkom-icon">👤</div>
+      <div>
+        <div class="welkom-naam" id="welkom-naam">—</div>
+        <div class="welkom-rol" id="welkom-rol"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Datum</div>
     <div class="card-body">
-      <div class="g2">
-        <div class="field" id="f-datum">
-          <label>Datum</label>
-          <input type="date" id="datum">
-        </div>
-        <div class="field" id="f-naam">
-          <label>Jouw naam</label>
-          <input type="text" id="naam" placeholder="Voornaam achternaam" autocomplete="name">
-        </div>
+      <div class="field" id="f-datum">
+        <label>Datum verplaatsing</label>
+        <input type="date" id="datum">
       </div>
     </div>
   </div>
@@ -688,18 +737,13 @@ function updateNav() {
 
 function validateStep(n) {
   if (n === 1) {
-    const mis = [];
-    if (!document.getElementById('datum').value) mis.push('Datum');
-    if (!document.getElementById('naam').value.trim()) mis.push('Naam');
-    ['datum','naam'].forEach(id => {
-      const el = document.getElementById(id);
-      const wrap = document.getElementById('f-' + id);
-      if (!el.value.trim()) {
-        wrap && wrap.classList.add('error');
-        el.addEventListener('input', () => wrap && wrap.classList.remove('error'), { once:true });
-      }
-    });
-    if (mis.length) { showToast('⚠️ Vul in: ' + mis.join(', ')); return false; }
+    if (!document.getElementById('datum').value) {
+      const wrap = document.getElementById('f-datum');
+      wrap && wrap.classList.add('error');
+      document.getElementById('datum').addEventListener('input', () => wrap && wrap.classList.remove('error'), { once:true });
+      showToast('⚠️ Vul een datum in');
+      return false;
+    }
     return true;
   }
   if (n === 2) {
@@ -1099,7 +1143,7 @@ async function uploadFotos() {
     const bestandsnaam = `${ts}_${itemId}_${i}.jpg`;
     const res  = await fetch(WORKER, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
       body: JSON.stringify({ action:'foto_upload', bestandsnaam, data: compressed }),
     });
     const data = await res.json();
@@ -1137,7 +1181,7 @@ async function verstuurAlles() {
   });
 
   const payload = {
-    naam:               document.getElementById('naam').value.trim(),
+    naam:               getTokenPayload()?.naam || '',
     datum:              document.getElementById('datum').value,
     beweging_type:      BEWEGING.type,
     van_naam:           BEWEGING.van.naam,
@@ -1152,7 +1196,7 @@ async function verstuurAlles() {
   try {
     const res  = await fetch(WORKER, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
       body: JSON.stringify(payload),
     });
     const data = await res.json();
@@ -1190,7 +1234,6 @@ async function syncKlussen() {
 function autosave() {
   try {
     const draft = {
-      naam:     document.getElementById('naam')?.value || '',
       datum:    document.getElementById('datum')?.value || '',
       beweging: BEWEGING,
       state:    JSON.parse(JSON.stringify(STATE, (k, v) => k === 'dataUrl' ? '[foto]' : v)),
@@ -1216,29 +1259,97 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
+/* ── AUTH ────────────────────────────────────────── */
+function getToken() {
+  return localStorage.getItem('mwb_token') || '';
+}
+
+function getTokenPayload() {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    if (payload.exp < Math.floor(Date.now() / 1000)) return null;
+    return payload;
+  } catch { return null; }
+}
+
+async function loginUser() {
+  const gebruiker = document.getElementById('login-gebruiker').value.trim();
+  const wachtwoord = document.getElementById('login-ww').value;
+  const fout = document.getElementById('login-fout');
+  const btn  = document.querySelector('.login-btn');
+
+  if (!gebruiker || !wachtwoord) {
+    fout.textContent = 'Vul gebruikersnaam en wachtwoord in.';
+    return;
+  }
+
+  btn.textContent = 'Bezig...';
+  btn.disabled    = true;
+  fout.textContent = '';
+
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', gebruikersnaam: gebruiker, wachtwoord }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      localStorage.setItem('mwb_token', data.token);
+      document.getElementById('login-overlay').classList.add('verborgen');
+      document.getElementById('login-ww').value = '';
+      startApp(data.naam, data.role);
+    } else {
+      fout.textContent = data.error || 'Inloggen mislukt.';
+      document.getElementById('login-ww').classList.add('fout');
+      setTimeout(() => document.getElementById('login-ww').classList.remove('fout'), 600);
+    }
+  } catch (e) {
+    fout.textContent = 'Verbindingsfout. Controleer internet.';
+  } finally {
+    btn.textContent = 'Inloggen →';
+    btn.disabled    = false;
+  }
+}
+
+function uitloggen() {
+  localStorage.removeItem('mwb_token');
+  location.reload();
+}
+
+function startApp(naam, role) {
+  document.getElementById('welkom-naam').textContent = naam;
+  document.getElementById('welkom-rol').textContent  = role === 'admin' ? 'Beheerder' : 'Medewerker';
+  if (role === 'admin') {
+    document.getElementById('header-beheer-link').style.display = '';
+  }
+  init();
+}
+
 /* ── INIT ────────────────────────────────────────── */
 function init() {
   initState();
 
-  // Datum op vandaag
   const nu = new Date();
-  const dd = nu.toISOString().slice(0,10);
-  document.getElementById('datum').value = dd;
-
-  // Naam herinneren
-  const opgeslagenNaam = localStorage.getItem('mwb_naam');
-  if (opgeslagenNaam) document.getElementById('naam').value = opgeslagenNaam;
-
-  // Naam onthouden bij wijziging
-  document.getElementById('naam').addEventListener('input', function() {
-    localStorage.setItem('mwb_naam', this.value);
-  });
+  document.getElementById('datum').value = nu.toISOString().slice(0, 10);
 
   updateProgress();
   updateNav();
 }
 
-init();
+/* ── START ───────────────────────────────────────── */
+(function checkAuth() {
+  const payload = getTokenPayload();
+  if (payload) {
+    document.getElementById('login-overlay').classList.add('verborgen');
+    startApp(payload.naam, payload.role);
+  }
+  // Als geen token: login overlay blijft zichtbaar
+})();
 </script>
 </body>
 </html>
