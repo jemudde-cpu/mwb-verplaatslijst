@@ -165,7 +165,7 @@ export default {
         }
       }
 
-      // Inzendingen (alle ingelogde gebruikers)
+      // Inzendingen (alle ingelogde gebruikers) — met paginering
       if (action === 'inzendingen') {
         const token   = getToken(request);
         const payload = await verifyJWT(token);
@@ -173,27 +173,35 @@ export default {
           return json({ ok: false, error: 'Niet ingelogd' }, 401);
         }
         try {
-          const res = await fetch(
-            `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
-            {
-              method: 'POST',
-              headers: {
-                'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
-                'Notion-Version': '2022-06-28',
-                'Content-Type':   'application/json',
-              },
-              body: JSON.stringify({
-                sorts: [{ property: 'Datum', direction: 'descending' }],
-                page_size: 100,
-              }),
+          const alleResultaten = [];
+          let cursor = undefined;
+          do {
+            const body = {
+              sorts: [{ property: 'Datum', direction: 'descending' }],
+              page_size: 100,
+            };
+            if (cursor) body.start_cursor = cursor;
+            const res = await fetch(
+              `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
+              {
+                method: 'POST',
+                headers: {
+                  'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+                  'Notion-Version': '2022-06-28',
+                  'Content-Type':   'application/json',
+                },
+                body: JSON.stringify(body),
+              }
+            );
+            if (!res.ok) {
+              const err = await res.text();
+              return json({ ok: false, error: err }, 500);
             }
-          );
-          if (!res.ok) {
-            const err = await res.text();
-            return json({ ok: false, error: err }, 500);
-          }
-          const data = await res.json();
-          return json({ ok: true, results: data.results });
+            const data = await res.json();
+            alleResultaten.push(...data.results);
+            cursor = data.has_more ? data.next_cursor : undefined;
+          } while (cursor);
+          return json({ ok: true, results: alleResultaten });
         } catch (e) {
           return json({ ok: false, error: e.message }, 500);
         }

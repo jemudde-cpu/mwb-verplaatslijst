@@ -1381,11 +1381,12 @@ async function verstuurAlles() {
   };
 
   try {
-    const res  = await fetch(WORKER, {
+    const res  = await apiFetch(WORKER, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
       body: JSON.stringify(payload),
     });
+    if (!res) return hideLoading();
     const data = await res.json();
     hideLoading();
     if (data.ok) {
@@ -1510,6 +1511,17 @@ function uitloggen() {
   location.reload();
 }
 
+async function apiFetch(url, opties = {}) {
+  const res = await fetch(url, opties);
+  if (res.status === 401) {
+    localStorage.removeItem('mwb_token');
+    alert('Je sessie is verlopen. Log opnieuw in.');
+    location.reload();
+    return null;
+  }
+  return res;
+}
+
 /* ── HOME ────────────────────────────────────────── */
 function naarHome() {
   document.getElementById('view-home').classList.add('active');
@@ -1545,9 +1557,10 @@ function naarOverzicht() {
 async function laadMijnInzendingen() {
   const el = document.getElementById('home-inzendingen');
   try {
-    const res  = await fetch(WORKER + '?action=mijn_inzendingen', {
+    const res  = await apiFetch(WORKER + '?action=mijn_inzendingen', {
       headers: { 'Authorization': 'Bearer ' + getToken() }
     });
+    if (!res) return;
     const data = await res.json();
     if (!data.ok || !data.results.length) {
       el.innerHTML = '<div class="home-leeg">Nog geen inzendingen gevonden.</div>';
@@ -1622,11 +1635,95 @@ let ovzActiefFilter = 'alles';
 let ovzLaadMoment  = null;
 let ovzGeladen     = false;
 
+function prop(page, name) {
+  return page?.properties?.[name];
+}
+
+function parseDetails(tekst) {
+  if (!tekst) return [];
+  const items = [];
+  const alle  = Object.values(SECTIES).flat();
+  for (const line of tekst.split('\n')) {
+    for (const item of alle) {
+      if (line.startsWith(item.naam + ':')) {
+        const aantalMatch = line.match(/:\s*(\d+)/);
+        const nummerMatch = line.match(/nr\.\s*([^)]+)/);
+        const aantal      = aantalMatch ? parseInt(aantalMatch[1]) : 0;
+        const nummers     = nummerMatch ? nummerMatch[1].split(',').map(n => n.trim()).filter(Boolean) : [];
+        if (aantal > 0) items.push({ id: item.id, naam: item.naam, aantal, nummers });
+        break;
+      }
+    }
+  }
+  return items;
+}
+
+function bouwLocatieMap(inzendingen) {
+  const gesorteerd = [...inzendingen].sort((a, b) => {
+    const da = prop(a, 'Datum')?.date?.start || '';
+    const db = prop(b, 'Datum')?.date?.start || '';
+    return da.localeCompare(db);
+  });
+  const nummerLocatie = {};
+  const locaties = {};
+
+  function getLocatieKey(naam, werknr) { return werknr || naam; }
+
+  function ensureLocatie(naam, werknr) {
+    const key = getLocatieKey(naam, werknr);
+    if (!locaties[key]) locaties[key] = { naam, werknr, items: {} };
+    return key;
+  }
+
+  function addItem(locKey, itemId, itemNaam, aantal, nummers) {
+    if (!locaties[locKey]) return;
+    if (!locaties[locKey].items[itemId])
+      locaties[locKey].items[itemId] = { naam: itemNaam, aantal: 0, nummers: [] };
+    locaties[locKey].items[itemId].aantal += aantal;
+    if (nummers) nummers.forEach(n => {
+      if (!locaties[locKey].items[itemId].nummers.includes(n))
+        locaties[locKey].items[itemId].nummers.push(n);
+    });
+  }
+
+  function removeItem(locKey, itemId, aantal, nummers) {
+    if (!locaties[locKey] || !locaties[locKey].items[itemId]) return;
+    locaties[locKey].items[itemId].aantal = Math.max(0, locaties[locKey].items[itemId].aantal - aantal);
+    if (nummers) nummers.forEach(n => {
+      const idx = locaties[locKey].items[itemId].nummers.indexOf(n);
+      if (idx >= 0) locaties[locKey].items[itemId].nummers.splice(idx, 1);
+    });
+    if (locaties[locKey].items[itemId].aantal <= 0 && locaties[locKey].items[itemId].nummers.length === 0)
+      delete locaties[locKey].items[itemId];
+  }
+
+  for (const inz of gesorteerd) {
+    const details   = prop(inz, 'Details')?.rich_text?.[0]?.plain_text || '';
+    const vanNr     = prop(inz, 'Werknr. Van')?.rich_text?.[0]?.plain_text || '';
+    const naarNr    = prop(inz, 'Werknr. Naar')?.rich_text?.[0]?.plain_text || '';
+    const naarNaam  = prop(inz, 'Bouwplaats')?.rich_text?.[0]?.plain_text || naarNr;
+    const vanKey    = vanNr  ? ensureLocatie(vanNr, vanNr) : null;
+    const naarKey   = naarNr ? ensureLocatie(naarNaam || naarNr, naarNr) : null;
+    if (!vanKey && !naarKey) continue;
+    const regelItems = parseDetails(details);
+    for (const ri of regelItems) {
+      if (vanKey)  removeItem(vanKey,  ri.id, ri.aantal, ri.nummers);
+      if (naarKey) addItem(naarKey, ri.id, ri.naam, ri.aantal, ri.nummers);
+    }
+  }
+
+  for (const key of Object.keys(locaties)) {
+    if (Object.keys(locaties[key].items).length === 0) delete locaties[key];
+  }
+  return locaties;
+}
+
 async function ovzLaadData() {
   document.getElementById('ovz-content').innerHTML =
     '<div class="ovz-loading"><div class="spinner"></div><div style="font-size:13px;color:var(--zacht)">Materieel laden...</div></div>';
   try {
-    const res  = await fetch(WORKER + '?action=inzendingen', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    const res  = await apiFetch(WORKER + '?action=inzendingen', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    if (!res) return;
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     ovzLocatieMap = bouwLocatieMap(data.results);

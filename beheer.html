@@ -578,6 +578,17 @@ function uitloggen() {
   location.reload();
 }
 
+async function apiFetch(url, opties = {}) {
+  const res = await fetch(url, opties);
+  if (res.status === 401) {
+    localStorage.removeItem('mwb_beheer_token');
+    alert('Je sessie is verlopen. Log opnieuw in.');
+    location.reload();
+    return null;
+  }
+  return res;
+}
+
 async function checkAuth() {
   const payload = getBeheerPayload();
   if (payload && payload.role === 'admin') {
@@ -616,7 +627,8 @@ async function laadInzendingen() {
   document.getElementById('inzendingen-content').innerHTML = '<div class="loading"><div class="spinner"></div> Inzendingen laden...</div>';
   document.getElementById('materieel-content').innerHTML   = '<div class="loading"><div class="spinner"></div> Materieel berekenen...</div>';
   try {
-    const res  = await fetch(WORKER + '?action=inzendingen', { headers: authHeaders() });
+    const res  = await apiFetch(WORKER + '?action=inzendingen', { headers: authHeaders() });
+    if (!res) return;
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     alleInzendingen = data.results;
@@ -724,11 +736,12 @@ async function wisselStatus(pageId, htmlId, huidig) {
   const btn   = document.getElementById('status-btn-' + htmlId);
   if (btn) { btn.textContent = 'Bezig...'; btn.disabled = true; }
   try {
-    const res  = await fetch(WORKER, {
+    const res  = await apiFetch(WORKER, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify({ action: 'status_wijzigen', page_id: pageId, status: nieuw }),
     });
+    if (!res) return;
     const data = await res.json();
     if (!data.ok) { showToast('❌ ' + (data.error || 'Mislukt')); return; }
     // Update lokale array en herrender kaart
@@ -756,11 +769,12 @@ async function verwijderInzending(pageId, htmlId, naam) {
   );
   if (!ok) return;
   try {
-    const res  = await fetch(WORKER, {
+    const res  = await apiFetch(WORKER, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify({ action: 'inzending_verwijderen', page_id: pageId }),
     });
+    if (!res) return;
     const data = await res.json();
     if (!data.ok) { showToast('❌ ' + (data.error || 'Verwijderen mislukt')); return; }
     alleInzendingen = alleInzendingen.filter(inz => inz.id.replace(/-/g,'') !== htmlId);
@@ -847,11 +861,12 @@ async function verwijderKlus(idx) {
 
 async function slaKlussenOp(silent = false) {
   try {
-    const res  = await fetch(WORKER, {
+    const res  = await apiFetch(WORKER, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify({ action: 'klussen_opslaan', klussen: alleKlussen }),
     });
+    if (!res) return;
     const data = await res.json();
     if (data.ok) { if (!silent) showToast('✓ Klussen opgeslagen'); else showToast('✓ Opgeslagen'); }
     else showToast('❌ Opslaan mislukt: ' + data.error);
@@ -1119,7 +1134,8 @@ const KLUSSEN_DEFAULT = [
 async function laadGebruikers() {
   document.getElementById('gebruikers-content').innerHTML = '<div class="loading"><div class="spinner"></div> Laden...</div>';
   try {
-    const res  = await fetch(WORKER + '?action=gebruikers', { headers: authHeaders() });
+    const res  = await apiFetch(WORKER + '?action=gebruikers', { headers: authHeaders() });
+    if (!res) return;
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     renderGebruikers(data.gebruikers);
@@ -1158,11 +1174,12 @@ async function voegGebruikerToe() {
     showToast('⚠️ Vul alle velden in (wachtwoord min. 6 tekens)'); return;
   }
   try {
-    const res  = await fetch(WORKER, {
+    const res  = await apiFetch(WORKER, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify({ action: 'gebruiker_aanmaken', naam, gebruikersnaam: gebruiker, wachtwoord, role }),
     });
+    if (!res) return;
     const data = await res.json();
     if (data.ok) {
       showToast('✓ Account aangemaakt');
@@ -1186,11 +1203,12 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
   );
   if (!ok) return;
   try {
-    const res  = await fetch(WORKER, {
+    const res  = await apiFetch(WORKER, {
       method: 'POST',
       headers: authHeaders(),
       body: JSON.stringify({ action: 'gebruiker_verwijderen', gebruikersnaam }),
     });
+    if (!res) return;
     const data = await res.json();
     if (data.ok) { showToast('✓ Account verwijderd'); laadGebruikers(); }
     else showToast('❌ ' + (data.error || 'Mislukt'));
