@@ -1295,47 +1295,61 @@ function saveSheet() { closeSheet(); }
 
 /* ── SAMENVATTING ────────────────────────────────── */
 function renderSummary() {
-  const el      = document.getElementById('summary-content');
+  const el           = document.getElementById('summary-content');
   const geselecteerd = alleItems().filter(i => STATE[i.id].aantal > 0);
+  const vanLabel     = BEWEGING.van.naam  || '—';
+  const naarLabel    = BEWEGING.naar.naam || '—';
+  const vanNr        = BEWEGING.van.werknr  || '';
+  const naarNr       = BEWEGING.naar.werknr || '';
+  const typeLabel    = { zaak_klus:'Van zaak → Klus', klus_klus:'Klus → Klus', klus_zaak:'Klus → Zaak' }[BEWEGING.type] || '—';
+  const datum        = document.getElementById('datum').value;
 
-  const vanLabel  = BEWEGING.van.naam  || '—';
-  const naarLabel = BEWEGING.naar.naam || '—';
-  const typeLabel = { zaak_klus:'Van zaak → Klus', klus_klus:'Klus → Klus', klus_zaak:'Klus → Zaak' }[BEWEGING.type] || '—';
-
-  let html = `<div class="sum-card">
-    <div class="sum-header">
-      <div class="sum-header-title">${typeLabel}</div>
-      <div class="sum-header-sub">${document.getElementById('datum').value} · ${document.getElementById('naam').value}</div>
-    </div>
-    <div class="sum-row">
-      <span class="sum-label">Van</span>
-      <span class="sum-value">${vanLabel}</span>
-    </div>
-    <div class="sum-row">
-      <span class="sum-label">Naar</span>
-      <span class="sum-value">${naarLabel}</span>
+  // Route card
+  let html = `<div class="detail-header" style="margin-bottom:14px;">
+    <div class="detail-titel">${typeLabel}</div>
+    <div class="detail-datum">${datum}</div>
+    <div class="detail-route">
+      <div class="detail-locatie">
+        <div class="detail-locatie-label">Van</div>
+        <div class="detail-locatie-naam">${vanLabel}</div>
+        ${vanNr && vanNr !== vanLabel ? `<div class="detail-locatie-nr">${vanNr}</div>` : ''}
+      </div>
+      <div class="detail-pijl">→</div>
+      <div class="detail-locatie">
+        <div class="detail-locatie-label">Naar</div>
+        <div class="detail-locatie-naam">${naarLabel}</div>
+        ${naarNr && naarNr !== naarLabel ? `<div class="detail-locatie-nr">${naarNr}</div>` : ''}
+      </div>
     </div>
   </div>`;
 
+  // Materieel
   if (geselecteerd.length) {
-    const rows = geselecteerd.map(item => {
-      const s = STATE[item.id];
-      let details = s.aantal + 'x';
-      if (s.nummers && s.nummers.length) details += ' · nr: ' + s.nummers.join(', ');
-      if (s.types   && s.types.length)   details += ' · ' + s.types.join(', ');
-      if (s.stuk    && s.stuk > 0)       details += ' · ⚠️ ' + s.stuk + ' stuk/weg';
+    const itemRijen = geselecteerd.map(item => {
+      const s    = STATE[item.id];
+      const naam = s.types?.length ? `${item.naam} ${s.types[0]}` : item.naam;
+      const nrs  = s.nummers?.length ? `Nr. ${s.nummers.join(', ')}` : '';
+      const stuk = s.stuk > 0 ? `⚠️ ${s.stuk} stuk/weggegooid` : '';
 
-      const fotoHtml = (s.fotos && s.fotos.length)
-        ? `<div class="sum-foto-row">
-            <div class="sum-foto-label">📷 ${s.fotos.length} foto${s.fotos.length > 1 ? "'s" : ''}</div>
-            <div class="sum-foto-thumbs">${s.fotos.map(f => `<img class="sum-foto-thumb" src="${f.dataUrl}">`).join('')}</div>
-          </div>`
+      const fotoHtml = s.fotos?.length
+        ? `<div class="sum-foto-thumbs" style="margin-top:8px;">${s.fotos.map(f => `<img class="sum-foto-thumb" src="${f.dataUrl}">`).join('')}</div>`
         : '';
 
-      return `<div class="sum-row"><span class="sum-label">${item.naam}</span><span class="sum-value">${details}</span></div>${fotoHtml}`;
+      return `<div class="detail-item-rij" style="flex-direction:column;align-items:flex-start;gap:4px;">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+          <div class="detail-item-naam">${naam}</div>
+          <div class="detail-item-aantal">×${s.aantal}</div>
+        </div>
+        ${nrs  ? `<div class="detail-item-nrs">${nrs}</div>`  : ''}
+        ${stuk ? `<div class="detail-item-nrs" style="color:var(--rood)">${stuk}</div>` : ''}
+        ${fotoHtml}
+      </div>`;
     }).join('');
 
-    html += `<div class="sum-card"><div class="sum-header"><div class="sum-header-title">Materieel (${geselecteerd.length} soorten)</div></div>${rows}</div>`;
+    html += `<div class="detail-sectie">
+      <div class="detail-sectie-titel">Verplaatst materieel (${geselecteerd.length} soort${geselecteerd.length !== 1 ? 'en' : ''})</div>
+      ${itemRijen}
+    </div>`;
   }
 
   el.innerHTML = html;
