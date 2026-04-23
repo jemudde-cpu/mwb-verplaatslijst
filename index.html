@@ -28,7 +28,8 @@
   --radius-sm: 4px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-body{font-family:'Inter',-apple-system,sans-serif;background:#111111;color:var(--tekst);min-height:100vh;overflow-x:hidden;overscroll-behavior:none;}
+html{overflow:hidden;height:100%;}
+body{font-family:'Inter',-apple-system,sans-serif;background:#111111;color:var(--tekst);height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:none;position:fixed;width:100%;touch-action:pan-y;}
 
 /* HEADER */
 header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px solid var(--border-2);padding:12px 18px 0;}
