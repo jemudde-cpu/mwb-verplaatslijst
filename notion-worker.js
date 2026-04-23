@@ -289,6 +289,34 @@ export default {
       return json({ ok: true, token, naam: user.naam || user.gebruikersnaam, role: user.role || 'user' });
     }
 
+    // ── REGISTREREN (publiek, altijd rol user) ───────────
+    if (data.action === 'registreren') {
+      const gebruikersnaam = sanitize(data.gebruikersnaam || '', 50).toLowerCase();
+      const naam           = sanitize(data.naam || data.gebruikersnaam || '', 100);
+      const wachtwoord     = typeof data.wachtwoord === 'string' ? data.wachtwoord : '';
+      if (!gebruikersnaam || wachtwoord.length < 6) {
+        return json({ ok: false, error: 'Gebruikersnaam vereist en wachtwoord minimaal 6 tekens' }, 400);
+      }
+      if (!/^[a-z0-9._\- ]+$/.test(gebruikersnaam)) {
+        return json({ ok: false, error: 'Gebruikersnaam: alleen letters, cijfers, punt, streepje of spatie' }, 400);
+      }
+      const users = await getUsers();
+      if (users.find(u => u.gebruikersnaam === gebruikersnaam)) {
+        return json({ ok: false, error: 'Gebruikersnaam al in gebruik' }, 409);
+      }
+      const salt = crypto.randomUUID();
+      const hash = await hashPw(wachtwoord, salt);
+      users.push({ gebruikersnaam, naam, wachtwoord_hash: hash, salt, role: 'user' });
+      await saveUsers(users);
+      const token = await signJWT({
+        sub:  gebruikersnaam,
+        naam: naam || gebruikersnaam,
+        role: 'user',
+        exp:  Math.floor(Date.now() / 1000) + 8 * 3600,
+      });
+      return json({ ok: true, token, naam: naam || gebruikersnaam, role: 'user' });
+    }
+
     // ── SETUP (eerste admin, alleen als er nog geen gebruikers zijn) ──
     if (data.action === 'setup') {
       const users = await getUsers();

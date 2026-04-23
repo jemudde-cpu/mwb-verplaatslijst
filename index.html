@@ -391,6 +391,28 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       onkeydown="if(event.key==='Enter')loginUser()">
     <button class="login-btn" onclick="loginUser()">Inloggen →</button>
     <div class="login-fout" id="login-fout"></div>
+    <div style="margin-top:16px;font-size:13px;color:var(--zacht);">Nog geen account? <a href="#" onclick="toonRegistreren(event)" style="color:var(--accent);text-decoration:none;font-weight:600;">Aanmelden</a></div>
+  </div>
+</div>
+
+<!-- REGISTREREN OVERLAY -->
+<div class="login-overlay verborgen" id="registreer-overlay">
+  <div class="login-box">
+    <div class="login-logo">✍️</div>
+    <div class="login-titel">Account aanmaken</div>
+    <div class="login-sub">Vul je gegevens in om je aan te melden.</div>
+    <input class="login-input" type="text" id="reg-naam" placeholder="Volledige naam"
+      autocomplete="name" spellcheck="false"
+      onkeydown="if(event.key==='Enter')document.getElementById('reg-gebruiker').focus()">
+    <input class="login-input" type="text" id="reg-gebruiker" placeholder="Gebruikersnaam"
+      autocomplete="username" autocapitalize="none" spellcheck="false"
+      onkeydown="if(event.key==='Enter')document.getElementById('reg-ww').focus()">
+    <input class="login-input" type="password" id="reg-ww" placeholder="Wachtwoord (min. 6 tekens)"
+      autocomplete="new-password"
+      onkeydown="if(event.key==='Enter')registreerUser()">
+    <button class="login-btn" onclick="registreerUser()">Account aanmaken →</button>
+    <div class="login-fout" id="reg-fout"></div>
+    <div style="margin-top:16px;font-size:13px;color:var(--zacht);">Al een account? <a href="#" onclick="toonInloggen(event)" style="color:var(--accent);text-decoration:none;font-weight:600;">Inloggen</a></div>
   </div>
 </div>
 
@@ -1502,6 +1524,61 @@ async function loginUser() {
     fout.textContent = 'Verbindingsfout. Controleer internet.';
   } finally {
     btn.textContent = 'Inloggen →';
+    btn.disabled    = false;
+  }
+}
+
+function toonRegistreren(e) {
+  e.preventDefault();
+  document.getElementById('login-overlay').classList.add('verborgen');
+  document.getElementById('registreer-overlay').classList.remove('verborgen');
+  document.getElementById('reg-fout').textContent = '';
+}
+
+function toonInloggen(e) {
+  e.preventDefault();
+  document.getElementById('registreer-overlay').classList.add('verborgen');
+  document.getElementById('login-overlay').classList.remove('verborgen');
+  document.getElementById('login-fout').textContent = '';
+}
+
+async function registreerUser() {
+  const naam       = document.getElementById('reg-naam').value.trim();
+  const gebruiker  = document.getElementById('reg-gebruiker').value.trim();
+  const wachtwoord = document.getElementById('reg-ww').value;
+  const fout       = document.getElementById('reg-fout');
+  const btn        = document.querySelector('#registreer-overlay .login-btn');
+
+  if (!naam || !gebruiker || wachtwoord.length < 6) {
+    fout.textContent = 'Vul alle velden in (wachtwoord min. 6 tekens).';
+    return;
+  }
+
+  btn.textContent = 'Bezig...';
+  btn.disabled    = true;
+  fout.textContent = '';
+
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'registreren', naam, gebruikersnaam: gebruiker, wachtwoord }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      localStorage.setItem('mwb_token', data.token);
+      document.getElementById('registreer-overlay').classList.add('verborgen');
+      document.getElementById('reg-ww').value = '';
+      startApp(data.naam, data.role);
+    } else {
+      fout.textContent = data.error || 'Aanmelden mislukt.';
+      document.getElementById('reg-gebruiker').classList.add('fout');
+      setTimeout(() => document.getElementById('reg-gebruiker').classList.remove('fout'), 600);
+    }
+  } catch (e) {
+    fout.textContent = 'Verbindingsfout. Controleer internet.';
+  } finally {
+    btn.textContent = 'Account aanmaken →';
     btn.disabled    = false;
   }
 }
