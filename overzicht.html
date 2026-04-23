@@ -260,7 +260,7 @@ const FILTER_MAP = {
   containers:   ['container'],
   lichtmasten:  ['lichtmast'],
   hekken:       ['bouwhekken','bouwhek_voeten','hekklemmen','hekwielen','hek_schoren','kunststof_rijplaten'],
-  aansluitingen:['bouwmeterkast','waterput','waterkraan'],
+  aansluitingen:['bouwmeterkast','bouwmeterkast_35a','bouwmeterkast_63a','bouwmeterkast_125a','waterput','waterkraan'],
 };
 
 let locatieMap = {};   // klus_key → { naam, werknr, items: { itemId → { naam, aantal, nummers[] } } }
@@ -377,10 +377,16 @@ function parseDetails(tekst) {
     for (const item of alle) {
       if (line.startsWith(item.naam + ':')) {
         const aantalMatch = line.match(/:\s*(\d+)/);
-        const nummerMatch = line.match(/nr\.\s*([^)]+)/);
+        const nummerMatch = line.match(/nr\.\s*([^)]+)\)/);
+        const typeMatch   = line.match(/\[([^\]]+)\]/);
         const aantal      = aantalMatch ? parseInt(aantalMatch[1]) : 0;
         const nummers     = nummerMatch ? nummerMatch[1].split(',').map(n => n.trim()).filter(Boolean) : [];
-        if (aantal > 0) items.push({ id: item.id, naam: item.naam, aantal, nummers });
+        const type        = typeMatch   ? typeMatch[1].trim() : '';
+        if (aantal > 0) {
+          const id   = type ? `${item.id}_${type.toLowerCase().replace(/[^a-z0-9]/g,'')}` : item.id;
+          const naam = type ? `${item.naam} ${type}` : item.naam;
+          items.push({ id, naam, aantal, nummers, type });
+        }
         break;
       }
     }
