@@ -11,6 +11,10 @@
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+i[data-lucide]{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;}
+</style>
 <style>
 :root {
   --accent:    #ff6b00;
@@ -182,9 +186,8 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:var(--dim);transition:color .2s;padding:8px 0;background:none;border:none;font-family:inherit;cursor:pointer;-webkit-appearance:none;position:relative;}
 .bn-item+.bn-item::before{content:'';position:absolute;left:0;top:16%;height:68%;width:1px;background:var(--border-2);}
 .bn-item.active{color:var(--accent);}
-.bn-icon{font-size:20px;line-height:1;}
-.bn-label{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
-.bn-icon{font-size:22px;line-height:1;}
+.bn-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
+.bn-icon i[data-lucide]{width:22px;height:22px;stroke-width:2;}
 .bn-label{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
 
 /* SAMENVATTING */
@@ -452,25 +455,25 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <small>Verplaatslijst</small>
     </div>
     <div class="header-menu-wrap">
-      <button class="header-menu-btn" id="menu-btn" onclick="toggleMenu()">⋮</button>
+      <button class="header-menu-btn" id="menu-btn" onclick="toggleMenu()"><i data-lucide="more-vertical"></i></button>
       <div class="header-dropdown" id="header-dropdown">
         <button class="dropdown-item" onclick="toggleTheme()">
-          <span class="dropdown-item-icon" id="theme-icon">☀️</span>
+          <span class="dropdown-item-icon" id="theme-icon"><i data-lucide="sun"></i></span>
           <span id="theme-label">Licht thema</span>
         </button>
         <div class="dropdown-divider"></div>
         <button class="dropdown-item" onclick="openWachtwoord()">
-          <span class="dropdown-item-icon">🔑</span>
+          <span class="dropdown-item-icon"><i data-lucide="key"></i></span>
           Wachtwoord wijzigen
         </button>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="beheer.html" id="header-beheer-link" style="display:none">
-          <span class="dropdown-item-icon">⚙️</span>
+          <span class="dropdown-item-icon"><i data-lucide="settings"></i></span>
           Beheer
         </a>
         <div class="dropdown-divider" id="beheer-divider" style="display:none"></div>
         <button class="dropdown-item dropdown-item-rood" onclick="uitloggen()">
-          <span class="dropdown-item-icon">🚪</span>
+          <span class="dropdown-item-icon"><i data-lucide="log-out"></i></span>
           Uitloggen
         </button>
       </div>
@@ -594,7 +597,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
         <div class="locatie-label">Naar welke klus?</div>
         <div class="ac-wrap">
           <div class="ac-input-row">
-            <span class="ac-search-icon">🔍</span>
+            <span class="ac-search-icon"><i data-lucide="search"></i></span>
             <input class="ac-input" id="ac-input-naar-zk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-zk',this.value)" onfocus="acOpen('naar-zk')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('naar-zk')">✕</button>
           </div>
@@ -607,7 +610,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
         <div class="locatie-label">Van welke klus?</div>
         <div class="ac-wrap">
           <div class="ac-input-row">
-            <span class="ac-search-icon">🔍</span>
+            <span class="ac-search-icon"><i data-lucide="search"></i></span>
             <input class="ac-input" id="ac-input-van-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kk',this.value)" onfocus="acOpen('van-kk')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('van-kk')">✕</button>
           </div>
@@ -617,7 +620,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
         <div class="locatie-label">Naar welke klus?</div>
         <div class="ac-wrap">
           <div class="ac-input-row">
-            <span class="ac-search-icon">🔍</span>
+            <span class="ac-search-icon"><i data-lucide="search"></i></span>
             <input class="ac-input" id="ac-input-naar-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-kk',this.value)" onfocus="acOpen('naar-kk')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('naar-kk')">✕</button>
           </div>
@@ -630,7 +633,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
         <div class="locatie-label">Van welke klus?</div>
         <div class="ac-wrap">
           <div class="ac-input-row">
-            <span class="ac-search-icon">🔍</span>
+            <span class="ac-search-icon"><i data-lucide="search"></i></span>
             <input class="ac-input" id="ac-input-van-kz" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kz',this.value)" onfocus="acOpen('van-kz')" autocomplete="off">
             <button class="ac-clear" onclick="acClear('van-kz')">✕</button>
           </div>
@@ -690,7 +693,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <textarea class="foto-opmerking" id="foto-opmerking" rows="2" placeholder="Opmerking bij deze foto (bijv. schade beschrijving)..."></textarea>
     </div>
     <div class="foto-actions">
-      <button class="foto-btn-camera" onclick="triggerCamera()">📷 Foto maken / kiezen</button>
+      <button class="foto-btn-camera" onclick="triggerCamera()"><i data-lucide="camera"></i> Foto maken / kiezen</button>
       <button class="foto-btn-save show" id="foto-save-btn" onclick="fotoOpslaan()" style="display:none">Opslaan ✓</button>
     </div>
     <input type="file" id="foto-file-input" accept="image/*" capture="environment" onchange="fotoGekozen(event)">
@@ -714,10 +717,10 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="ovz-wrap">
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <div class="ovz-search-wrap" style="flex:1;margin-bottom:0;">
-        <span class="ovz-search-icon">🔍</span>
+        <span class="ovz-search-icon"><i data-lucide="search"></i></span>
         <input class="ovz-search-input" type="text" id="ovz-zoek" placeholder="Zoek op klus of werknummer..." oninput="ovzFilter()">
       </div>
-      <button onclick="ovzHerlaad()" style="width:48px;height:48px;flex-shrink:0;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border-2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;" title="Verversen">🔄</button>
+      <button onclick="ovzHerlaad()" style="width:48px;height:48px;flex-shrink:0;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border-2);color:var(--tekst);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;" title="Verversen"><i data-lucide="refresh-cw"></i></button>
     </div>
     <div class="ovz-filter-wrap">
       <button class="ovz-filter-btn active" onclick="ovzSetFilter('alles',this)">Alles</button>
@@ -762,15 +765,15 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
   <button class="bn-item active" id="bn-home" onclick="naarHome()">
-    <span class="bn-icon">🏠</span>
+    <span class="bn-icon"><i data-lucide="home"></i></span>
     <span class="bn-label">Home</span>
   </button>
   <button class="bn-item" id="bn-wizard" onclick="naarWizard()">
-    <span class="bn-icon">📋</span>
+    <span class="bn-icon"><i data-lucide="clipboard-list"></i></span>
     <span class="bn-label">Verplaatsen</span>
   </button>
   <button class="bn-item" id="bn-overzicht" onclick="naarOverzicht()">
-    <span class="bn-icon">📍</span>
+    <span class="bn-icon"><i data-lucide="map-pin"></i></span>
     <span class="bn-label">Overzicht</span>
   </button>
 </nav>
@@ -784,7 +787,7 @@ function setTheme(t) {
   localStorage.setItem('mwb_theme', t);
   const icon  = document.getElementById('theme-icon');
   const label = document.getElementById('theme-label');
-  if (icon)  icon.textContent  = t === 'light' ? '🌙' : '☀️';
+  if (icon)  { icon.innerHTML = t === 'light' ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>'; lucide.createIcons({nodes:[icon]}); }
   if (label) label.textContent = t === 'light' ? 'Donker thema' : 'Licht thema';
   document.getElementById('theme-meta').content = t === 'light' ? '#f0f0f0' : '#111111';
 }
@@ -806,6 +809,7 @@ document.addEventListener('click', e => {
 });
 document.addEventListener('DOMContentLoaded', () => {
   setTheme(localStorage.getItem('mwb_theme') || 'dark');
+  lucide.createIcons();
 });
 
 /* ── KLUSSEN ─────────────────────────────────────── */
@@ -1105,6 +1109,7 @@ function renderItems() {
   const items = SECTIES[activeTab];
   const list  = document.getElementById('item-list');
   list.innerHTML = items.map(item => renderItem(item)).join('');
+  lucide.createIcons();
 }
 
 function renderItem(item) {
@@ -1162,7 +1167,7 @@ function renderItem(item) {
 
   if (isActive) {
     extraHtml += `<button class="foto-btn ${hasFotos ? 'has-foto' : ''}" onclick="openFotoSheet('${item.id}')">
-      📷 ${hasFotos ? s.fotos.length + ' foto' + (s.fotos.length > 1 ? "'s" : '') : 'Foto toevoegen'}
+      <i data-lucide="camera"></i> ${hasFotos ? s.fotos.length + ' foto' + (s.fotos.length > 1 ? "'s" : '') : 'Foto toevoegen'}
     </button>`;
     if (hasFotos) {
       extraHtml += `<div class="foto-thumbs">${thumbs}</div>`;
@@ -1354,6 +1359,7 @@ function renderSummary() {
   }
 
   el.innerHTML = html;
+  lucide.createIcons();
 }
 
 /* ── FOTO COMPRIMEREN ────────────────────────────── */
@@ -1800,6 +1806,7 @@ function openDetail(index) {
 
   alleViewsUit();
   document.getElementById('view-detail').classList.add('active');
+  lucide.createIcons();
 }
 
 function startApp(naam, role) {
@@ -1991,6 +1998,7 @@ function ovzRender() {
     klusKeys.forEach(k => { html += ovzKlusKaart(k, false); });
   }
   document.getElementById('ovz-content').innerHTML = html;
+  lucide.createIcons();
 }
 
 function ovzKlusKaart(key, isZaak) {
