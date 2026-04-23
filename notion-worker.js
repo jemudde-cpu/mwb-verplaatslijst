@@ -135,12 +135,42 @@ export default {
         return json({ ok: true, hasUsers: users.length > 0 });
       }
 
-      // Inzendingen (admin)
+      // Mijn inzendingen (ingelogde gebruiker, gefilterd op naam)
+      if (action === 'mijn_inzendingen') {
+        const token   = getToken(request);
+        const payload = await verifyJWT(token);
+        if (!payload) return json({ ok: false, error: 'Niet ingelogd' }, 401);
+        try {
+          const res = await fetch(
+            `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+                'Notion-Version': '2022-06-28',
+                'Content-Type':   'application/json',
+              },
+              body: JSON.stringify({
+                filter: { property: 'Ingevuld door', rich_text: { equals: payload.naam } },
+                sorts:  [{ property: 'Datum', direction: 'descending' }],
+                page_size: 5,
+              }),
+            }
+          );
+          if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
+          const data = await res.json();
+          return json({ ok: true, results: data.results });
+        } catch (e) {
+          return json({ ok: false, error: e.message }, 500);
+        }
+      }
+
+      // Inzendingen (alle ingelogde gebruikers)
       if (action === 'inzendingen') {
         const token   = getToken(request);
         const payload = await verifyJWT(token);
-        if (!payload || payload.role !== 'admin') {
-          return json({ ok: false, error: 'Geen toegang' }, 401);
+        if (!payload) {
+          return json({ ok: false, error: 'Niet ingelogd' }, 401);
         }
         try {
           const res = await fetch(
@@ -388,6 +418,62 @@ export default {
       });
       const fotoUrl = `${new URL(request.url).origin}?action=foto&naam=${encodeURIComponent(safeName)}`;
       return json({ ok: true, url: fotoUrl });
+    }
+
+    // ── STATUS WIJZIGEN (admin) ───────────────────────────
+    if (data.action === 'status_wijzigen') {
+      const token   = getToken(request, data);
+      const payload = await verifyJWT(token);
+      if (!payload || payload.role !== 'admin') {
+        return json({ ok: false, error: 'Geen toegang' }, 401);
+      }
+      const pageId = (data.page_id || '').replace(/[^a-f0-9\-]/gi, '').slice(0, 36);
+      const status = data.status === 'Verwerkt' ? 'Verwerkt' : 'Nieuw';
+      if (!pageId) return json({ ok: false, error: 'page_id vereist' }, 400);
+      try {
+        const res = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+            'Notion-Version': '2022-06-28',
+            'Content-Type':   'application/json',
+          },
+          body: JSON.stringify({ properties: { 'Status': { select: { name: status } } } }),
+        });
+        if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
+        return json({ ok: true });
+      } catch (e) {
+        return json({ ok: false, error: e.message }, 500);
+      }
+    }
+
+    // ── INZENDING VERWIJDEREN (admin) ────────────────────
+    if (data.action === 'inzending_verwijderen') {
+      const token   = getToken(request, data);
+      const payload = await verifyJWT(token);
+      if (!payload || payload.role !== 'admin') {
+        return json({ ok: false, error: 'Geen toegang' }, 401);
+      }
+      const pageId = (data.page_id || '').replace(/[^a-f0-9\-]/gi, '').slice(0, 36);
+      if (!pageId) return json({ ok: false, error: 'page_id vereist' }, 400);
+      try {
+        const res = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+            'Notion-Version': '2022-06-28',
+            'Content-Type':   'application/json',
+          },
+          body: JSON.stringify({ archived: true }),
+        });
+        if (!res.ok) {
+          const err = await res.text();
+          return json({ ok: false, error: err }, 500);
+        }
+        return json({ ok: true });
+      } catch (e) {
+        return json({ ok: false, error: e.message }, 500);
+      }
     }
 
     // ── VERPLAATSING OPSLAAN IN NOTION (ingelogde gebruiker) ──

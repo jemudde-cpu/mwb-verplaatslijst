@@ -69,17 +69,31 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .header-logo{width:30px;height:30px;background:var(--accent);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
 .header-title{flex:1;font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;line-height:1.2;}
 .header-title small{display:block;font-size:10px;font-weight:400;color:var(--zacht);text-transform:none;letter-spacing:0;}
-.header-app-link{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-decoration:none;padding:6px 12px;border:1px solid rgba(255,107,0,.30);border-radius:var(--radius-sm);white-space:nowrap;}
-.header-logout{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--zacht);padding:6px 12px;border:1px solid var(--border-2);border-radius:var(--radius-sm);background:transparent;cursor:pointer;-webkit-appearance:none;}
+.header-menu-wrap{position:relative;flex-shrink:0;}
+.header-menu-btn{width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border-2);color:var(--tekst);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:border-color .2s;}
+.header-menu-btn:active,.header-menu-btn.open{border-color:var(--accent);color:var(--accent);}
+.header-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:200px;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,.40);overflow:hidden;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s,transform .18s;z-index:200;}
+.header-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
+.dropdown-item{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;border:none;background:transparent;color:var(--tekst);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;text-align:left;-webkit-appearance:none;transition:background .12s;}
+.dropdown-item:hover{background:rgba(255,255,255,.05);}
+.dropdown-item:active{background:rgba(255,255,255,.09);}
+.dropdown-item-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.dropdown-divider{height:1px;background:var(--border);margin:4px 0;}
+.dropdown-item-rood{color:var(--rood);}
+.dropdown-item-rood:hover{background:rgba(239,68,68,.07);}
 
-/* TABS */
-.tab-nav{display:flex;padding:0 16px 12px;gap:6px;overflow-x:auto;scrollbar-width:none;}
-.tab-nav::-webkit-scrollbar{display:none;}
-.tab-nav-btn{flex-shrink:0;padding:9px 16px;border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;background:transparent;border:1px solid var(--border-2);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
-.tab-nav-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:16px;left:16px;right:16px;z-index:60;background:#1a1a1a;border:1px solid var(--border-2);border-radius:16px;display:flex;box-shadow:0 8px 32px rgba(0,0,0,.50);overflow:hidden;}
+.bottom-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 9px;border:none;background:transparent;color:var(--zacht);cursor:pointer;font-family:inherit;gap:3px;position:relative;-webkit-appearance:none;transition:color .15s;}
+.bottom-nav-btn+.bottom-nav-btn::before{content:'';position:absolute;left:0;top:16%;height:68%;width:1px;background:var(--border-2);}
+.bottom-nav-btn.active{color:var(--accent);}
+.bottom-nav-btn.active::after{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--accent);border-radius:0 0 2px 2px;}
+.bottom-nav-icon{font-size:20px;line-height:1;}
+.bottom-nav-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;}
+.bottom-nav-badge{position:absolute;top:7px;right:calc(50% - 16px);background:var(--accent);color:#fff;font-size:9px;font-weight:800;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1;}
 
 /* CONTENT */
-.main{position:relative;max-width:800px;margin:0 auto;padding:16px 16px 40px;}
+.main{position:relative;max-width:800px;margin:0 auto;padding:16px 16px 100px;}
 .tab-content{display:none;}
 .tab-content.active{display:block;animation:fadeIn .25s ease;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
@@ -114,6 +128,15 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .status-verwerkt{background:rgba(34,197,94,.15);color:var(--groen);}
 .inz-chevron{color:var(--dim);font-size:14px;flex-shrink:0;transition:transform .25s;}
 .inz-card.open .inz-chevron{transform:rotate(90deg);}
+.inz-del-btn{width:28px;height:28px;border-radius:var(--radius-sm);border:none;background:rgba(239,68,68,.12);color:rgba(239,68,68,.75);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none;transition:background .15s;}
+.inz-del-btn:active{background:rgba(239,68,68,.28);}
+.inz-status-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 14px;border-top:1px solid var(--border);margin-top:10px;}
+.inz-status-label{font-size:11px;font-weight:700;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;}
+.inz-status-toggle{padding:8px 16px;border-radius:var(--radius-sm);border:none;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;-webkit-appearance:none;transition:all .2s;text-transform:uppercase;letter-spacing:.5px;}
+.inz-status-toggle-nieuw{background:rgba(34,197,94,.12);color:var(--groen);}
+.inz-status-toggle-nieuw:active{background:rgba(34,197,94,.25);}
+.inz-status-toggle-verwerkt{background:rgba(255,107,0,.12);color:var(--accent);}
+.inz-status-toggle-verwerkt:active{background:rgba(255,107,0,.25);}
 .inz-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border);}
 .inz-card.open .inz-body{display:block;}
 .inz-detail-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--zacht);margin:12px 0 6px;}
@@ -174,16 +197,26 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 /* LEEG */
 .leeg{text-align:center;padding:40px 20px;color:var(--zacht);font-size:14px;}
 
-/* BADGE TELLERS */
-.tab-badge{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,107,0,.20);color:var(--accent);font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:var(--radius-sm);padding:0 5px;margin-left:6px;}
+
+/* BEVESTIG MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .18s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal-box{width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-lg);overflow:hidden;transform:translateY(12px);transition:transform .18s;}
+.modal-overlay.open .modal-box{transform:translateY(0);}
+.modal-body{padding:22px 20px 8px;text-align:center;}
+.modal-icon{font-size:32px;margin-bottom:10px;}
+.modal-titel{font-size:15px;font-weight:800;margin-bottom:6px;}
+.modal-tekst{font-size:13px;color:var(--zacht);line-height:1.5;}
+.modal-acties{display:flex;gap:0;border-top:1px solid var(--border);margin-top:18px;}
+.modal-btn{flex:1;padding:15px;border:none;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;-webkit-appearance:none;transition:background .15s;}
+.modal-btn-annuleer{background:transparent;color:var(--zacht);border-right:1px solid var(--border);}
+.modal-btn-annuleer:active{background:rgba(255,255,255,.04);}
+.modal-btn-verwijder{background:transparent;color:var(--rood);}
+.modal-btn-verwijder:active{background:rgba(239,68,68,.08);}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;background:#1a1a1a;border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 22px;font-size:14px;font-weight:700;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* THEME TOGGLE */
-.theme-toggle{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--border-2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;flex-shrink:0;transition:border-color .2s;}
-.theme-toggle:active{border-color:var(--accent);}
 
 /* LIGHT THEME */
 [data-theme="light"]{--tekst:#111111;--zacht:#666666;--dim:#bbbbbb;--border:#e5e5e5;--border-2:#d0d0d0;--surface:#ffffff;--surface-2:#f5f5f5;}
@@ -194,6 +227,9 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 [data-theme="light"] .lightbox{background:rgba(255,255,255,.97);}
 [data-theme="light"] .lightbox img{box-shadow:0 8px 40px rgba(0,0,0,.15);}
 [data-theme="light"] .pw-titel{color:#111111;}
+[data-theme="light"] .bottom-nav{background:#ffffff;box-shadow:0 8px 32px rgba(0,0,0,.12);}
+[data-theme="light"] .header-dropdown{box-shadow:0 8px 32px rgba(0,0,0,.15);}
+[data-theme="light"] .modal-overlay{background:rgba(0,0,0,.35);}
 </style>
 </head>
 <body>
@@ -240,17 +276,49 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       Beheer
       <small>Middelwatering Bouw</small>
     </div>
-    <a href="index.html" class="header-app-link">← App</a>
-    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Licht/donker"></button>
-    <button class="header-logout" onclick="uitloggen()">Uitloggen</button>
+    <div class="header-menu-wrap">
+      <button class="header-menu-btn" id="menu-btn" onclick="toggleMenu()" title="Menu">⋮</button>
+      <div class="header-dropdown" id="header-dropdown">
+        <button class="dropdown-item" id="theme-item" onclick="toggleTheme()">
+          <span class="dropdown-item-icon" id="theme-icon">☀️</span>
+          <span id="theme-label">Licht thema</span>
+        </button>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="index.html">
+          <span class="dropdown-item-icon">📱</span>
+          Terug naar app
+        </a>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item dropdown-item-rood" onclick="uitloggen()">
+          <span class="dropdown-item-icon">🚪</span>
+          Uitloggen
+        </button>
+      </div>
+    </div>
   </div>
-  <nav class="tab-nav">
-    <button class="tab-nav-btn active" onclick="tabSwitch('materieel',this)">📍 Materieel</button>
-    <button class="tab-nav-btn" onclick="tabSwitch('inzendingen',this)">📋 Inzendingen <span class="tab-badge" id="badge-inz">0</span></button>
-    <button class="tab-nav-btn" onclick="tabSwitch('klussen',this)">🏗️ Klussen <span class="tab-badge" id="badge-kl">0</span></button>
-    <button class="tab-nav-btn" onclick="tabSwitch('gebruikers',this)">👥 Gebruikers</button>
-  </nav>
 </header>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bottom-nav-btn active" id="btn-materieel" onclick="tabSwitch('materieel',this)">
+    <span class="bottom-nav-icon">📍</span>
+    <span class="bottom-nav-label">Materieel</span>
+  </button>
+  <button class="bottom-nav-btn" id="btn-inzendingen" onclick="tabSwitch('inzendingen',this)">
+    <span class="bottom-nav-icon">📋</span>
+    <span class="bottom-nav-label">Inzendingen</span>
+    <span class="bottom-nav-badge" id="badge-inz" style="display:none">0</span>
+  </button>
+  <button class="bottom-nav-btn" id="btn-klussen" onclick="tabSwitch('klussen',this)">
+    <span class="bottom-nav-icon">🏗️</span>
+    <span class="bottom-nav-label">Klussen</span>
+    <span class="bottom-nav-badge" id="badge-kl" style="display:none">0</span>
+  </button>
+  <button class="bottom-nav-btn" id="btn-gebruikers" onclick="tabSwitch('gebruikers',this)">
+    <span class="bottom-nav-icon">👥</span>
+    <span class="bottom-nav-label">Gebruikers</span>
+  </button>
+</nav>
 
 <!-- TAB: MATERIEEL -->
 <div class="main tab-content active" id="tab-materieel">
@@ -354,6 +422,21 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   </div>
 </div>
 
+<!-- BEVESTIG MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-body">
+      <div class="modal-icon" id="modal-icon">🗑️</div>
+      <div class="modal-titel" id="modal-titel"></div>
+      <div class="modal-tekst" id="modal-tekst"></div>
+    </div>
+    <div class="modal-acties">
+      <button class="modal-btn modal-btn-annuleer" id="modal-annuleer">Annuleren</button>
+      <button class="modal-btn modal-btn-verwijder" id="modal-bevestig">Verwijderen</button>
+    </div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
@@ -369,14 +452,29 @@ const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
 function setTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem('mwb_theme', t);
-  const btn = document.getElementById('theme-toggle');
-  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀️';
+  const icon  = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-label');
+  if (icon)  icon.textContent  = t === 'light' ? '🌙' : '☀️';
+  if (label) label.textContent = t === 'light' ? 'Donker thema' : 'Licht thema';
   document.getElementById('theme-meta').content = t === 'light' ? '#f0f0f0' : '#111111';
 }
 function toggleTheme() {
   setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
 }
-document.addEventListener('DOMContentLoaded', () => { setTheme(localStorage.getItem('mwb_theme') || 'dark'); });  // ← Pas dit aan om het wachtwoord te wijzigen
+function toggleMenu() {
+  const btn      = document.getElementById('menu-btn');
+  const dropdown = document.getElementById('header-dropdown');
+  const isOpen   = dropdown.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.header-menu-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('header-dropdown').classList.remove('open');
+    document.getElementById('menu-btn').classList.remove('open');
+  }
+});
+document.addEventListener('DOMContentLoaded', () => { setTheme(localStorage.getItem('mwb_theme') || 'dark'); });
 
 let alleInzendingen = [];
 let alleKlussen     = [];
@@ -501,9 +599,10 @@ async function checkAuth() {
 /* ── TABS ─────────────────────────────────────────── */
 function tabSwitch(naam, btn) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + naam).classList.add('active');
   btn.classList.add('active');
+  if (naam === 'gebruikers') laadGebruikers();
 }
 
 /* ── INIT ─────────────────────────────────────────── */
@@ -521,7 +620,9 @@ async function laadInzendingen() {
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
     alleInzendingen = data.results;
-    document.getElementById('badge-inz').textContent = alleInzendingen.length;
+    const badgeInz = document.getElementById('badge-inz');
+    badgeInz.textContent = alleInzendingen.length;
+    badgeInz.style.display = alleInzendingen.length ? 'flex' : 'none';
     renderInzendingen();
     locatieMap = bouwLocatieMap(alleInzendingen);
     renderMaterieel();
@@ -589,6 +690,7 @@ function renderInzCard(inz) {
         <div class="inz-meta">${datum} · ${invuld}</div>
       </div>
       <span class="inz-status ${statusClass}">${status}</span>
+      <button class="inz-del-btn" title="Inzending verwijderen" onclick="event.stopPropagation();verwijderInzending('${inz.id}','${id}','${naam.replace(/'/g,"\\'")}')">🗑</button>
       <span class="inz-chevron">›</span>
     </div>
     <div class="inz-body">
@@ -597,6 +699,14 @@ function renderInzCard(inz) {
       ${detailsTekst ? `<div class="inz-detail-label">Materieel</div><div class="inz-detail-tekst">${detailsTekst}</div>` : ''}
       ${opm ? `<div class="inz-detail-label">Opmerking</div><div class="inz-detail-tekst">${opm}</div>` : ''}
       ${fotoHtml}
+      <div class="inz-status-row">
+        <span class="inz-status-label">Status</span>
+        <button class="inz-status-toggle ${status === 'Verwerkt' ? 'inz-status-toggle-verwerkt' : 'inz-status-toggle-nieuw'}"
+          id="status-btn-${id}"
+          onclick="wisselStatus('${inz.id}','${id}','${status}')">
+          ${status === 'Verwerkt' ? '↩ Zet op Nieuw' : '✓ Markeer Verwerkt'}
+        </button>
+      </div>
     </div>
   </div>`;
 }
@@ -609,13 +719,70 @@ function filterInzendingen() {
   renderInzendingen();
 }
 
+async function wisselStatus(pageId, htmlId, huidig) {
+  const nieuw = huidig === 'Verwerkt' ? 'Nieuw' : 'Verwerkt';
+  const btn   = document.getElementById('status-btn-' + htmlId);
+  if (btn) { btn.textContent = 'Bezig...'; btn.disabled = true; }
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ action: 'status_wijzigen', page_id: pageId, status: nieuw }),
+    });
+    const data = await res.json();
+    if (!data.ok) { showToast('❌ ' + (data.error || 'Mislukt')); return; }
+    // Update lokale array en herrender kaart
+    const inz = alleInzendingen.find(i => i.id.replace(/-/g,'') === htmlId);
+    if (inz && inz.properties?.['Status']?.select) {
+      inz.properties['Status'].select.name = nieuw;
+    }
+    // Herrender de kaart
+    const kaartEl = document.getElementById('inz-' + htmlId);
+    const wasOpen = kaartEl?.classList.contains('open');
+    renderInzendingen();
+    if (wasOpen) document.getElementById('inz-' + htmlId)?.classList.add('open');
+    showToast(nieuw === 'Verwerkt' ? '✓ Gemarkeerd als Verwerkt' : '↩ Teruggezet op Nieuw');
+  } catch {
+    showToast('❌ Verbindingsfout');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function verwijderInzending(pageId, htmlId, naam) {
+  const ok = await bevestig(
+    'Inzending verwijderen?',
+    `"${naam}" wordt uit Notion verwijderd. Het materiaaloverzicht wordt daarna automatisch bijgewerkt.`
+  );
+  if (!ok) return;
+  try {
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ action: 'inzending_verwijderen', page_id: pageId }),
+    });
+    const data = await res.json();
+    if (!data.ok) { showToast('❌ ' + (data.error || 'Verwijderen mislukt')); return; }
+    alleInzendingen = alleInzendingen.filter(inz => inz.id.replace(/-/g,'') !== htmlId);
+    document.getElementById('badge-inz').textContent = alleInzendingen.length;
+    renderInzendingen();
+    locatieMap = bouwLocatieMap(alleInzendingen);
+    renderMaterieel();
+    showToast('✓ Inzending verwijderd');
+  } catch (e) {
+    showToast('❌ Verbindingsfout');
+  }
+}
+
 /* ── KLUSSEN ──────────────────────────────────────── */
 async function laadKlussen() {
   try {
     const res  = await fetch(WORKER + '?action=klussen');
     const data = await res.json();
     alleKlussen = data.ok && data.klussen.length ? data.klussen : [...KLUSSEN_DEFAULT];
-    document.getElementById('badge-kl').textContent = alleKlussen.length;
+    const badgeKl = document.getElementById('badge-kl');
+    badgeKl.textContent = alleKlussen.length;
+    badgeKl.style.display = 'flex';
     renderKlussen();
   } catch (e) {
     alleKlussen = [...KLUSSEN_DEFAULT];
@@ -657,15 +824,23 @@ function voegKlusToe() {
   alleKlussen.unshift({ naam, werknr: nr });
   document.getElementById('nieuw-klus-naam').value = '';
   document.getElementById('nieuw-klus-nr').value   = '';
-  document.getElementById('badge-kl').textContent  = alleKlussen.length;
+  const badgeKl2 = document.getElementById('badge-kl');
+  badgeKl2.textContent = alleKlussen.length;
+  badgeKl2.style.display = 'flex';
   renderKlussen();
   slaKlussenOp(true);
 }
 
-function verwijderKlus(idx) {
-  if (!confirm(`Verwijder "${alleKlussen[idx].naam}"?`)) return;
+async function verwijderKlus(idx) {
+  const ok = await bevestig(
+    'Klus verwijderen?',
+    `"${alleKlussen[idx].naam}" (${alleKlussen[idx].werknr}) wordt permanent verwijderd.`
+  );
+  if (!ok) return;
   alleKlussen.splice(idx, 1);
-  document.getElementById('badge-kl').textContent = alleKlussen.length;
+  const badgeKl3 = document.getElementById('badge-kl');
+  badgeKl3.textContent = alleKlussen.length;
+  badgeKl3.style.display = 'flex';
   renderKlussen();
   slaKlussenOp(true);
 }
@@ -832,6 +1007,27 @@ function closeLightbox() {
   document.getElementById('lightbox').classList.remove('open');
 }
 
+/* ── BEVESTIG MODAL ───────────────────────────────── */
+function bevestig(titel, tekst, icon = '🗑️') {
+  return new Promise(resolve => {
+    document.getElementById('modal-icon').textContent  = icon;
+    document.getElementById('modal-titel').textContent = titel;
+    document.getElementById('modal-tekst').textContent = tekst;
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.add('open');
+    function sluit(ok) {
+      overlay.classList.remove('open');
+      document.getElementById('modal-bevestig').onclick  = null;
+      document.getElementById('modal-annuleer').onclick  = null;
+      overlay.onclick = null;
+      resolve(ok);
+    }
+    document.getElementById('modal-bevestig').onclick = () => sluit(true);
+    document.getElementById('modal-annuleer').onclick = () => sluit(false);
+    overlay.onclick = e => { if (e.target === overlay) sluit(false); };
+  });
+}
+
 /* ── HELPERS ──────────────────────────────────────── */
 function prop(page, name) {
   return page?.properties?.[name];
@@ -983,7 +1179,12 @@ async function voegGebruikerToe() {
 }
 
 async function verwijderGebruiker(gebruikersnaam, naam) {
-  if (!confirm(`Account "${naam}" (${gebruikersnaam}) verwijderen?`)) return;
+  const ok = await bevestig(
+    'Account verwijderen?',
+    `"${naam}" (${gebruikersnaam}) kan daarna niet meer inloggen.`,
+    '👤'
+  );
+  if (!ok) return;
   try {
     const res  = await fetch(WORKER, {
       method: 'POST',
@@ -996,13 +1197,6 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
   } catch (e) {
     showToast('❌ Verbindingsfout');
   }
-}
-
-/* ── TABS (uitgebreid) ────────────────────────────── */
-const origTabSwitch = tabSwitch;
-function tabSwitch(naam, btn) {
-  origTabSwitch(naam, btn);
-  if (naam === 'gebruikers') laadGebruikers();
 }
 
 /* ── START ────────────────────────────────────────── */

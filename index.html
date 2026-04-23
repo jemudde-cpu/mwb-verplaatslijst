@@ -177,9 +177,12 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .btn-verstuur{background:var(--groen);color:#fff;}
 
 /* BOTTOM NAVIGATION */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:55;display:flex;background:#111111;border-top:2px solid var(--border-2);height:72px;}
-.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:var(--dim);transition:color .2s;padding:8px 0;}
+.bottom-nav{position:fixed;bottom:16px;left:16px;right:16px;z-index:55;display:flex;background:#1a1a1a;border:1px solid var(--border-2);border-radius:16px;height:64px;box-shadow:0 8px 32px rgba(0,0,0,.50);overflow:hidden;}
+.bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;color:var(--dim);transition:color .2s;padding:8px 0;background:none;border:none;font-family:inherit;cursor:pointer;-webkit-appearance:none;position:relative;}
+.bn-item+.bn-item::before{content:'';position:absolute;left:0;top:16%;height:68%;width:1px;background:var(--border-2);}
 .bn-item.active{color:var(--accent);}
+.bn-icon{font-size:20px;line-height:1;}
+.bn-label{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
 .bn-icon{font-size:22px;line-height:1;}
 .bn-label{font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;}
 
@@ -242,16 +245,39 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .ir-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 .info-row span:last-child{font-size:13px;color:rgba(255,255,255,.65);line-height:1.5;}
 
-/* THEME TOGGLE */
-.theme-toggle{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--surface);border:1.5px solid var(--border-2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;flex-shrink:0;transition:border-color .2s;}
-.theme-toggle:active{border-color:var(--accent);}
+/* HEADER MENU */
+.header-menu-wrap{position:relative;flex-shrink:0;}
+.header-menu-btn{width:36px;height:36px;border-radius:var(--radius-sm);background:var(--surface);border:1.5px solid var(--border-2);color:var(--tekst);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:border-color .2s;}
+.header-menu-btn.open,.header-menu-btn:active{border-color:var(--accent);color:var(--accent);}
+.header-dropdown{position:absolute;top:calc(100% + 8px);right:0;min-width:200px;background:var(--surface);border:1.5px solid var(--border-2);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,.40);overflow:hidden;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .18s,transform .18s;z-index:200;}
+.header-dropdown.open{opacity:1;pointer-events:all;transform:translateY(0);}
+.dropdown-item{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;border:none;background:transparent;color:var(--tekst);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;text-align:left;-webkit-appearance:none;transition:background .12s;}
+.dropdown-item:hover{background:rgba(255,255,255,.05);}
+.dropdown-item:active{background:rgba(255,255,255,.09);}
+.dropdown-item-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.dropdown-divider{height:1px;background:var(--border);margin:4px 0;}
+.dropdown-item-rood{color:var(--rood);}
+.dropdown-item-rood:hover{background:rgba(239,68,68,.07);}
+
+/* WACHTWOORD MODAL */
+.ww-modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;padding:0;}
+.ww-modal-overlay.open{opacity:1;pointer-events:all;}
+.ww-modal-box{width:100%;max-width:480px;background:var(--surface);border-radius:16px 16px 0 0;border:1px solid var(--border-2);border-bottom:none;padding:20px 20px 40px;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1,.32,1);}
+.ww-modal-overlay.open .ww-modal-box{transform:translateY(0);}
+.ww-handle{width:40px;height:3px;background:var(--border-2);border-radius:2px;margin:0 auto 20px;}
+.ww-titel{font-size:17px;font-weight:800;margin-bottom:4px;}
+.ww-sub{font-size:13px;color:var(--zacht);margin-bottom:20px;}
+.ww-input{width:100%;padding:13px 16px;border:1.5px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:15px;font-weight:600;color:var(--tekst);background:var(--surface-2);margin-bottom:10px;-webkit-appearance:none;}
+.ww-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,0,.15);}
+.ww-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#fff;cursor:pointer;margin-top:4px;-webkit-appearance:none;}
+.ww-fout{font-size:13px;color:var(--rood);min-height:18px;margin-top:6px;font-weight:600;}
 
 /* LIGHT THEME */
 [data-theme="light"]{--tekst:#111111;--zacht:#666666;--dim:#bbbbbb;--border:#e5e5e5;--border-2:#d0d0d0;--surface:#ffffff;--surface-2:#f5f5f5;}
 [data-theme="light"] body{background:#f0f0f0;}
 [data-theme="light"] header{background:#f0f0f0;}
 [data-theme="light"] .nav-bar{background:#f0f0f0;}
-[data-theme="light"] .bottom-nav{background:#f0f0f0;}
+[data-theme="light"] .bottom-nav{background:#ffffff;box-shadow:0 8px 32px rgba(0,0,0,.12);}
 [data-theme="light"] .header-title{color:#111111;}
 [data-theme="light"] .loading-overlay{background:rgba(240,240,240,.97);}
 [data-theme="light"] .toast{background:#ffffff;}
@@ -259,6 +285,71 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 [data-theme="light"] .ac-dropdown{background:#ffffff;box-shadow:0 8px 24px rgba(0,0,0,.10);}
 [data-theme="light"] .field input[type="date"]{color-scheme:light;}
 [data-theme="light"] .info-row span:last-child{color:#555555;}
+[data-theme="light"] .header-dropdown{box-shadow:0 8px 32px rgba(0,0,0,.12);}
+
+/* OVERZICHT VIEW */
+.ovz-wrap{padding:16px 16px 110px;max-width:720px;margin:0 auto;}
+.ovz-search-wrap{position:relative;margin-bottom:14px;}
+.ovz-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--zacht);pointer-events:none;}
+.ovz-search-input{width:100%;padding:13px 14px 13px 42px;border:1px solid var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:500;color:var(--tekst);background:var(--surface);-webkit-appearance:none;transition:border-color .2s;}
+.ovz-search-input::placeholder{color:var(--dim);}
+.ovz-search-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,107,0,.13);}
+.ovz-filter-wrap{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+.ovz-filter-wrap::-webkit-scrollbar{display:none;}
+.ovz-filter-btn{flex-shrink:0;padding:8px 14px;border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;background:transparent;border:1px solid var(--border-2);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
+.ovz-filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ovz-sectie-header{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--zacht);padding:6px 12px 10px;border-left:2px solid var(--accent);margin-bottom:10px;}
+.ovz-klus-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;}
+.ovz-klus-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;gap:12px;}
+.ovz-klus-header:active{background:rgba(255,255,255,.03);}
+.ovz-klus-info{flex:1;min-width:0;}
+.ovz-klus-naam{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ovz-klus-nr{font-size:11px;font-weight:800;color:var(--accent);padding:3px 9px;background:rgba(255,107,0,.12);border-radius:var(--radius-sm);flex-shrink:0;}
+.ovz-klus-teller{font-size:11px;color:var(--zacht);margin-top:2px;}
+.ovz-klus-chevron{color:var(--dim);font-size:14px;transition:transform .25s;flex-shrink:0;}
+.ovz-klus-card.open .ovz-klus-chevron{transform:rotate(90deg);}
+.ovz-klus-body{display:none;border-top:1px solid var(--border);}
+.ovz-klus-card.open .ovz-klus-body{display:block;}
+.ovz-item-regel{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:12px;}
+.ovz-item-regel:last-child{border-bottom:none;}
+.ovz-item-naam{font-size:13px;font-weight:600;}
+.ovz-item-detail{font-size:11px;color:var(--zacht);margin-top:2px;line-height:1.4;}
+.ovz-item-badge{font-size:12px;font-weight:800;color:var(--accent);background:rgba(255,107,0,.12);padding:3px 10px;border-radius:var(--radius-sm);white-space:nowrap;flex-shrink:0;}
+.ovz-zaak-card{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.18);}
+.ovz-zaak-card .ovz-klus-naam{color:var(--groen);}
+.ovz-zaak-card .ovz-klus-nr{background:rgba(34,197,94,.12);color:var(--groen);}
+.ovz-status-banner{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;}
+.ovz-status-dot{width:8px;height:8px;border-radius:50%;background:var(--groen);flex-shrink:0;}
+.ovz-status-tekst{font-size:13px;color:var(--zacht);}
+.ovz-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 20px;}
+.ovz-leeg{text-align:center;padding:48px 20px;}
+.ovz-leeg-icon{font-size:40px;margin-bottom:10px;}
+.ovz-leeg-titel{font-size:16px;font-weight:800;margin-bottom:4px;}
+.ovz-leeg-sub{font-size:13px;color:var(--zacht);}
+
+/* HOME VIEW */
+.view{display:none;}
+.view.active{display:block;}
+.home-wrap{padding:16px 16px 120px;max-width:680px;margin:0 auto;}
+.home-welkom-card{background:linear-gradient(135deg,rgba(255,107,0,.13) 0%,rgba(255,107,0,.04) 100%);border:1px solid rgba(255,107,0,.25);border-radius:var(--radius-lg);padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;}
+.home-welkom-avatar{width:52px;height:52px;background:rgba(255,107,0,.18);border:2px solid rgba(255,107,0,.35);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.home-welkom-groet{font-size:10px;color:var(--zacht);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.home-welkom-naam{font-size:20px;font-weight:900;line-height:1.2;}
+.home-welkom-datum{font-size:12px;color:var(--zacht);margin-top:4px;}
+.home-cta{width:100%;padding:18px 20px;background:var(--accent);border:none;border-radius:var(--radius-lg);font-family:inherit;font-size:15px;font-weight:800;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:.6px;margin-bottom:24px;-webkit-appearance:none;transition:opacity .15s;}
+.home-cta:active{opacity:.85;}
+.home-cta-arrow{font-size:22px;font-weight:400;}
+.home-sectie-titel{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--zacht);margin-bottom:10px;}
+.home-inz-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+.home-inz-icon{font-size:22px;flex-shrink:0;}
+.home-inz-info{flex:1;min-width:0;}
+.home-inz-naam{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.home-inz-meta{font-size:11px;color:var(--zacht);margin-top:2px;}
+.home-inz-status{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 9px;border-radius:var(--radius-sm);flex-shrink:0;}
+.home-inz-status-nieuw{background:rgba(255,107,0,.15);color:var(--accent);}
+.home-inz-status-verwerkt{background:rgba(34,197,94,.15);color:var(--groen);}
+.home-leeg{text-align:center;padding:30px 20px;color:var(--zacht);font-size:13px;}
+.home-spinner{width:20px;height:20px;border:2px solid var(--border-2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto;}
 
 /* LOGIN OVERLAY */
 .login-overlay{position:fixed;inset:0;z-index:500;background:#111111;display:flex;align-items:center;justify-content:center;padding:24px;}
@@ -282,10 +373,6 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .welkom-naam{font-size:16px;font-weight:800;color:var(--tekst);}
 .welkom-rol{font-size:11px;color:var(--zacht);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
 
-/* HEADER USER INFO */
-.header-user{display:flex;align-items:center;gap:8px;}
-.header-logout{font-size:10px;font-weight:800;color:var(--zacht);padding:5px 11px;border:1.5px solid var(--border-2);border-radius:var(--radius-sm);text-transform:uppercase;letter-spacing:.5px;background:transparent;cursor:pointer;-webkit-appearance:none;}
-.header-logout:active{border-color:var(--accent);color:var(--accent);}
 </style>
 </head>
 <body>
@@ -314,9 +401,30 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       Middelwatering Bouw
       <small>Verplaatslijst</small>
     </div>
-    <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()" title="Licht/donker"></button>
-    <a href="beheer.html" class="header-beheer" id="header-beheer-link" style="display:none">⚙️ Beheer</a>
-    <button class="header-logout" onclick="uitloggen()">Uitloggen</button>
+    <div class="header-menu-wrap">
+      <button class="header-menu-btn" id="menu-btn" onclick="toggleMenu()">⋮</button>
+      <div class="header-dropdown" id="header-dropdown">
+        <button class="dropdown-item" onclick="toggleTheme()">
+          <span class="dropdown-item-icon" id="theme-icon">☀️</span>
+          <span id="theme-label">Licht thema</span>
+        </button>
+        <div class="dropdown-divider"></div>
+        <button class="dropdown-item" onclick="openWachtwoord()">
+          <span class="dropdown-item-icon">🔑</span>
+          Wachtwoord wijzigen
+        </button>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="beheer.html" id="header-beheer-link" style="display:none">
+          <span class="dropdown-item-icon">⚙️</span>
+          Beheer
+        </a>
+        <div class="dropdown-divider" id="beheer-divider" style="display:none"></div>
+        <button class="dropdown-item dropdown-item-rood" onclick="uitloggen()">
+          <span class="dropdown-item-icon">🚪</span>
+          Uitloggen
+        </button>
+      </div>
+    </div>
   </div>
   <div class="progress" id="progress-bar">
     <div class="progress-step" id="ps-1" onclick="goToStep(1)">
@@ -341,6 +449,28 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   </div>
 </header>
 
+<!-- HOME VIEW -->
+<div class="view active" id="view-home">
+  <div class="home-wrap">
+    <div class="home-welkom-card">
+      <div class="home-welkom-avatar">👷</div>
+      <div>
+        <div class="home-welkom-groet" id="home-groet">Welkom</div>
+        <div class="home-welkom-naam" id="home-naam">—</div>
+        <div class="home-welkom-datum" id="home-datum-str"></div>
+      </div>
+    </div>
+    <button class="home-cta" onclick="naarWizard()">
+      <span>Nieuwe verplaatsing</span>
+      <span class="home-cta-arrow">→</span>
+    </button>
+    <div class="home-sectie-titel">Mijn recente inzendingen</div>
+    <div id="home-inzendingen"><div class="home-spinner"></div></div>
+  </div>
+</div>
+
+<!-- WIZARD VIEW -->
+<div class="view" id="view-wizard">
 <div class="wizard">
 
 <!-- STAP 1 -->
@@ -527,6 +657,45 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <button class="sheet-save" onclick="saveSheet()">Opslaan ✓</button>
 </div>
 
+</div><!-- /view-wizard -->
+
+<!-- OVERZICHT VIEW -->
+<div class="view" id="view-overzicht">
+  <div class="ovz-wrap">
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div class="ovz-search-wrap" style="flex:1;margin-bottom:0;">
+        <span class="ovz-search-icon">🔍</span>
+        <input class="ovz-search-input" type="text" id="ovz-zoek" placeholder="Zoek op klus of werknummer..." oninput="ovzFilter()">
+      </div>
+      <button onclick="ovzHerlaad()" style="width:48px;height:48px;flex-shrink:0;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border-2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;" title="Verversen">🔄</button>
+    </div>
+    <div class="ovz-filter-wrap">
+      <button class="ovz-filter-btn active" onclick="ovzSetFilter('alles',this)">Alles</button>
+      <button class="ovz-filter-btn" onclick="ovzSetFilter('keten',this)">Keten</button>
+      <button class="ovz-filter-btn" onclick="ovzSetFilter('containers',this)">Containers</button>
+      <button class="ovz-filter-btn" onclick="ovzSetFilter('lichtmasten',this)">Lichtmasten</button>
+      <button class="ovz-filter-btn" onclick="ovzSetFilter('hekken',this)">Bouwhekken</button>
+      <button class="ovz-filter-btn" onclick="ovzSetFilter('aansluitingen',this)">Aansluitingen</button>
+    </div>
+    <div id="ovz-status-banner"></div>
+    <div id="ovz-content"><div class="ovz-loading"><div class="spinner"></div><div style="font-size:13px;color:var(--zacht)">Materieel laden...</div></div></div>
+  </div>
+</div>
+
+<!-- WACHTWOORD MODAL -->
+<div class="ww-modal-overlay" id="ww-overlay" onclick="if(event.target===this)sluitWachtwoord()">
+  <div class="ww-modal-box">
+    <div class="ww-handle"></div>
+    <div class="ww-titel">Wachtwoord wijzigen</div>
+    <div class="ww-sub">Kies een nieuw wachtwoord van minimaal 6 tekens.</div>
+    <input class="ww-input" type="password" id="ww-huidig" placeholder="Huidig wachtwoord" autocomplete="current-password">
+    <input class="ww-input" type="password" id="ww-nieuw" placeholder="Nieuw wachtwoord">
+    <input class="ww-input" type="password" id="ww-bevestig" placeholder="Bevestig nieuw wachtwoord" onkeydown="if(event.key==='Enter')slaWachtwoordOp()">
+    <div class="ww-fout" id="ww-fout"></div>
+    <button class="ww-btn" id="ww-btn" onclick="slaWachtwoordOp()">Wachtwoord opslaan →</button>
+  </div>
+</div>
+
 <!-- LOADING OVERLAY -->
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
@@ -537,14 +706,18 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
-  <a href="index.html" class="bn-item active">
+  <button class="bn-item active" id="bn-home" onclick="naarHome()">
+    <span class="bn-icon">🏠</span>
+    <span class="bn-label">Home</span>
+  </button>
+  <button class="bn-item" id="bn-wizard" onclick="naarWizard()">
     <span class="bn-icon">📋</span>
     <span class="bn-label">Verplaatsen</span>
-  </a>
-  <a href="overzicht.html" class="bn-item">
+  </button>
+  <button class="bn-item" id="bn-overzicht" onclick="naarOverzicht()">
     <span class="bn-icon">📍</span>
     <span class="bn-label">Overzicht</span>
-  </a>
+  </button>
 </nav>
 
 <script>
@@ -554,14 +727,28 @@ const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
 function setTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   localStorage.setItem('mwb_theme', t);
-  const btn = document.getElementById('theme-toggle');
-  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀️';
+  const icon  = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-label');
+  if (icon)  icon.textContent  = t === 'light' ? '🌙' : '☀️';
+  if (label) label.textContent = t === 'light' ? 'Donker thema' : 'Licht thema';
   document.getElementById('theme-meta').content = t === 'light' ? '#f0f0f0' : '#111111';
 }
 function toggleTheme() {
   setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
 }
-// Init thema icon na DOM load
+function toggleMenu() {
+  const btn      = document.getElementById('menu-btn');
+  const dropdown = document.getElementById('header-dropdown');
+  const isOpen   = dropdown.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+document.addEventListener('click', e => {
+  const wrap = document.querySelector('.header-menu-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('header-dropdown').classList.remove('open');
+    document.getElementById('menu-btn').classList.remove('open');
+  }
+});
 document.addEventListener('DOMContentLoaded', () => {
   setTheme(localStorage.getItem('mwb_theme') || 'dark');
 });
@@ -1208,6 +1395,8 @@ async function verstuurAlles() {
         initState();
         BEWEGING.type = ''; BEWEGING.van = { naam:'',werknr:'' }; BEWEGING.naar = { naam:'',werknr:'' };
         goToStep(1);
+        naarHome();
+        laadMijnInzendingen();
       }, 1500);
     } else {
       showToast('❌ Fout: ' + (data.error || 'onbekend'));
@@ -1321,12 +1510,91 @@ function uitloggen() {
   location.reload();
 }
 
+/* ── HOME ────────────────────────────────────────── */
+function naarHome() {
+  document.getElementById('view-home').classList.add('active');
+  document.getElementById('view-wizard').classList.remove('active');
+  document.getElementById('view-overzicht').classList.remove('active');
+  document.getElementById('progress-bar').style.display = 'none';
+  document.getElementById('bn-home').classList.add('active');
+  document.getElementById('bn-wizard').classList.remove('active');
+  document.getElementById('bn-overzicht').classList.remove('active');
+}
+
+function naarWizard() {
+  document.getElementById('view-wizard').classList.add('active');
+  document.getElementById('view-home').classList.remove('active');
+  document.getElementById('view-overzicht').classList.remove('active');
+  document.getElementById('progress-bar').style.display = '';
+  document.getElementById('bn-wizard').classList.add('active');
+  document.getElementById('bn-home').classList.remove('active');
+  document.getElementById('bn-overzicht').classList.remove('active');
+}
+
+function naarOverzicht() {
+  document.getElementById('view-overzicht').classList.add('active');
+  document.getElementById('view-home').classList.remove('active');
+  document.getElementById('view-wizard').classList.remove('active');
+  document.getElementById('progress-bar').style.display = 'none';
+  document.getElementById('bn-overzicht').classList.add('active');
+  document.getElementById('bn-home').classList.remove('active');
+  document.getElementById('bn-wizard').classList.remove('active');
+  if (!ovzGeladen) ovzLaadData();
+}
+
+async function laadMijnInzendingen() {
+  const el = document.getElementById('home-inzendingen');
+  try {
+    const res  = await fetch(WORKER + '?action=mijn_inzendingen', {
+      headers: { 'Authorization': 'Bearer ' + getToken() }
+    });
+    const data = await res.json();
+    if (!data.ok || !data.results.length) {
+      el.innerHTML = '<div class="home-leeg">Nog geen inzendingen gevonden.</div>';
+      return;
+    }
+    el.innerHTML = data.results.map(inz => {
+      const naam   = inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
+      const bp     = inz.properties?.['Bouwplaats']?.rich_text?.[0]?.plain_text || '';
+      const datum  = inz.properties?.['Datum']?.date?.start || '';
+      const status = inz.properties?.['Status']?.select?.name || 'Nieuw';
+      const type   = inz.properties?.['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
+      const icon   = type.includes('Zaak') ? '🏢' : '🔄';
+      const sc     = status === 'Verwerkt' ? 'home-inz-status-verwerkt' : 'home-inz-status-nieuw';
+      return `<div class="home-inz-card">
+        <span class="home-inz-icon">${icon}</span>
+        <div class="home-inz-info">
+          <div class="home-inz-naam">${naam}</div>
+          <div class="home-inz-meta">${datum}${bp ? ' · ' + bp : ''}</div>
+        </div>
+        <span class="home-inz-status ${sc}">${status}</span>
+      </div>`;
+    }).join('');
+  } catch {
+    el.innerHTML = '<div class="home-leeg">Kon inzendingen niet laden.</div>';
+  }
+}
+
 function startApp(naam, role) {
+  // Wizard stap 1
   document.getElementById('welkom-naam').textContent = naam;
   document.getElementById('welkom-rol').textContent  = role === 'admin' ? 'Beheerder' : 'Medewerker';
   if (role === 'admin') {
     document.getElementById('header-beheer-link').style.display = '';
+    document.getElementById('beheer-divider').style.display = '';
   }
+  // Home view
+  const groeten = ['Goedenacht','Goedemorgen','Goedemiddag','Goedenavond'];
+  const uur = new Date().getHours();
+  const groet = uur < 6 ? groeten[0] : uur < 12 ? groeten[1] : uur < 18 ? groeten[2] : groeten[3];
+  document.getElementById('home-groet').textContent = groet;
+  document.getElementById('home-naam').textContent  = naam;
+  const nu = new Date();
+  document.getElementById('home-datum-str').textContent =
+    nu.toLocaleDateString('nl-NL', { weekday:'long', day:'numeric', month:'long' });
+  // Start op home, progress bar verborgen
+  document.getElementById('progress-bar').style.display = 'none';
+  laadMijnInzendingen();
   init();
 }
 
@@ -1339,6 +1607,169 @@ function init() {
 
   updateProgress();
   updateNav();
+}
+
+/* ── OVERZICHT ───────────────────────────────────── */
+const OVZ_FILTER_MAP = {
+  keten:        ['schaftkeet','uitvoerderskeet','pipokeet','keettrap'],
+  containers:   ['container'],
+  lichtmasten:  ['lichtmast'],
+  hekken:       ['bouwhekken','bouwhek_voeten','hekklemmen','hekwielen','hek_schoren','kunststof_rijplaten'],
+  aansluitingen:['bouwmeterkast','waterput','waterkraan'],
+};
+let ovzLocatieMap  = {};
+let ovzActiefFilter = 'alles';
+let ovzLaadMoment  = null;
+let ovzGeladen     = false;
+
+async function ovzLaadData() {
+  document.getElementById('ovz-content').innerHTML =
+    '<div class="ovz-loading"><div class="spinner"></div><div style="font-size:13px;color:var(--zacht)">Materieel laden...</div></div>';
+  try {
+    const res  = await fetch(WORKER + '?action=inzendingen', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    ovzLocatieMap = bouwLocatieMap(data.results);
+    ovzLaadMoment = new Date();
+    ovzGeladen    = true;
+    ovzRender();
+  } catch (e) {
+    document.getElementById('ovz-content').innerHTML =
+      `<div class="ovz-leeg"><div class="ovz-leeg-icon">⚠️</div><div class="ovz-leeg-titel">Ophalen mislukt</div><div class="ovz-leeg-sub">${e.message}</div></div>`;
+  }
+}
+
+function ovzRender() {
+  const statusEl = document.getElementById('ovz-status-banner');
+  statusEl.innerHTML = ovzLaadMoment
+    ? `<div class="ovz-status-banner"><div class="ovz-status-dot"></div><div class="ovz-status-tekst">Bijgewerkt om ${ovzLaadMoment.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} · ${Object.keys(ovzLocatieMap).length} locaties</div></div>`
+    : '';
+
+  const zoek    = (document.getElementById('ovz-zoek').value || '').toLowerCase();
+  const locKeys = Object.keys(ovzLocatieMap).filter(k => {
+    const loc = ovzLocatieMap[k];
+    if (zoek && !loc.naam.toLowerCase().includes(zoek) && !loc.werknr.toLowerCase().includes(zoek)) return false;
+    if (ovzActiefFilter !== 'alles') {
+      const ids = OVZ_FILTER_MAP[ovzActiefFilter] || [];
+      if (!Object.keys(loc.items).some(id => ids.includes(id))) return false;
+    }
+    return true;
+  });
+
+  if (!locKeys.length) {
+    document.getElementById('ovz-content').innerHTML =
+      '<div class="ovz-leeg"><div class="ovz-leeg-icon">📭</div><div class="ovz-leeg-titel">Niets gevonden</div><div class="ovz-leeg-sub">Probeer een andere zoekterm of filter.</div></div>';
+    return;
+  }
+
+  const zaakKeys = locKeys.filter(k => k === 'DE ZAAK' || ovzLocatieMap[k].naam.includes('Zaak') || ovzLocatieMap[k].naam.includes('Depot'));
+  const klusKeys = locKeys.filter(k => !zaakKeys.includes(k));
+  let html = '';
+  if (zaakKeys.length) {
+    html += '<div class="ovz-sectie-header">🏢🏭 De Zaak – Depot</div>';
+    zaakKeys.forEach(k => { html += ovzKlusKaart(k, true); });
+  }
+  if (klusKeys.length) {
+    if (zaakKeys.length) html += '<div class="ovz-sectie-header" style="margin-top:20px;">🏗️ Bouwplaatsen</div>';
+    klusKeys.forEach(k => { html += ovzKlusKaart(k, false); });
+  }
+  document.getElementById('ovz-content').innerHTML = html;
+}
+
+function ovzKlusKaart(key, isZaak) {
+  const loc   = ovzLocatieMap[key];
+  const items = ovzActiefFilter === 'alles'
+    ? Object.entries(loc.items)
+    : Object.entries(loc.items).filter(([id]) => (OVZ_FILTER_MAP[ovzActiefFilter] || []).includes(id));
+  if (!items.length) return '';
+  const totaal = items.reduce((s,[,v]) => s + v.aantal, 0);
+  const safeId = key.replace(/[^a-z0-9]/gi,'_');
+  const regels = items.map(([,v]) => {
+    const nrs = v.nummers?.length ? `<div class="ovz-item-detail">Nr: ${v.nummers.join(', ')}</div>` : '';
+    return `<div class="ovz-item-regel"><div><div class="ovz-item-naam">${v.naam}</div>${nrs}</div><div class="ovz-item-badge">${v.aantal}×</div></div>`;
+  }).join('');
+  return `<div class="ovz-klus-card ${isZaak ? 'ovz-zaak-card' : ''}" id="ovzkc-${safeId}">
+    <div class="ovz-klus-header" onclick="document.getElementById('ovzkc-${safeId}').classList.toggle('open')">
+      <div class="ovz-klus-info">
+        <div class="ovz-klus-naam">${loc.naam || loc.werknr}</div>
+        <div class="ovz-klus-teller">${items.length} soort${items.length!==1?'en':''} · ${totaal} stuks</div>
+      </div>
+      ${loc.werknr && loc.werknr !== 'DE ZAAK' ? `<span class="ovz-klus-nr">${loc.werknr}</span>` : ''}
+      <span class="ovz-klus-chevron">›</span>
+    </div>
+    <div class="ovz-klus-body">${regels}</div>
+  </div>`;
+}
+
+function ovzHerlaad() {
+  ovzGeladen = false;
+  ovzLaadData();
+}
+
+function ovzSetFilter(filter, btn) {
+  ovzActiefFilter = filter;
+  document.querySelectorAll('.ovz-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ovzRender();
+}
+
+function ovzFilter() { ovzRender(); }
+
+/* ── WACHTWOORD WIJZIGEN ─────────────────────────── */
+function openWachtwoord() {
+  document.getElementById('ww-huidig').value   = '';
+  document.getElementById('ww-nieuw').value    = '';
+  document.getElementById('ww-bevestig').value = '';
+  document.getElementById('ww-fout').textContent = '';
+  document.getElementById('ww-overlay').classList.add('open');
+  document.getElementById('header-dropdown').classList.remove('open');
+  document.getElementById('menu-btn').classList.remove('open');
+  setTimeout(() => document.getElementById('ww-huidig').focus(), 350);
+}
+
+function sluitWachtwoord() {
+  document.getElementById('ww-overlay').classList.remove('open');
+}
+
+async function slaWachtwoordOp() {
+  const huidig   = document.getElementById('ww-huidig').value;
+  const nieuw    = document.getElementById('ww-nieuw').value;
+  const bevestig = document.getElementById('ww-bevestig').value;
+  const fout     = document.getElementById('ww-fout');
+  const btn      = document.getElementById('ww-btn');
+
+  if (!huidig)              { fout.textContent = 'Vul je huidige wachtwoord in.'; return; }
+  if (nieuw.length < 6)     { fout.textContent = 'Nieuw wachtwoord minimaal 6 tekens.'; return; }
+  if (nieuw !== bevestig)   { fout.textContent = 'Wachtwoorden komen niet overeen.'; return; }
+
+  btn.textContent = 'Bezig...'; btn.disabled = true; fout.textContent = '';
+  try {
+    // Eerst inloggen om huidig wachtwoord te verifiëren
+    const loginRes  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', gebruikersnaam: getTokenPayload()?.sub, wachtwoord: huidig }),
+    });
+    const loginData = await loginRes.json();
+    if (!loginData.ok) { fout.textContent = 'Huidig wachtwoord is onjuist.'; return; }
+
+    const res  = await fetch(WORKER, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+      body: JSON.stringify({ action: 'wachtwoord_wijzigen', wachtwoord_nieuw: nieuw }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      sluitWachtwoord();
+      showToast('✓ Wachtwoord gewijzigd');
+    } else {
+      fout.textContent = data.error || 'Wijzigen mislukt.';
+    }
+  } catch {
+    fout.textContent = 'Verbindingsfout. Probeer opnieuw.';
+  } finally {
+    btn.textContent = 'Wachtwoord opslaan →'; btn.disabled = false;
+  }
 }
 
 /* ── START ───────────────────────────────────────── */
