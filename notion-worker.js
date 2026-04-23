@@ -153,13 +153,13 @@ export default {
               body: JSON.stringify({
                 filter: { property: 'Ingevuld door', rich_text: { equals: payload.naam } },
                 sorts:  [{ property: 'Datum', direction: 'descending' }],
-                page_size: 5,
+                page_size: 100,
               }),
             }
           );
           if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
           const data = await res.json();
-          return json({ ok: true, results: data.results });
+          return json({ ok: true, results: data.results, has_more: data.has_more });
         } catch (e) {
           return json({ ok: false, error: e.message }, 500);
         }

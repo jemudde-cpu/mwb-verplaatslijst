@@ -350,6 +350,33 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .home-inz-status-verwerkt{background:rgba(34,197,94,.15);color:var(--groen);}
 .home-leeg{text-align:center;padding:30px 20px;color:var(--zacht);font-size:13px;}
 .home-spinner{width:20px;height:20px;border:2px solid var(--border-2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:30px auto;}
+.home-inz-card{cursor:pointer;}
+.home-inz-card:active{opacity:.7;}
+
+/* DETAIL VIEW */
+.detail-wrap{padding:20px 20px 100px;}
+.detail-back{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;cursor:pointer;margin-bottom:20px;background:none;border:none;font-family:inherit;padding:0;}
+.detail-header{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+.detail-titel{font-size:18px;font-weight:900;margin-bottom:6px;}
+.detail-datum{font-size:13px;color:var(--zacht);margin-bottom:12px;}
+.detail-status{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+.detail-status.nieuw{background:rgba(255,107,0,.15);color:var(--accent);}
+.detail-status.verwerkt{background:rgba(34,197,94,.15);color:var(--groen);}
+.detail-route{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-2);}
+.detail-locatie{flex:1;background:var(--bg);border-radius:10px;padding:10px 12px;}
+.detail-locatie-label{font-size:11px;color:var(--zacht);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.detail-locatie-naam{font-size:14px;font-weight:800;}
+.detail-locatie-nr{font-size:12px;color:var(--zacht);margin-top:2px;}
+.detail-pijl{font-size:20px;color:var(--accent);flex-shrink:0;}
+.detail-sectie{margin-bottom:14px;}
+.detail-sectie-titel{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--zacht);margin-bottom:8px;}
+.detail-item-rij{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface);border:1px solid var(--border-2);border-radius:10px;margin-bottom:6px;}
+.detail-item-naam{font-size:14px;font-weight:700;}
+.detail-item-nrs{font-size:12px;color:var(--zacht);margin-top:2px;}
+.detail-item-aantal{font-size:20px;font-weight:900;color:var(--accent);}
+.detail-opmerking{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius);padding:14px;font-size:14px;line-height:1.6;color:var(--tekst);}
+.detail-fotos{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.detail-foto{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;border:1px solid var(--border-2);}
 
 /* LOGIN OVERLAY */
 .login-overlay{position:fixed;inset:0;z-index:500;background:#111111;display:flex;align-items:center;justify-content:center;padding:24px;}
@@ -722,6 +749,11 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Bezig met versturen...</div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div class="view" id="view-detail">
+  <div class="detail-wrap" id="detail-inhoud"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1600,39 +1632,41 @@ async function apiFetch(url, opties = {}) {
 }
 
 /* ── HOME ────────────────────────────────────────── */
-function naarHome() {
-  document.getElementById('view-home').classList.add('active');
-  document.getElementById('view-wizard').classList.remove('active');
-  document.getElementById('view-overzicht').classList.remove('active');
+function alleViewsUit() {
+  ['view-home','view-wizard','view-overzicht','view-detail'].forEach(id =>
+    document.getElementById(id).classList.remove('active')
+  );
+  ['bn-home','bn-wizard','bn-overzicht'].forEach(id =>
+    document.getElementById(id).classList.remove('active')
+  );
   document.getElementById('progress-bar').style.display = 'none';
+}
+
+function naarHome() {
+  alleViewsUit();
+  document.getElementById('view-home').classList.add('active');
   document.getElementById('bn-home').classList.add('active');
-  document.getElementById('bn-wizard').classList.remove('active');
-  document.getElementById('bn-overzicht').classList.remove('active');
 }
 
 function naarWizard() {
+  alleViewsUit();
   document.getElementById('view-wizard').classList.add('active');
-  document.getElementById('view-home').classList.remove('active');
-  document.getElementById('view-overzicht').classList.remove('active');
-  document.getElementById('progress-bar').style.display = '';
   document.getElementById('bn-wizard').classList.add('active');
-  document.getElementById('bn-home').classList.remove('active');
-  document.getElementById('bn-overzicht').classList.remove('active');
+  document.getElementById('progress-bar').style.display = '';
 }
 
 function naarOverzicht() {
+  alleViewsUit();
   document.getElementById('view-overzicht').classList.add('active');
-  document.getElementById('view-home').classList.remove('active');
-  document.getElementById('view-wizard').classList.remove('active');
-  document.getElementById('progress-bar').style.display = 'none';
   document.getElementById('bn-overzicht').classList.add('active');
-  document.getElementById('bn-home').classList.remove('active');
-  document.getElementById('bn-wizard').classList.remove('active');
   if (!ovzGeladen) ovzLaadData();
 }
 
+let mijnInzendingen = [];
+
 async function laadMijnInzendingen() {
   const el = document.getElementById('home-inzendingen');
+  el.innerHTML = '<div class="home-spinner"></div>';
   try {
     const res  = await apiFetch(WORKER + '?action=mijn_inzendingen', {
       headers: { 'Authorization': 'Bearer ' + getToken() }
@@ -1643,7 +1677,8 @@ async function laadMijnInzendingen() {
       el.innerHTML = '<div class="home-leeg">Nog geen inzendingen gevonden.</div>';
       return;
     }
-    el.innerHTML = data.results.map(inz => {
+    mijnInzendingen = data.results;
+    el.innerHTML = mijnInzendingen.map((inz, i) => {
       const naam   = inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
       const bp     = inz.properties?.['Bouwplaats']?.rich_text?.[0]?.plain_text || '';
       const datum  = inz.properties?.['Datum']?.date?.start || '';
@@ -1651,7 +1686,7 @@ async function laadMijnInzendingen() {
       const type   = inz.properties?.['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
       const icon   = type.includes('Zaak') ? '🏢' : '🔄';
       const sc     = status === 'Verwerkt' ? 'home-inz-status-verwerkt' : 'home-inz-status-nieuw';
-      return `<div class="home-inz-card">
+      return `<div class="home-inz-card" onclick="openDetail(${i})">
         <span class="home-inz-icon">${icon}</span>
         <div class="home-inz-info">
           <div class="home-inz-naam">${naam}</div>
@@ -1663,6 +1698,88 @@ async function laadMijnInzendingen() {
   } catch {
     el.innerHTML = '<div class="home-leeg">Kon inzendingen niet laden.</div>';
   }
+}
+
+function openDetail(index) {
+  const inz     = mijnInzendingen[index];
+  if (!inz) return;
+  const p       = inz.properties || {};
+  const naam    = p['Naam']?.title?.[0]?.plain_text || '—';
+  const datum   = p['Datum']?.date?.start || '';
+  const status  = p['Status']?.select?.name || 'Nieuw';
+  const type    = p['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
+  const vanNr   = p['Werknr. Van']?.rich_text?.[0]?.plain_text || '—';
+  const naarNr  = p['Werknr. Naar']?.rich_text?.[0]?.plain_text || '—';
+  const naarNaam = p['Bouwplaats']?.rich_text?.[0]?.plain_text || naarNr;
+  const details  = p['Details']?.rich_text?.[0]?.plain_text || '';
+  const opmerking = p['Opmerkingen']?.rich_text?.[0]?.plain_text || '';
+  const sc      = status === 'Verwerkt' ? 'verwerkt' : 'nieuw';
+
+  // Parse items uit details
+  const alle = Object.values(SECTIES).flat();
+  const itemRegels = details.split('\n').map(line => {
+    for (const item of alle) {
+      if (line.startsWith(item.naam + ':')) {
+        const aantalMatch = line.match(/:\s*(\d+)/);
+        const nummerMatch = line.match(/nr\.\s*([^)]+)/);
+        const opmMatch    = line.match(/–\s*(.+)$/);
+        return {
+          naam:    item.naam,
+          aantal:  aantalMatch ? aantalMatch[1] : '?',
+          nummers: nummerMatch ? nummerMatch[1] : '',
+          opm:     opmMatch    ? opmMatch[1]    : '',
+        };
+      }
+    }
+    return null;
+  }).filter(Boolean);
+
+  let itemsHtml = '';
+  if (itemRegels.length) {
+    itemsHtml = `<div class="detail-sectie">
+      <div class="detail-sectie-titel">Verplaatst materieel</div>
+      ${itemRegels.map(it => `
+        <div class="detail-item-rij">
+          <div>
+            <div class="detail-item-naam">${it.naam}</div>
+            ${it.nummers ? `<div class="detail-item-nrs">Nr. ${it.nummers}</div>` : ''}
+            ${it.opm     ? `<div class="detail-item-nrs">${it.opm}</div>` : ''}
+          </div>
+          <div class="detail-item-aantal">×${it.aantal}</div>
+        </div>`).join('')}
+    </div>`;
+  }
+
+  const opmHtml = opmerking ? `<div class="detail-sectie">
+    <div class="detail-sectie-titel">Opmerking</div>
+    <div class="detail-opmerking">${opmerking}</div>
+  </div>` : '';
+
+  document.getElementById('detail-inhoud').innerHTML = `
+    <button class="detail-back" onclick="naarHome()">← Terug</button>
+    <div class="detail-header">
+      <div class="detail-titel">${naam}</div>
+      <div class="detail-datum">${datum} · ${type}</div>
+      <span class="detail-status ${sc}">${status === 'Verwerkt' ? '✓ Verwerkt' : '● Nieuw'}</span>
+      <div class="detail-route">
+        <div class="detail-locatie">
+          <div class="detail-locatie-label">Van</div>
+          <div class="detail-locatie-naam">${vanNr}</div>
+        </div>
+        <div class="detail-pijl">→</div>
+        <div class="detail-locatie">
+          <div class="detail-locatie-label">Naar</div>
+          <div class="detail-locatie-naam">${naarNaam}</div>
+          ${naarNr !== naarNaam ? `<div class="detail-locatie-nr">${naarNr}</div>` : ''}
+        </div>
+      </div>
+    </div>
+    ${itemsHtml}
+    ${opmHtml}
+  `;
+
+  alleViewsUit();
+  document.getElementById('view-detail').classList.add('active');
 }
 
 function startApp(naam, role) {
