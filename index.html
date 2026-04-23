@@ -1219,9 +1219,8 @@ function verwijderNummer(id, idx) {
 /* ── TYPES ───────────────────────────────────────── */
 function toggleType(id, type) {
   if (!STATE[id].types) STATE[id].types = [];
-  const idx = STATE[id].types.indexOf(type);
-  if (idx >= 0) STATE[id].types.splice(idx, 1);
-  else STATE[id].types.push(type);
+  const huidig = STATE[id].types[0];
+  STATE[id].types = huidig === type ? [] : [type];
   renderItems();
   autosave();
 }
