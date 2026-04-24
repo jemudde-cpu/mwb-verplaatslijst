@@ -541,6 +541,7 @@ export default {
         type_id: sanitize(m.type_id || '', 50),
         naam:    sanitize(m.naam    || '', 100),
         nummer:  m.nummer != null ? sanitize(String(m.nummer), 20) : null,
+        aantal:  m.aantal != null ? Math.max(0, Math.min(9999, parseInt(m.aantal) || 0)) : null,
         locatie: sanitize(m.locatie || 'zaak', 50),
       })).filter(m => m.id && m.type_id && m.naam);
       await saveMaterialen(items);
@@ -561,10 +562,29 @@ export default {
       const materialen = await getMaterialen();
       const itemIds    = new Set((Array.isArray(data.item_ids) ? data.item_ids : []).map(id => String(id).slice(0, 50)));
       const movedItems = materialen.filter(m => itemIds.has(m.id));
+
+      // Normale items: locatie bijwerken
       for (const item of materialen) {
         if (itemIds.has(item.id)) item.locatie = naarLocatie;
       }
-      if (itemIds.size > 0) await saveMaterialen(materialen);
+
+      // Bulk items (hekken e.d.): aantal aftrekken van bron, optellen op bestemming
+      const bulkData = Array.isArray(data.bulk_items) ? data.bulk_items : [];
+      for (const b of bulkData) {
+        const n   = Math.max(1, parseInt(b.aantal) || 0);
+        const src = materialen.find(m => m.id === String(b.id || '').slice(0, 50));
+        if (src && src.aantal != null) {
+          src.aantal = Math.max(0, src.aantal - n);
+          const dst = materialen.find(m => m.type_id === src.type_id && m.locatie === naarLocatie && m.aantal != null && m.id !== src.id);
+          if (dst) {
+            dst.aantal = (dst.aantal || 0) + n;
+          } else {
+            materialen.push({ id: crypto.randomUUID(), type_id: src.type_id, naam: src.naam, aantal: n, nummer: null, locatie: naarLocatie });
+          }
+        }
+      }
+
+      if (itemIds.size > 0 || bulkData.length > 0) await saveMaterialen(materialen);
 
       // Bouw Notion details
       const groepen = {};

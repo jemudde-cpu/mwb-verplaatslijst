@@ -899,16 +899,18 @@ let fotoDataUrl = null;
 // Nieuwe verplaats-state
 const VAN  = { type: null, naam: '', werknr: '' };
 const NAAR = { type: null, naam: '', werknr: '' };
-let geselecteerdeItems = new Set();
-let algemeneFotos      = [];
+let geselecteerdeItems    = new Set();
+let geselecteerdeAantallen = {};
+let algemeneFotos          = [];
 let alleMaterialen     = [];
 let materieelLaden     = false;
 
 function initState() {
   VAN.type = null; VAN.naam = ''; VAN.werknr = '';
   NAAR.type = null; NAAR.naam = ''; NAAR.werknr = '';
-  geselecteerdeItems = new Set();
-  algemeneFotos = [];
+  geselecteerdeItems     = new Set();
+  geselecteerdeAantallen = {};
+  algemeneFotos          = [];
 }
 function alleItems() { return Object.values(SECTIES).flat(); }
 
@@ -972,7 +974,9 @@ function validateStep(n) {
     return true;
   }
   if (n === 2) {
-    if (geselecteerdeItems.size === 0) { showToast('⚠️ Selecteer minstens 1 item om te verplaatsen'); return false; }
+    if (geselecteerdeItems.size === 0 && Object.keys(geselecteerdeAantallen).length === 0) {
+      showToast('⚠️ Selecteer minstens 1 item om te verplaatsen'); return false;
+    }
     return true;
   }
   if (n === 3) {
@@ -1102,8 +1106,8 @@ async function renderStap2() {
     perSectie[sectie].push(item);
   }
 
-  const allGeselecteerd = hierItems.filter(m => geselecteerdeItems.has(m.id)).length;
-  let html = `<div style="font-size:12px;color:var(--zacht);font-weight:700;margin-bottom:10px;text-align:right;">${allGeselecteerd} van ${hierItems.length} geselecteerd</div>`;
+  const allGeselecteerd = hierItems.filter(m => geselecteerdeItems.has(m.id)).length + Object.keys(geselecteerdeAantallen).length;
+  let html = `<div id="stap2-teller" style="font-size:12px;color:var(--zacht);font-weight:700;margin-bottom:10px;text-align:right;">${allGeselecteerd} van ${hierItems.length} geselecteerd</div>`;
 
   const secties = sectionOrder.filter(s => perSectie[s]);
   for (const sectie of secties) {
@@ -1111,14 +1115,32 @@ async function renderStap2() {
     html += `<div class="mat-kies-sectie-titel">${sectie}</div>
     <div class="card" style="margin-bottom:10px;">`;
     for (const item of items) {
-      const gesel = geselecteerdeItems.has(item.id);
-      html += `<div class="mat-kies-row ${gesel ? 'geselecteerd' : ''}" data-item-id="${item.id}" onclick="toggleItem('${item.id}')">
-        <div class="mat-kies-check ${gesel ? 'checked' : ''}"></div>
-        <div>
-          <div class="mat-kies-naam">${item.naam}</div>
-          ${item.nummer ? `<div class="mat-kies-nr">Nr. ${item.nummer}</div>` : ''}
-        </div>
-      </div>`;
+      if (item.aantal != null) {
+        // Bulk item (hekken): toon aantal-input
+        const huidig = geselecteerdeAantallen[item.id] || 0;
+        html += `<div class="mat-kies-row" data-bulk-id="${item.id}" style="justify-content:space-between;">
+          <div>
+            <div class="mat-kies-naam">${item.naam}</div>
+            <div class="mat-kies-nr">${item.aantal} stuks beschikbaar</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:11px;color:var(--zacht);">verplaats:</span>
+            <input type="number" min="0" max="${item.aantal}" value="${huidig}"
+              style="width:56px;padding:4px 8px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:6px;color:var(--tekst);font-size:14px;text-align:center;font-family:inherit;"
+              oninput="setBulkAantal('${item.id}', this.value, ${item.aantal})">
+          </div>
+        </div>`;
+      } else {
+        // Normaal item: checkbox
+        const gesel = geselecteerdeItems.has(item.id);
+        html += `<div class="mat-kies-row ${gesel ? 'geselecteerd' : ''}" data-item-id="${item.id}" onclick="toggleItem('${item.id}')">
+          <div class="mat-kies-check ${gesel ? 'checked' : ''}"></div>
+          <div>
+            <div class="mat-kies-naam">${item.naam}</div>
+            ${item.nummer ? `<div class="mat-kies-nr">Nr. ${item.nummer}</div>` : ''}
+          </div>
+        </div>`;
+      }
     }
     html += '</div>';
   }
@@ -1133,10 +1155,22 @@ function toggleItem(id) {
   const gesel = geselecteerdeItems.has(id);
   row?.classList.toggle('geselecteerd', gesel);
   check?.classList.toggle('checked', gesel);
-  // Update teller
-  const hierItems = alleMaterialen.filter(m => m.locatie === (VAN.type === 'zaak' ? 'zaak' : VAN.werknr));
-  const teller = document.querySelector('#stap2-inhoud > div:first-child');
-  if (teller && teller.style) teller.textContent = geselecteerdeItems.size + ' van ' + hierItems.length + ' geselecteerd';
+  updateStap2Teller();
+}
+
+function setBulkAantal(id, value, max) {
+  const n = Math.max(0, Math.min(parseInt(max) || 0, parseInt(value) || 0));
+  if (n > 0) geselecteerdeAantallen[id] = n;
+  else delete geselecteerdeAantallen[id];
+  updateStap2Teller();
+}
+
+function updateStap2Teller() {
+  const vanLoc = VAN.type === 'zaak' ? 'zaak' : VAN.werknr;
+  const totaal = alleMaterialen.filter(m => m.locatie === vanLoc).length;
+  const gesel  = geselecteerdeItems.size + Object.keys(geselecteerdeAantallen).length;
+  const teller = document.getElementById('stap2-teller');
+  if (teller) teller.textContent = gesel + ' van ' + totaal + ' geselecteerd';
 }
 
 async function laadMaterialenApp() {
@@ -1250,9 +1284,14 @@ function renderSummary() {
   </div>`;
 
   const selectedList = alleMaterialen.filter(m => geselecteerdeItems.has(m.id));
-  if (selectedList.length) {
+  const bulkList     = Object.entries(geselecteerdeAantallen).map(([id, aantal]) => {
+    const m = alleMaterialen.find(x => x.id === id);
+    return m ? { ...m, verplaatsAantal: aantal } : null;
+  }).filter(Boolean);
+  const totaal = selectedList.length + bulkList.length;
+  if (totaal > 0) {
     html += `<div class="detail-sectie">
-      <div class="detail-sectie-titel">Materieel (${selectedList.length} stuk${selectedList.length !== 1 ? 's' : ''})</div>
+      <div class="detail-sectie-titel">Materieel (${totaal} type${totaal !== 1 ? 's' : ''})</div>
       ${selectedList.map(m => `
         <div class="detail-item-rij">
           <div>
@@ -1260,6 +1299,11 @@ function renderSummary() {
             ${m.nummer ? `<div class="detail-item-nrs">Nr. ${m.nummer}</div>` : ''}
           </div>
           <div class="detail-item-aantal">×1</div>
+        </div>`).join('')}
+      ${bulkList.map(m => `
+        <div class="detail-item-rij">
+          <div><div class="detail-item-naam">${m.naam}</div></div>
+          <div class="detail-item-aantal">×${m.verplaatsAantal}</div>
         </div>`).join('')}
     </div>`;
   }
@@ -1321,15 +1365,21 @@ async function verstuurAlles() {
 
   setLoading('Verplaatsing registreren...');
 
+  const bulkItems = Object.entries(geselecteerdeAantallen).map(([id, aantal]) => {
+    const m = alleMaterialen.find(x => x.id === id);
+    return m ? { id, type_id: m.type_id, naam: m.naam, aantal } : null;
+  }).filter(Boolean);
+
   const payload = {
-    action:    'verplaatsing_uitvoeren',
-    naam:      getTokenPayload()?.naam || '',
-    datum:     document.getElementById('datum').value,
-    van:       { naam: VAN.naam, werknr: VAN.werknr },
-    naar:      { naam: NAAR.naam, werknr: NAAR.werknr },
-    item_ids:  [...geselecteerdeItems],
-    foto_urls: fotoUrls,
-    opmerking: document.getElementById('algemeen_opmerking').value.trim(),
+    action:     'verplaatsing_uitvoeren',
+    naam:       getTokenPayload()?.naam || '',
+    datum:      document.getElementById('datum').value,
+    van:        { naam: VAN.naam, werknr: VAN.werknr },
+    naar:       { naam: NAAR.naam, werknr: NAAR.werknr },
+    item_ids:   [...geselecteerdeItems],
+    bulk_items: bulkItems,
+    foto_urls:  fotoUrls,
+    opmerking:  document.getElementById('algemeen_opmerking').value.trim(),
   };
 
   try {
@@ -1376,10 +1426,11 @@ async function syncKlussen() {
 function autosave() {
   try {
     const draft = {
-      datum: document.getElementById('datum')?.value || '',
-      van:   { ...VAN },
-      naar:  { ...NAAR },
-      items: [...geselecteerdeItems],
+      datum:     document.getElementById('datum')?.value || '',
+      van:       { ...VAN },
+      naar:      { ...NAAR },
+      items:     [...geselecteerdeItems],
+      aantallen: { ...geselecteerdeAantallen },
     };
     localStorage.setItem('mwb_draft', JSON.stringify(draft));
   } catch(_) {}

@@ -338,8 +338,9 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     </div>
     <div style="padding:0 16px 14px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-        <select class="add-klus-input" id="add-mat-type" style="grid-column:1/-1;"></select>
-        <input class="add-klus-input" type="text" id="add-mat-nummer" placeholder="Nummer (bijv. 1)">
+        <select class="add-klus-input" id="add-mat-type" style="grid-column:1/-1;" onchange="updateAddMatVeld()"></select>
+        <input class="add-klus-input" type="text"   id="add-mat-nummer" placeholder="Nummer (bijv. 1)">
+        <input class="add-klus-input" type="number" id="add-mat-aantal" placeholder="Aantal (bijv. 20)" min="1" style="display:none">
         <select class="add-klus-input" id="add-mat-locatie"><option value="zaak">De Zaak</option></select>
       </div>
       <button class="add-klus-btn" style="width:100%;" onclick="voegMaterieelToe()">+ Toevoegen</button>
@@ -348,7 +349,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
   <div id="mat-init-wrap" style="display:none;margin-bottom:12px;">
     <button onclick="initialiseerMaterieel()" style="width:100%;padding:14px;background:var(--surface);border:1.5px dashed var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:700;color:var(--zacht);cursor:pointer;-webkit-appearance:none;">
-      📦 Initialiseer standaard materieel (alles nr. 1 op De Zaak, bouwhekken overgeslagen)
+      📦 Initialiseer standaard materieel (nr. 1 per item, hekken 20 stuks)
     </button>
   </div>
 
@@ -1178,12 +1179,19 @@ function vulTypeDropdown() {
     optg.label = sectie;
     for (const item of items) {
       const opt = document.createElement('option');
-      opt.value       = item.id + '|' + item.naam;
+      opt.value       = item.id + '|' + item.naam + '|' + sectie;
       opt.textContent = item.naam;
       optg.appendChild(opt);
     }
     sel.appendChild(optg);
   }
+}
+
+function updateAddMatVeld() {
+  const val      = document.getElementById('add-mat-type').value;
+  const isHekken = val ? val.split('|')[2] === 'Bouwhekken' : false;
+  document.getElementById('add-mat-nummer').style.display = isHekken ? 'none' : '';
+  document.getElementById('add-mat-aantal').style.display = isHekken ? '' : 'none';
 }
 
 function vulLocatieDropdown() {
@@ -1246,21 +1254,26 @@ function renderMaterieelBeheer(zoek) {
     const items   = perLocatie[loc];
     const klusObj = alleKlussen.find(k => k.werknr === loc);
     const locNaam = loc === 'zaak' ? '🏢 De Zaak – Depot' : ('🏗️ ' + (klusObj ? klusObj.naam + ' (' + loc + ')' : loc));
+    const totaalStuds = items.reduce((s, m) => s + (m.aantal || 1), 0);
     return `<div class="card" style="margin-bottom:10px;">
       <div class="card-header" style="padding-bottom:8px;">
         <div class="card-title-row">
           <div>
             <div class="card-title">${locNaam}</div>
-            <div class="card-sub">${items.length} stuk${items.length !== 1 ? 's' : ''}</div>
+            <div class="card-sub">${totaalStuds} stuk${totaalStuds !== 1 ? 's' : ''}</div>
           </div>
         </div>
       </div>
-      ${items.map(m => `<div class="klus-item">
-        <div class="klus-naam">${m.naam}${m.nummer ? ' <span class="klus-nr">Nr. ' + m.nummer + '</span>' : ''}</div>
+      ${items.map(m => {
+        const badge    = m.aantal != null ? ' <span class="klus-nr">' + m.aantal + ' stuks</span>' : m.nummer ? ' <span class="klus-nr">Nr. ' + m.nummer + '</span>' : '';
+        const labelEsc = (m.naam + (m.aantal != null ? ' (' + m.aantal + ' stuks)' : m.nummer ? ' nr. ' + m.nummer : '')).replace(/'/g,"\\'");
+        return `<div class="klus-item">
+        <div class="klus-naam">${m.naam}${badge}</div>
         <div class="klus-acties">
-          <button class="klus-btn klus-btn-del" onclick="verwijderMaterieelItem('${m.id}','${(m.naam + (m.nummer ? ' nr. ' + m.nummer : '')).replace(/'/g,"\\'")}')">🗑</button>
+          <button class="klus-btn klus-btn-del" onclick="verwijderMaterieelItem('${m.id}','${labelEsc}')">🗑</button>
         </div>
-      </div>`).join('')}
+      </div>`;
+      }).join('')}
     </div>`;
   }).join('');
 }
@@ -1269,13 +1282,23 @@ function filterMaterieelBeheer() { renderMaterieelBeheer(); }
 
 function voegMaterieelToe() {
   const typeVal = document.getElementById('add-mat-type').value;
-  const nummer  = document.getElementById('add-mat-nummer').value.trim();
   const locatie = document.getElementById('add-mat-locatie').value || 'zaak';
   if (!typeVal) { showToast('⚠️ Selecteer een type'); return; }
-  const [type_id, naam] = typeVal.split('|');
-  alleMaterieelBeheer.push({ id: crypto.randomUUID(), type_id, naam, nummer: nummer || null, locatie });
+  const [type_id, naam, sectie] = typeVal.split('|');
+  const isHekken = sectie === 'Bouwhekken';
+  let item;
+  if (isHekken) {
+    const aantalVal = parseInt(document.getElementById('add-mat-aantal').value) || 1;
+    item = { id: crypto.randomUUID(), type_id, naam, aantal: aantalVal, nummer: null, locatie };
+  } else {
+    const nummer = document.getElementById('add-mat-nummer').value.trim();
+    item = { id: crypto.randomUUID(), type_id, naam, nummer: nummer || null, locatie };
+  }
+  alleMaterieelBeheer.push(item);
   document.getElementById('add-mat-type').value   = '';
   document.getElementById('add-mat-nummer').value = '';
+  document.getElementById('add-mat-aantal').value = '';
+  updateAddMatVeld();
   slaaMaterieelOp(true);
   renderMaterieelBeheer();
   showToast('✓ Item toegevoegd');
@@ -1306,13 +1329,16 @@ async function slaaMaterieelOp(silent = false) {
 
 async function initialiseerMaterieel() {
   const ok = await bevestig('Standaard materieel aanmaken?',
-    'Maakt voor elke categorie (behalve Bouwhekken) 1 item aan met nummer 1, locatie: De Zaak.', '📦');
+    'Per type 1 item met nummer 1 op De Zaak. Bouwhekken-categorie: 20 stuks per type, geen nummer.', '📦');
   if (!ok) return;
   const nieuw = [];
   for (const [sectie, items] of Object.entries(SECTIES)) {
-    if (sectie === 'Bouwhekken') continue;
     for (const item of items) {
-      nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, nummer: '1', locatie: 'zaak' });
+      if (sectie === 'Bouwhekken') {
+        nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, aantal: 20, nummer: null, locatie: 'zaak' });
+      } else {
+        nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, nummer: '1', locatie: 'zaak' });
+      }
     }
   }
   alleMaterieelBeheer = nieuw;
