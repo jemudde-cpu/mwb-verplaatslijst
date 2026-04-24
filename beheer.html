@@ -349,7 +349,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
   <div id="mat-init-wrap" style="display:none;margin-bottom:12px;">
     <button onclick="initialiseerMaterieel()" style="width:100%;padding:14px;background:var(--surface);border:1.5px dashed var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:700;color:var(--zacht);cursor:pointer;-webkit-appearance:none;">
-      📦 Initialiseer standaard materieel (nr. 1 per item, hekken 20 stuks)
+      📦 Initialiseer standaard materieel (nummers 1–5 per type, hekken 20 stuks)
     </button>
   </div>
 
@@ -1329,7 +1329,7 @@ async function slaaMaterieelOp(silent = false) {
 
 async function initialiseerMaterieel() {
   const ok = await bevestig('Standaard materieel aanmaken?',
-    'Per type 1 item met nummer 1 op De Zaak. Bouwhekken-categorie: 20 stuks per type, geen nummer.', '📦');
+    'Per type nummers 1 t/m 5 op De Zaak. Bouwhekken-categorie: 20 stuks per type, geen nummer.', '📦');
   if (!ok) return;
   const nieuw = [];
   for (const [sectie, items] of Object.entries(SECTIES)) {
@@ -1337,7 +1337,9 @@ async function initialiseerMaterieel() {
       if (sectie === 'Bouwhekken') {
         nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, aantal: 20, nummer: null, locatie: 'zaak' });
       } else {
-        nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, nummer: '1', locatie: 'zaak' });
+        for (let nr = 1; nr <= 5; nr++) {
+          nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, nummer: String(nr), locatie: 'zaak' });
+        }
       }
     }
   }

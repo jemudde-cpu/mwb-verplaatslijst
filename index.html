@@ -419,8 +419,13 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .mat-kies-check{width:22px;height:22px;border-radius:5px;border:2px solid var(--border-2);background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .mat-kies-check.checked{background:var(--accent);border-color:var(--accent);}
 .mat-kies-check.checked::after{content:'✓';color:#fff;font-size:12px;font-weight:800;}
+.mat-kies-check.partial{background:rgba(255,107,0,.2);border-color:var(--accent);}
+.mat-kies-check.partial::after{content:'–';color:var(--accent);font-size:16px;font-weight:800;line-height:1;}
 .mat-kies-naam{font-size:14px;font-weight:700;}
 .mat-kies-nr{font-size:11px;color:var(--zacht);margin-top:2px;}
+.mat-kies-chevron{font-size:12px;color:var(--zacht);margin-left:auto;padding-left:8px;}
+.mat-kies-sub{background:rgba(0,0,0,.18);}
+.mat-kies-sub .mat-kies-row{padding-left:36px;}
 
 </style>
 </head>
@@ -899,8 +904,9 @@ let fotoDataUrl = null;
 // Nieuwe verplaats-state
 const VAN  = { type: null, naam: '', werknr: '' };
 const NAAR = { type: null, naam: '', werknr: '' };
-let geselecteerdeItems    = new Set();
+let geselecteerdeItems     = new Set();
 let geselecteerdeAantallen = {};
+let expandedTypes          = new Set();
 let algemeneFotos          = [];
 let alleMaterialen     = [];
 let materieelLaden     = false;
@@ -910,6 +916,7 @@ function initState() {
   NAAR.type = null; NAAR.naam = ''; NAAR.werknr = '';
   geselecteerdeItems     = new Set();
   geselecteerdeAantallen = {};
+  expandedTypes          = new Set();
   algemeneFotos          = [];
 }
 function alleItems() { return Object.values(SECTIES).flat(); }
@@ -1107,44 +1114,76 @@ async function renderStap2() {
   }
 
   const allGeselecteerd = hierItems.filter(m => geselecteerdeItems.has(m.id)).length + Object.keys(geselecteerdeAantallen).length;
-  let html = `<div id="stap2-teller" style="font-size:12px;color:var(--zacht);font-weight:700;margin-bottom:10px;text-align:right;">${allGeselecteerd} van ${hierItems.length} geselecteerd</div>`;
+  let html = `<div id="stap2-teller" style="font-size:12px;color:var(--zacht);font-weight:700;margin-bottom:10px;text-align:right;">${allGeselecteerd} geselecteerd</div>`;
 
   const secties = sectionOrder.filter(s => perSectie[s]);
   for (const sectie of secties) {
     const items = perSectie[sectie];
-    html += `<div class="mat-kies-sectie-titel">${sectie}</div>
-    <div class="card" style="margin-bottom:10px;">`;
+
+    // Groepeer per type_id
+    const perType = {};
     for (const item of items) {
-      if (item.aantal != null) {
-        // Bulk item (hekken): toon aantal-input
-        const huidig = geselecteerdeAantallen[item.id] || 0;
-        html += `<div class="mat-kies-row" data-bulk-id="${item.id}" style="justify-content:space-between;">
+      if (!perType[item.type_id]) perType[item.type_id] = { naam: item.naam, items: [] };
+      perType[item.type_id].items.push(item);
+    }
+
+    html += `<div class="mat-kies-sectie-titel">${sectie}</div><div class="card" style="margin-bottom:10px;">`;
+
+    for (const [typeId, groep] of Object.entries(perType)) {
+      const eersteItem = groep.items[0];
+
+      if (eersteItem.aantal != null) {
+        // Bulk item (hekken): aantal-input
+        const huidig = geselecteerdeAantallen[eersteItem.id] || 0;
+        html += `<div class="mat-kies-row" style="justify-content:space-between;">
           <div>
-            <div class="mat-kies-naam">${item.naam}</div>
-            <div class="mat-kies-nr">${item.aantal} stuks beschikbaar</div>
+            <div class="mat-kies-naam">${eersteItem.naam}</div>
+            <div class="mat-kies-nr">${eersteItem.aantal} stuks beschikbaar</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <span style="font-size:11px;color:var(--zacht);">verplaats:</span>
-            <input type="number" min="0" max="${item.aantal}" value="${huidig}"
+            <input type="number" min="0" max="${eersteItem.aantal}" value="${huidig}"
               style="width:56px;padding:4px 8px;background:var(--surface-2);border:1.5px solid var(--border);border-radius:6px;color:var(--tekst);font-size:14px;text-align:center;font-family:inherit;"
-              oninput="setBulkAantal('${item.id}', this.value, ${item.aantal})">
+              oninput="setBulkAantal('${eersteItem.id}',this.value,${eersteItem.aantal})">
           </div>
         </div>`;
       } else {
-        // Normaal item: checkbox
-        const gesel = geselecteerdeItems.has(item.id);
-        html += `<div class="mat-kies-row ${gesel ? 'geselecteerd' : ''}" data-item-id="${item.id}" onclick="toggleItem('${item.id}')">
-          <div class="mat-kies-check ${gesel ? 'checked' : ''}"></div>
-          <div>
-            <div class="mat-kies-naam">${item.naam}</div>
-            ${item.nummer ? `<div class="mat-kies-nr">Nr. ${item.nummer}</div>` : ''}
+        // Normaal: expand-header + sub-items
+        const aantalGesel = groep.items.filter(m => geselecteerdeItems.has(m.id)).length;
+        const checkState  = aantalGesel === groep.items.length && groep.items.length > 0 ? 'checked' : aantalGesel > 0 ? 'partial' : '';
+        const isOpen      = expandedTypes.has(typeId);
+        html += `<div class="mat-kies-row" data-expand-type="${typeId}" onclick="toggleTypeExpand('${typeId}')">
+          <div class="mat-kies-check ${checkState}"></div>
+          <div style="flex:1">
+            <div class="mat-kies-naam">${groep.naam}</div>
+            <div class="mat-kies-nr" id="sub-lbl-${typeId}">${groep.items.length} beschikbaar${aantalGesel > 0 ? ' · ' + aantalGesel + ' geselecteerd' : ''}</div>
           </div>
+          <div class="mat-kies-chevron" id="chev-${typeId}">${isOpen ? '▲' : '▼'}</div>
+        </div>
+        <div class="mat-kies-sub" id="expand-${typeId}" style="${isOpen ? '' : 'display:none'}">
+          ${groep.items.map(item => {
+            const gesel = geselecteerdeItems.has(item.id);
+            return `<div class="mat-kies-row ${gesel ? 'geselecteerd' : ''}" data-item-id="${item.id}" onclick="event.stopPropagation();toggleItem('${item.id}')">
+              <div class="mat-kies-check ${gesel ? 'checked' : ''}"></div>
+              <div class="mat-kies-naam">Nr. ${item.nummer || '—'}</div>
+            </div>`;
+          }).join('')}
         </div>`;
       }
     }
     html += '</div>';
   }
   el.innerHTML = html;
+}
+
+function toggleTypeExpand(typeId) {
+  if (expandedTypes.has(typeId)) expandedTypes.delete(typeId);
+  else expandedTypes.add(typeId);
+  const open  = expandedTypes.has(typeId);
+  const panel = document.getElementById('expand-' + typeId);
+  const chev  = document.getElementById('chev-' + typeId);
+  if (panel) panel.style.display = open ? '' : 'none';
+  if (chev)  chev.textContent    = open ? '▲' : '▼';
 }
 
 function toggleItem(id) {
@@ -1155,6 +1194,24 @@ function toggleItem(id) {
   const gesel = geselecteerdeItems.has(id);
   row?.classList.toggle('geselecteerd', gesel);
   check?.classList.toggle('checked', gesel);
+
+  // Update groep-header check + label
+  const item = alleMaterialen.find(m => m.id === id);
+  if (item) {
+    const vanLoc    = VAN.type === 'zaak' ? 'zaak' : VAN.werknr;
+    const groepItems = alleMaterialen.filter(m => m.type_id === item.type_id && m.locatie === vanLoc);
+    const aantalGesel = groepItems.filter(m => geselecteerdeItems.has(m.id)).length;
+    const headerRow   = document.querySelector(`[data-expand-type="${item.type_id}"]`);
+    if (headerRow) {
+      const hCheck = headerRow.querySelector('.mat-kies-check');
+      if (hCheck) {
+        hCheck.className = 'mat-kies-check' +
+          (aantalGesel === groepItems.length && groepItems.length > 0 ? ' checked' : aantalGesel > 0 ? ' partial' : '');
+      }
+      const lbl = document.getElementById('sub-lbl-' + item.type_id);
+      if (lbl) lbl.textContent = groepItems.length + ' beschikbaar' + (aantalGesel > 0 ? ' · ' + aantalGesel + ' geselecteerd' : '');
+    }
+  }
   updateStap2Teller();
 }
 
