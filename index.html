@@ -404,6 +404,24 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .welkom-naam{font-size:16px;font-weight:800;color:var(--tekst);}
 .welkom-rol{font-size:11px;color:var(--zacht);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
 
+/* LOCATIE KEUZE (stap 1 + 3) */
+.loc-zaak-btn{width:100%;padding:16px 18px;background:rgba(34,197,94,.06);border:2px solid rgba(34,197,94,.20);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:800;color:var(--groen);cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;margin-bottom:14px;-webkit-appearance:none;transition:all .2s;}
+.loc-zaak-btn:active{background:rgba(34,197,94,.12);}
+.loc-zaak-btn.selected{background:rgba(34,197,94,.14);border-color:var(--groen);box-shadow:0 0 0 3px rgba(34,197,94,.12);}
+.loc-zaak-tekst{font-size:11px;color:var(--zacht);font-weight:500;margin-top:2px;}
+
+/* MATERIEEL KEUZE (stap 2) */
+.mat-kies-sectie-titel{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--zacht);margin:14px 0 6px;border-left:3px solid var(--accent);padding-left:10px;}
+.mat-kies-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent;}
+.mat-kies-row:last-child{border-bottom:none;}
+.mat-kies-row:active{background:rgba(255,255,255,.03);}
+.mat-kies-row.geselecteerd{background:rgba(255,107,0,.06);}
+.mat-kies-check{width:22px;height:22px;border-radius:5px;border:2px solid var(--border-2);background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.mat-kies-check.checked{background:var(--accent);border-color:var(--accent);}
+.mat-kies-check.checked::after{content:'✓';color:#fff;font-size:12px;font-weight:800;}
+.mat-kies-naam{font-size:14px;font-weight:700;}
+.mat-kies-nr{font-size:11px;color:var(--zacht);margin-top:2px;}
+
 </style>
 </head>
 <body>
@@ -482,17 +500,17 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="progress" id="progress-bar">
     <div class="progress-step" id="ps-1" onclick="goToStep(1)">
       <div class="progress-dot">1</div>
-      <div class="progress-label">Gegevens</div>
+      <div class="progress-label">Locatie</div>
     </div>
     <div class="progress-line" id="pl-1"></div>
     <div class="progress-step" id="ps-2" onclick="goToStep(2)">
       <div class="progress-dot">2</div>
-      <div class="progress-label">Verplaatsing</div>
+      <div class="progress-label">Materieel</div>
     </div>
     <div class="progress-line" id="pl-2"></div>
     <div class="progress-step" id="ps-3" onclick="goToStep(3)">
       <div class="progress-dot">3</div>
-      <div class="progress-label">Materieel</div>
+      <div class="progress-label">Bestemming</div>
     </div>
     <div class="progress-line" id="pl-3"></div>
     <div class="progress-step" id="ps-4" onclick="goToStep(4)">
@@ -528,18 +546,8 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <!-- STAP 1 -->
 <div class="step active" id="step-1">
-  <p class="step-title">Jouw gegevens</p>
-  <p class="step-sub">Controleer de datum en begin.</p>
-  <div class="card">
-    <div class="card-title">Ingelogd als</div>
-    <div class="welkom-row">
-      <div class="welkom-icon">👤</div>
-      <div>
-        <div class="welkom-naam" id="welkom-naam">—</div>
-        <div class="welkom-rol" id="welkom-rol"></div>
-      </div>
-    </div>
-  </div>
+  <p class="step-title">Locatie</p>
+  <p class="step-sub">Vul de datum in en geef aan waar je nu staat.</p>
   <div class="card">
     <div class="card-title">Datum</div>
     <div class="card-body">
@@ -549,115 +557,56 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       </div>
     </div>
   </div>
-  <div class="info-row">
-    <span class="ir-icon">💡</span>
-    <span>Kies daarna het type verplaatsing, selecteer het materieel, vul nummers in en maak foto's bij schade.</span>
-  </div>
-</div>
-
-<!-- STAP 2 -->
-<div class="step" id="step-2">
-  <p class="step-title">Verplaatsing</p>
-  <p class="step-sub">Hoe wordt het materieel verplaatst?</p>
   <div class="card" style="overflow:visible;">
-    <div class="card-body" style="padding-top:18px;">
-      <div class="beweging-grid">
-        <button class="beweging-card" id="bc-zaak_klus" onclick="selectBeweging('zaak_klus')">
-          <div class="bc-check">✓</div>
-          <div class="bc-icon">🏢🏭</div>
-          <div class="bc-arrow">↓</div>
-          <div class="bc-icon">🏗️</div>
-          <div class="bc-title">Van zaak naar klus</div>
-          <div class="bc-sub">Depot → Project</div>
-        </button>
-        <button class="beweging-card" id="bc-klus_klus" onclick="selectBeweging('klus_klus')">
-          <div class="bc-check">✓</div>
-          <div class="bc-icon">🏗️</div>
-          <div class="bc-arrow">↓</div>
-          <div class="bc-icon">🏗️</div>
-          <div class="bc-title">Klus naar klus</div>
-          <div class="bc-sub">Project → Project</div>
-        </button>
-        <button class="beweging-card" id="bc-klus_zaak" onclick="selectBeweging('klus_zaak')">
-          <div class="bc-check">✓</div>
-          <div class="bc-icon">🏗️</div>
-          <div class="bc-arrow">↓</div>
-          <div class="bc-icon">🏢🏭</div>
-          <div class="bc-title">Terug naar zaak</div>
-          <div class="bc-sub">Project → Depot</div>
-        </button>
-      </div>
-
-      <div class="locatie-velden" id="lv-zaak_klus">
-        <div class="locatie-label" style="margin-bottom:6px;">Van</div>
-        <div class="locatie-zaak" style="margin-bottom:16px;">
-          <span class="lz-icon">🏢🏭</span>
-          <div><div class="lz-title">De Zaak – Depot</div><div class="lz-sub">Vertrekpunt: magazijn / depot</div></div>
+    <div class="card-title">Waar sta jij nu?</div>
+    <div class="card-body" style="padding-top:12px;">
+      <button class="loc-zaak-btn" id="van-zaak-btn" onclick="selectLocatieVan('zaak')">
+        <span style="font-size:22px;">🏢</span>
+        <div><div>De Zaak – Depot</div><div class="loc-zaak-tekst">Magazijn / depot</div></div>
+      </button>
+      <div class="locatie-label" style="margin-bottom:8px;">Of zoek een klus:</div>
+      <div class="ac-wrap">
+        <div class="ac-input-row">
+          <span class="ac-search-icon"><i data-lucide="search"></i></span>
+          <input class="ac-input" id="ac-input-van" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van',this.value)" onfocus="acOpen('van')" autocomplete="off">
+          <button class="ac-clear" onclick="acClear('van')">✕</button>
         </div>
-        <div class="locatie-label">Naar welke klus?</div>
-        <div class="ac-wrap">
-          <div class="ac-input-row">
-            <span class="ac-search-icon"><i data-lucide="search"></i></span>
-            <input class="ac-input" id="ac-input-naar-zk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-zk',this.value)" onfocus="acOpen('naar-zk')" autocomplete="off">
-            <button class="ac-clear" onclick="acClear('naar-zk')">✕</button>
-          </div>
-          <div class="ac-badge" id="ac-badge-naar-zk"></div>
-          <div class="ac-dropdown" id="ac-dropdown-naar-zk"></div>
-        </div>
-      </div>
-
-      <div class="locatie-velden" id="lv-klus_klus">
-        <div class="locatie-label">Van welke klus?</div>
-        <div class="ac-wrap">
-          <div class="ac-input-row">
-            <span class="ac-search-icon"><i data-lucide="search"></i></span>
-            <input class="ac-input" id="ac-input-van-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kk',this.value)" onfocus="acOpen('van-kk')" autocomplete="off">
-            <button class="ac-clear" onclick="acClear('van-kk')">✕</button>
-          </div>
-          <div class="ac-badge" id="ac-badge-van-kk"></div>
-          <div class="ac-dropdown" id="ac-dropdown-van-kk"></div>
-        </div>
-        <div class="locatie-label">Naar welke klus?</div>
-        <div class="ac-wrap">
-          <div class="ac-input-row">
-            <span class="ac-search-icon"><i data-lucide="search"></i></span>
-            <input class="ac-input" id="ac-input-naar-kk" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar-kk',this.value)" onfocus="acOpen('naar-kk')" autocomplete="off">
-            <button class="ac-clear" onclick="acClear('naar-kk')">✕</button>
-          </div>
-          <div class="ac-badge" id="ac-badge-naar-kk"></div>
-          <div class="ac-dropdown" id="ac-dropdown-naar-kk"></div>
-        </div>
-      </div>
-
-      <div class="locatie-velden" id="lv-klus_zaak">
-        <div class="locatie-label">Van welke klus?</div>
-        <div class="ac-wrap">
-          <div class="ac-input-row">
-            <span class="ac-search-icon"><i data-lucide="search"></i></span>
-            <input class="ac-input" id="ac-input-van-kz" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van-kz',this.value)" onfocus="acOpen('van-kz')" autocomplete="off">
-            <button class="ac-clear" onclick="acClear('van-kz')">✕</button>
-          </div>
-          <div class="ac-badge" id="ac-badge-van-kz"></div>
-          <div class="ac-dropdown" id="ac-dropdown-van-kz"></div>
-        </div>
-        <div class="locatie-label" style="margin-top:4px;">Naar</div>
-        <div class="locatie-zaak">
-          <span class="lz-icon">🏢🏭</span>
-          <div><div class="lz-title">De Zaak – Depot</div><div class="lz-sub">Bestemming: magazijn / depot</div></div>
-        </div>
+        <div class="ac-badge" id="ac-badge-van"></div>
+        <div class="ac-dropdown" id="ac-dropdown-van"></div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- STAP 2 -->
+<div class="step" id="step-2">
+  <p class="step-title">Materieel</p>
+  <p class="step-sub" id="stap2-sub">Selecteer wat je wilt verplaatsen</p>
+  <div id="stap2-inhoud"><div class="home-spinner" style="margin:40px auto;"></div></div>
+</div>
+
 <!-- STAP 3 -->
 <div class="step" id="step-3">
-  <p class="step-title">Materieel</p>
-  <p class="step-sub">Stel het aantal in, vul nummers in en maak foto's bij schade.</p>
-  <div class="tab-bar-wrap">
-    <div class="tab-bar" id="tab-bar"></div>
+  <p class="step-title">Bestemming</p>
+  <p class="step-sub">Waar naartoe?</p>
+  <div class="card" style="overflow:visible;">
+    <div class="card-body" style="padding-top:12px;">
+      <button class="loc-zaak-btn" id="naar-zaak-btn" onclick="selectLocatieNaar('zaak')">
+        <span style="font-size:22px;">🏢</span>
+        <div><div>De Zaak – Depot</div><div class="loc-zaak-tekst">Magazijn / depot</div></div>
+      </button>
+      <div class="locatie-label" style="margin-bottom:8px;">Of zoek een klus:</div>
+      <div class="ac-wrap">
+        <div class="ac-input-row">
+          <span class="ac-search-icon"><i data-lucide="search"></i></span>
+          <input class="ac-input" id="ac-input-naar" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar',this.value)" onfocus="acOpen('naar')" autocomplete="off">
+          <button class="ac-clear" onclick="acClear('naar')">✕</button>
+        </div>
+        <div class="ac-badge" id="ac-badge-naar"></div>
+        <div class="ac-dropdown" id="ac-dropdown-naar"></div>
+      </div>
+    </div>
   </div>
-  <div id="item-list"></div>
 </div>
 
 <!-- STAP 4 -->
@@ -665,6 +614,15 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <p class="step-title">Controleer & verstuur</p>
   <p class="step-sub">Kijk alles na en tik op Verstuur.</p>
   <div id="summary-content"></div>
+  <div class="card">
+    <div class="card-title">Foto's toevoegen</div>
+    <div class="card-body" style="padding-top:8px;">
+      <div id="fotos-preview" class="foto-thumbs"></div>
+      <button class="foto-btn" onclick="openFotoSheetAlgemeen()">
+        <i data-lucide="camera"></i> Foto toevoegen
+      </button>
+    </div>
+  </div>
   <div class="card">
     <div class="card-title">Opmerkingen</div>
     <div class="card-body">
@@ -933,17 +891,24 @@ const SECTIES = {
 
 /* ── STATE ───────────────────────────────────────── */
 const STATE = {};
-const BEWEGING = { type:'', van:{ naam:'', werknr:'' }, naar:{ naam:'', werknr:'' } };
 const AC_STATE = {};
-let activeTab = Object.keys(SECTIES)[0];
 let sheetItemId = null;
 let fotoItemId  = null;
 let fotoDataUrl = null;
 
+// Nieuwe verplaats-state
+const VAN  = { type: null, naam: '', werknr: '' };
+const NAAR = { type: null, naam: '', werknr: '' };
+let geselecteerdeItems = new Set();
+let algemeneFotos      = [];
+let alleMaterialen     = [];
+let materieelLaden     = false;
+
 function initState() {
-  alleItems().forEach(item => {
-    STATE[item.id] = { aantal:0, nummers:[], types:[], fotos:[], stuk:0 };
-  });
+  VAN.type = null; VAN.naam = ''; VAN.werknr = '';
+  NAAR.type = null; NAAR.naam = ''; NAAR.werknr = '';
+  geselecteerdeItems = new Set();
+  algemeneFotos = [];
 }
 function alleItems() { return Object.values(SECTIES).flat(); }
 
@@ -960,8 +925,7 @@ function goToStep(n) {
   window.scrollTo({ top:0, behavior:'smooth' });
   document.querySelectorAll('.ac-dropdown.open').forEach(d => d.classList.remove('open'));
   updateProgress(); updateNav(); autosave();
-  if (currentStep === 2) syncKlussen();
-  if (currentStep === 3) renderMaterialStep();
+  if (currentStep === 2) renderStap2();
   if (currentStep === 4) renderSummary();
 }
 function nextStep() { goToStep(currentStep + 1); }
@@ -1004,42 +968,38 @@ function validateStep(n) {
       showToast('⚠️ Vul een datum in');
       return false;
     }
+    if (!VAN.type) { showToast('⚠️ Selecteer je huidige locatie'); return false; }
     return true;
   }
   if (n === 2) {
-    if (!BEWEGING.type) { showToast('⚠️ Kies een bewegingstype'); return false; }
-    if (BEWEGING.type === 'zaak_klus' && !BEWEGING.naar.naam) { showToast('⚠️ Selecteer een klus als bestemming'); return false; }
-    if (BEWEGING.type === 'klus_klus' && (!BEWEGING.van.naam || !BEWEGING.naar.naam)) { showToast('⚠️ Vul beide klussen in'); return false; }
-    if (BEWEGING.type === 'klus_zaak' && !BEWEGING.van.naam) { showToast('⚠️ Selecteer de klus waar het vandaan komt'); return false; }
+    if (geselecteerdeItems.size === 0) { showToast('⚠️ Selecteer minstens 1 item om te verplaatsen'); return false; }
     return true;
   }
   if (n === 3) {
-    if (!alleItems().some(i => STATE[i.id].aantal > 0)) { showToast('⚠️ Selecteer minstens 1 item'); return false; }
-    const onvolledig = alleItems().filter(item =>
-      item.hasNr && STATE[item.id].aantal > 0 && STATE[item.id].nummers.length < STATE[item.id].aantal
-    );
-    if (onvolledig.length) {
-      showToast('⚠️ Vul nummers in voor: ' + onvolledig.map(i => i.naam).join(', '));
-      return false;
-    }
+    if (!NAAR.type) { showToast('⚠️ Selecteer de bestemming'); return false; }
+    if (VAN.werknr === NAAR.werknr) { showToast('⚠️ Van en naar locatie zijn hetzelfde'); return false; }
     return true;
   }
   return true;
 }
 
-/* ── BEWEGING ────────────────────────────────────── */
-function selectBeweging(type) {
-  BEWEGING.type = type;
-  BEWEGING.van  = { naam:'', werknr:'' };
-  BEWEGING.naar = { naam:'', werknr:'' };
-  ['naar-zk','van-kk','naar-kk','van-kz'].forEach(id => acClearSilent(id));
-  ['zaak_klus','klus_klus','klus_zaak'].forEach(t => {
-    document.getElementById('bc-' + t).classList.toggle('selected', t === type);
-    document.getElementById('lv-' + t).classList.toggle('show', t === type);
-  });
-  if (type === 'zaak_klus') BEWEGING.van  = { naam:'De Zaak – Depot', werknr:'DE ZAAK' };
-  if (type === 'klus_zaak') BEWEGING.naar = { naam:'De Zaak – Depot', werknr:'DE ZAAK' };
-  autosave();
+/* ── LOCATIE SELECTIE ────────────────────────────── */
+function selectLocatieVan(type, naam, werknr) {
+  VAN.type   = type;
+  VAN.naam   = type === 'zaak' ? 'De Zaak – Depot' : (naam || '');
+  VAN.werknr = type === 'zaak' ? 'zaak' : (werknr || '');
+  document.getElementById('van-zaak-btn')?.classList.toggle('selected', type === 'zaak');
+  if (type === 'zaak') acClearSilent('van');
+  // Reset materieel selectie wanneer locatie wijzigt
+  geselecteerdeItems.clear();
+}
+
+function selectLocatieNaar(type, naam, werknr) {
+  NAAR.type   = type;
+  NAAR.naam   = type === 'zaak' ? 'De Zaak – Depot' : (naam || '');
+  NAAR.werknr = type === 'zaak' ? 'zaak' : (werknr || '');
+  document.getElementById('naar-zaak-btn')?.classList.toggle('selected', type === 'zaak');
+  if (type === 'zaak') acClearSilent('naar');
 }
 
 /* ── AUTOCOMPLETE ────────────────────────────────── */
@@ -1089,15 +1049,15 @@ function acSelect(veldId, naam, werknr) {
   badge.classList.add('show');
   dropdown.classList.remove('open');
   AC_STATE[veldId] = { naam, werknr };
-  if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = { naam, werknr };
-  if (veldId === 'van-kk'  || veldId === 'van-kz')  BEWEGING.van  = { naam, werknr };
+  if (veldId === 'van')  { selectLocatieVan('klus',  naam, werknr); document.getElementById('van-zaak-btn')?.classList.remove('selected'); }
+  if (veldId === 'naar') { selectLocatieNaar('klus', naam, werknr); document.getElementById('naar-zaak-btn')?.classList.remove('selected'); }
   autosave();
 }
 
 function acClear(veldId) {
   acClearSilent(veldId);
-  if (veldId === 'naar-zk' || veldId === 'naar-kk') BEWEGING.naar = { naam:'', werknr:'' };
-  if (veldId === 'van-kk'  || veldId === 'van-kz')  BEWEGING.van  = { naam:'', werknr:'' };
+  if (veldId === 'van')  { VAN.type  = null; VAN.naam  = ''; VAN.werknr  = ''; geselecteerdeItems.clear(); document.getElementById('van-zaak-btn')?.classList.remove('selected'); }
+  if (veldId === 'naar') { NAAR.type = null; NAAR.naam = ''; NAAR.werknr = ''; document.getElementById('naar-zaak-btn')?.classList.remove('selected'); }
   autosave();
 }
 function acClearSilent(veldId) {
@@ -1110,162 +1070,94 @@ function acClearSilent(veldId) {
   AC_STATE[veldId] = null;
 }
 
-/* ── MATERIEEL RENDER ────────────────────────────── */
-function renderMaterialStep() {
-  const secties = Object.keys(SECTIES);
-  const tabBar  = document.getElementById('tab-bar');
-  tabBar.innerHTML = secties.map(s =>
-    `<button class="tab-btn ${s === activeTab ? 'active' : ''}" onclick="switchTab('${s}')">${s}</button>`
-  ).join('');
-  renderItems();
-}
+/* ── MATERIEEL STAP 2 ────────────────────────────── */
+async function renderStap2() {
+  const el  = document.getElementById('stap2-inhoud');
+  const sub = document.getElementById('stap2-sub');
+  el.innerHTML = '<div class="home-spinner" style="margin:40px auto;"></div>';
+  if (sub) sub.textContent = 'Selecteer wat je wilt verplaatsen';
 
-function switchTab(s) {
-  activeTab = s;
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.textContent === s));
-  renderItems();
-}
+  if (!materieelLaden) await laadMaterialenApp();
 
-function renderItems() {
-  const items = SECTIES[activeTab];
-  const list  = document.getElementById('item-list');
-  list.innerHTML = items.map(item => renderItem(item)).join('');
-  lucide.createIcons();
-}
+  const vanLocatie = VAN.type === 'zaak' ? 'zaak' : VAN.werknr;
+  const hierItems  = alleMaterialen.filter(m => m.locatie === vanLocatie);
+  if (sub) sub.textContent = 'Materieel op: ' + VAN.naam;
 
-function renderItem(item) {
-  const s = STATE[item.id];
-  const isActive = s.aantal > 0;
-  const hasFotos = s.fotos && s.fotos.length > 0;
-
-  let extraHtml = '';
-
-  // Nummers
-  if (item.hasNr && isActive) {
-    const chips = s.nummers.map((nr, i) =>
-      `<div class="nr-chip">${nr}<button onclick="verwijderNummer('${item.id}',${i})">✕</button></div>`
-    ).join('');
-    extraHtml += `<div class="nummers-wrap show" id="nw-${item.id}">
-      <div class="nummers-row" id="nr-chips-${item.id}">${chips}</div>
-      <div class="nr-add-row">
-        <input class="nr-input" type="number" id="nr-input-${item.id}" placeholder="Voer nummer in..." inputmode="numeric">
-        <button class="nr-add-btn" onclick="voegNummerToe('${item.id}')">+ Toevoegen</button>
-      </div>
-      <div style="font-size:11px;font-weight:700;margin:6px 0 4px;${s.nummers.length >= s.aantal ? 'color:var(--groen)' : 'color:var(--rood)'}">
-        ${s.nummers.length >= s.aantal ? '✓' : '⚠️'} ${s.nummers.length} van ${s.aantal} nummer${s.aantal !== 1 ? 's' : ''} ingevuld
-      </div>
+  if (!hierItems.length) {
+    el.innerHTML = `<div class="info-row" style="margin-top:0;">
+      <span class="ir-icon">ℹ️</span>
+      <span>Geen geregistreerd materieel gevonden op <strong>${VAN.naam}</strong>. Vraag de beheerder om materieel toe te voegen via de beheerpagina.</span>
     </div>`;
+    return;
   }
 
-  // Types (bouwmeterkast)
-  if (item.hasTypes && isActive) {
-    const types = ['35A','63A','125A'];
-    const chips = types.map(t =>
-      `<button class="type-chip ${s.types.includes(t) ? 'selected' : ''}" onclick="toggleType('${item.id}','${t}')">${t}</button>`
-    ).join('');
-    extraHtml += `<div class="types-wrap show" id="tw-${item.id}">
-      <div style="font-size:11px;color:var(--zacht);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Type aansluiting</div>
-      <div class="types-row">${chips}</div>
-    </div>`;
-  }
-
-  // Defect stepper
-  if (item.hasDefect && isActive) {
-    extraHtml += `<div class="defect-row">
-      <span class="defect-label">⚠️ Stuk / weggegooid</span>
-      <div class="defect-stepper">
-        <button class="step-btn" onclick="changeDefect('${item.id}',-1)">−</button>
-        <span class="step-count" id="defect-${item.id}">${s.stuk}</span>
-        <button class="step-btn" onclick="changeDefect('${item.id}',1)">+</button>
-      </div>
-    </div>`;
-  }
-
-  // Foto thumbnails
-  const thumbs = (s.fotos || []).map((f, i) =>
-    `<div class="foto-thumb">
-      <img src="${f.dataUrl}" alt="foto">
-      <button class="foto-thumb-del" onclick="verwijderFoto('${item.id}',${i})">✕</button>
-    </div>`
-  ).join('');
-
-  if (isActive) {
-    extraHtml += `<button class="foto-btn ${hasFotos ? 'has-foto' : ''}" onclick="openFotoSheet('${item.id}')">
-      <i data-lucide="camera"></i> ${hasFotos ? s.fotos.length + ' foto' + (s.fotos.length > 1 ? "'s" : '') : 'Foto toevoegen'}
-    </button>`;
-    if (hasFotos) {
-      extraHtml += `<div class="foto-thumbs">${thumbs}</div>`;
+  const perSectie = {};
+  const sectionOrder = Object.keys(SECTIES);
+  for (const item of hierItems) {
+    let sectie = 'Overig';
+    for (const [s, sItems] of Object.entries(SECTIES)) {
+      if (sItems.some(si => si.id === item.type_id)) { sectie = s; break; }
     }
+    if (!perSectie[sectie]) perSectie[sectie] = [];
+    perSectie[sectie].push(item);
   }
 
-  return `<div class="card" style="overflow:visible;margin-bottom:10px;">
-    <div class="item-row">
-      <div>
-        <div class="item-name">${item.naam}</div>
-      </div>
-      <div class="stepper ${isActive ? 'active' : ''}" id="stepper-${item.id}">
-        <button class="step-btn" onclick="changeAantal('${item.id}',-1)">−</button>
-        <span class="step-count" id="cnt-${item.id}">${s.aantal}</span>
-        <button class="step-btn" onclick="changeAantal('${item.id}',1)">+</button>
-      </div>
-    </div>
-    ${extraHtml}
-  </div>`;
+  const allGeselecteerd = hierItems.filter(m => geselecteerdeItems.has(m.id)).length;
+  let html = `<div style="font-size:12px;color:var(--zacht);font-weight:700;margin-bottom:10px;text-align:right;">${allGeselecteerd} van ${hierItems.length} geselecteerd</div>`;
+
+  const secties = sectionOrder.filter(s => perSectie[s]);
+  for (const sectie of secties) {
+    const items = perSectie[sectie];
+    html += `<div class="mat-kies-sectie-titel">${sectie}</div>
+    <div class="card" style="margin-bottom:10px;">`;
+    for (const item of items) {
+      const gesel = geselecteerdeItems.has(item.id);
+      html += `<div class="mat-kies-row ${gesel ? 'geselecteerd' : ''}" data-item-id="${item.id}" onclick="toggleItem('${item.id}')">
+        <div class="mat-kies-check ${gesel ? 'checked' : ''}"></div>
+        <div>
+          <div class="mat-kies-naam">${item.naam}</div>
+          ${item.nummer ? `<div class="mat-kies-nr">Nr. ${item.nummer}</div>` : ''}
+        </div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
 }
 
-/* ── STEPPER ─────────────────────────────────────── */
-function changeAantal(id, delta) {
-  const item = alleItems().find(i => i.id === id);
-  STATE[id].aantal = Math.max(0, STATE[id].aantal + delta);
-  renderItems();
-  autosave();
+function toggleItem(id) {
+  if (geselecteerdeItems.has(id)) geselecteerdeItems.delete(id);
+  else geselecteerdeItems.add(id);
+  const row   = document.querySelector(`[data-item-id="${id}"]`);
+  const check = row?.querySelector('.mat-kies-check');
+  const gesel = geselecteerdeItems.has(id);
+  row?.classList.toggle('geselecteerd', gesel);
+  check?.classList.toggle('checked', gesel);
+  // Update teller
+  const hierItems = alleMaterialen.filter(m => m.locatie === (VAN.type === 'zaak' ? 'zaak' : VAN.werknr));
+  const teller = document.querySelector('#stap2-inhoud > div:first-child');
+  if (teller && teller.style) teller.textContent = geselecteerdeItems.size + ' van ' + hierItems.length + ' geselecteerd';
 }
 
-function changeDefect(id, delta) {
-  STATE[id].stuk = Math.max(0, (STATE[id].stuk || 0) + delta);
-  const el = document.getElementById('defect-' + id);
-  if (el) el.textContent = STATE[id].stuk;
-  autosave();
-}
-
-/* ── NUMMERS ─────────────────────────────────────── */
-function voegNummerToe(id) {
-  const input = document.getElementById('nr-input-' + id);
-  const nr    = input.value.trim();
-  if (!nr) return;
-  if (!STATE[id].nummers) STATE[id].nummers = [];
-  STATE[id].nummers.push(nr);
-  input.value = '';
-  renderItems();
-  autosave();
-}
-
-function verwijderNummer(id, idx) {
-  STATE[id].nummers.splice(idx, 1);
-  renderItems();
-  autosave();
-}
-
-/* ── TYPES ───────────────────────────────────────── */
-function toggleType(id, type) {
-  if (!STATE[id].types) STATE[id].types = [];
-  const huidig = STATE[id].types[0];
-  STATE[id].types = huidig === type ? [] : [type];
-  renderItems();
-  autosave();
+async function laadMaterialenApp() {
+  materieelLaden = true;
+  try {
+    const res  = await apiFetch(WORKER + '?action=materieel', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    if (!res) return;
+    const data = await res.json();
+    if (data.ok) alleMaterialen = data.materialen;
+  } catch (_) {}
 }
 
 /* ── FOTO ────────────────────────────────────────── */
-function openFotoSheet(itemId) {
-  fotoItemId  = itemId;
+function openFotoSheetAlgemeen() {
+  fotoItemId  = '__algemeen__';
   fotoDataUrl = null;
-  const item  = alleItems().find(i => i.id === itemId);
-  document.getElementById('foto-title').textContent = 'Foto – ' + item.naam;
-  document.getElementById('foto-sub').textContent   = 'Maak een foto bij schade of voor documentatie';
+  document.getElementById('foto-title').textContent = 'Foto toevoegen';
+  document.getElementById('foto-sub').textContent   = 'Maak een foto of kies er een uit';
   document.getElementById('foto-preview-area').classList.remove('show');
   document.getElementById('foto-opmerking').value   = '';
-  const saveBtn = document.getElementById('foto-save-btn');
-  saveBtn.style.display = 'none';
+  document.getElementById('foto-save-btn').style.display = 'none';
   document.getElementById('foto-overlay').classList.add('open');
 }
 
@@ -1300,20 +1192,28 @@ function fotoGekozen(e) {
 }
 
 function fotoOpslaan() {
-  if (!fotoDataUrl || !fotoItemId) return;
+  if (!fotoDataUrl) return;
   const opm = document.getElementById('foto-opmerking').value.trim();
-  if (!STATE[fotoItemId].fotos) STATE[fotoItemId].fotos = [];
-  STATE[fotoItemId].fotos.push({ dataUrl: fotoDataUrl, opm });
-  renderItems();
-  autosave();
+  algemeneFotos.push({ dataUrl: fotoDataUrl, opm });
+  renderFotosStap4();
   closeFotoSheet();
   showToast('📷 Foto opgeslagen');
 }
 
-function verwijderFoto(id, idx) {
-  STATE[id].fotos.splice(idx, 1);
-  renderItems();
-  autosave();
+function renderFotosStap4() {
+  const el = document.getElementById('fotos-preview');
+  if (!el) return;
+  el.innerHTML = algemeneFotos.map((f, i) =>
+    `<div class="foto-thumb">
+      <img src="${f.dataUrl}" alt="foto">
+      <button class="foto-thumb-del" onclick="verwijderAlgemeneFoto(${i})">✕</button>
+    </div>`
+  ).join('');
+}
+
+function verwijderAlgemeneFoto(idx) {
+  algemeneFotos.splice(idx, 1);
+  renderFotosStap4();
 }
 
 /* ── SHEET (legacy – kan nog gebruikt worden) ────── */
@@ -1326,60 +1226,41 @@ function saveSheet() { closeSheet(); }
 
 /* ── SAMENVATTING ────────────────────────────────── */
 function renderSummary() {
-  const el           = document.getElementById('summary-content');
-  const geselecteerd = alleItems().filter(i => STATE[i.id].aantal > 0);
-  const vanLabel     = BEWEGING.van.naam  || '—';
-  const naarLabel    = BEWEGING.naar.naam || '—';
-  const vanNr        = BEWEGING.van.werknr  || '';
-  const naarNr       = BEWEGING.naar.werknr || '';
-  const typeLabel    = { zaak_klus:'Van zaak → Klus', klus_klus:'Klus → Klus', klus_zaak:'Klus → Zaak' }[BEWEGING.type] || '—';
-  const datum        = document.getElementById('datum').value;
+  const el     = document.getElementById('summary-content');
+  const datum  = document.getElementById('datum').value;
+  const vanNr  = VAN.werknr  !== 'zaak' ? VAN.werknr  : '';
+  const naarNr = NAAR.werknr !== 'zaak' ? NAAR.werknr : '';
 
-  // Route card
   let html = `<div class="detail-header" style="margin-bottom:14px;">
-    <div class="detail-titel">${typeLabel}</div>
+    <div class="detail-titel">Verplaatsing overzicht</div>
     <div class="detail-datum">${datum}</div>
     <div class="detail-route">
       <div class="detail-locatie">
         <div class="detail-locatie-label">Van</div>
-        <div class="detail-locatie-naam">${vanLabel}</div>
-        ${vanNr && vanNr !== vanLabel ? `<div class="detail-locatie-nr">${vanNr}</div>` : ''}
+        <div class="detail-locatie-naam">${VAN.naam || '—'}</div>
+        ${vanNr ? `<div class="detail-locatie-nr">${vanNr}</div>` : ''}
       </div>
       <div class="detail-pijl">→</div>
       <div class="detail-locatie">
         <div class="detail-locatie-label">Naar</div>
-        <div class="detail-locatie-naam">${naarLabel}</div>
-        ${naarNr && naarNr !== naarLabel ? `<div class="detail-locatie-nr">${naarNr}</div>` : ''}
+        <div class="detail-locatie-naam">${NAAR.naam || '—'}</div>
+        ${naarNr ? `<div class="detail-locatie-nr">${naarNr}</div>` : ''}
       </div>
     </div>
   </div>`;
 
-  // Materieel
-  if (geselecteerd.length) {
-    const itemRijen = geselecteerd.map(item => {
-      const s    = STATE[item.id];
-      const naam = s.types?.length ? `${item.naam} ${s.types[0]}` : item.naam;
-      const nrs  = s.nummers?.length ? `Nr. ${s.nummers.join(', ')}` : '';
-      const stuk = s.stuk > 0 ? `⚠️ ${s.stuk} stuk/weggegooid` : '';
-
-      const fotoHtml = s.fotos?.length
-        ? `<div class="sum-foto-thumbs" style="margin-top:8px;">${s.fotos.map(f => `<img class="sum-foto-thumb" src="${f.dataUrl}">`).join('')}</div>`
-        : '';
-
-      return `<div class="detail-item-rij" style="flex-direction:column;align-items:flex-start;gap:4px;">
-        <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
-          <div class="detail-item-naam">${naam}</div>
-          <div class="detail-item-aantal">×${s.aantal}</div>
-        </div>
-        ${nrs  ? `<div class="detail-item-nrs">${nrs}</div>`  : ''}
-        ${stuk ? `<div class="detail-item-nrs" style="color:var(--rood)">${stuk}</div>` : ''}
-        ${fotoHtml}
-      </div>`;
-    }).join('');
-
+  const selectedList = alleMaterialen.filter(m => geselecteerdeItems.has(m.id));
+  if (selectedList.length) {
     html += `<div class="detail-sectie">
-      <div class="detail-sectie-titel">Verplaatst materieel (${geselecteerd.length} soort${geselecteerd.length !== 1 ? 'en' : ''})</div>
-      ${itemRijen}
+      <div class="detail-sectie-titel">Materieel (${selectedList.length} stuk${selectedList.length !== 1 ? 's' : ''})</div>
+      ${selectedList.map(m => `
+        <div class="detail-item-rij">
+          <div>
+            <div class="detail-item-naam">${m.naam}</div>
+            ${m.nummer ? `<div class="detail-item-nrs">Nr. ${m.nummer}</div>` : ''}
+          </div>
+          <div class="detail-item-aantal">×1</div>
+        </div>`).join('')}
     </div>`;
   }
 
@@ -1408,34 +1289,22 @@ function compressPhoto(dataUrl, maxSize = 1280, quality = 0.78) {
 
 /* ── FOTO UPLOADEN ───────────────────────────────── */
 async function uploadFotos() {
-  const uploads = [];
-  for (const item of alleItems()) {
-    const s = STATE[item.id];
-    if (!s.fotos || s.fotos.length === 0) continue;
-    for (const foto of s.fotos) {
-      uploads.push({ itemId: item.id, itemNaam: item.naam, foto });
-    }
-  }
-  if (uploads.length === 0) return [];
-
+  if (algemeneFotos.length === 0) return [];
   const ts    = Date.now();
   const urls  = [];
-  const total = uploads.length;
-
+  const total = algemeneFotos.length;
   for (let i = 0; i < total; i++) {
-    const { itemId, itemNaam, foto } = uploads[i];
+    const foto = algemeneFotos[i];
     setLoading(`Foto ${i+1} van ${total} uploaden...`);
     const compressed   = await compressPhoto(foto.dataUrl);
-    const bestandsnaam = `${ts}_${itemId}_${i}.jpg`;
+    const bestandsnaam = `${ts}_algemeen_${i}.jpg`;
     const res  = await fetch(WORKER, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
       body: JSON.stringify({ action:'foto_upload', bestandsnaam, data: compressed }),
     });
     const data = await res.json();
-    if (data.ok) {
-      urls.push({ url: data.url, item: itemNaam, opm: foto.opm });
-    }
+    if (data.ok) urls.push({ url: data.url, opm: foto.opm || '' });
   }
   return urls;
 }
@@ -1452,31 +1321,15 @@ async function verstuurAlles() {
 
   setLoading('Verplaatsing registreren...');
 
-  const onderdelen = {};
-  alleItems().forEach(item => {
-    const s = STATE[item.id];
-    if (s.aantal > 0) {
-      onderdelen[item.id] = {
-        naam:    item.naam,
-        aantal:  s.aantal,
-        nummers: s.nummers.join(', '),
-        types:   s.types.join(', '),
-        stuk:    s.stuk || 0,
-      };
-    }
-  });
-
   const payload = {
-    naam:               getTokenPayload()?.naam || '',
-    datum:              document.getElementById('datum').value,
-    beweging_type:      BEWEGING.type,
-    van_naam:           BEWEGING.van.naam,
-    van_werknr:         BEWEGING.van.werknr,
-    naar_naam:          BEWEGING.naar.naam,
-    naar_werknr:        BEWEGING.naar.werknr,
-    onderdelen,
-    foto_urls:          fotoUrls,
-    algemeen_opmerking: document.getElementById('algemeen_opmerking').value.trim(),
+    action:    'verplaatsing_uitvoeren',
+    naam:      getTokenPayload()?.naam || '',
+    datum:     document.getElementById('datum').value,
+    van:       { naam: VAN.naam, werknr: VAN.werknr },
+    naar:      { naam: NAAR.naam, werknr: NAAR.werknr },
+    item_ids:  [...geselecteerdeItems],
+    foto_urls: fotoUrls,
+    opmerking: document.getElementById('algemeen_opmerking').value.trim(),
   };
 
   try {
@@ -1490,10 +1343,10 @@ async function verstuurAlles() {
     hideLoading();
     if (data.ok) {
       localStorage.removeItem('mwb_draft');
+      alleMaterialen = [];
       showToast('✓ Verplaatsing geregistreerd!');
       setTimeout(() => {
         initState();
-        BEWEGING.type = ''; BEWEGING.van = { naam:'',werknr:'' }; BEWEGING.naar = { naam:'',werknr:'' };
         goToStep(1);
         naarHome();
         laadMijnInzendingen();
@@ -1523,9 +1376,10 @@ async function syncKlussen() {
 function autosave() {
   try {
     const draft = {
-      datum:    document.getElementById('datum')?.value || '',
-      beweging: BEWEGING,
-      state:    JSON.parse(JSON.stringify(STATE, (k, v) => k === 'dataUrl' ? '[foto]' : v)),
+      datum: document.getElementById('datum')?.value || '',
+      van:   { ...VAN },
+      naar:  { ...NAAR },
+      items: [...geselecteerdeItems],
     };
     localStorage.setItem('mwb_draft', JSON.stringify(draft));
   } catch(_) {}
@@ -1914,6 +1768,8 @@ function init() {
 
   updateProgress();
   updateNav();
+  syncKlussen();
+  laadMaterialenApp();
 }
 
 /* ── OVERZICHT ───────────────────────────────────── */

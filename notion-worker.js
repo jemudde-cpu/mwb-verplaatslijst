@@ -99,6 +99,13 @@ export default {
     async function saveUsers(users) {
       await env.MWB_KLUSSEN.put('mwb_users', JSON.stringify(users));
     }
+    async function getMaterialen() {
+      const raw = await env.MWB_KLUSSEN.get('mwb_materieel');
+      return raw ? JSON.parse(raw) : [];
+    }
+    async function saveMaterialen(items) {
+      await env.MWB_KLUSSEN.put('mwb_materieel', JSON.stringify(items));
+    }
 
     // ── REQUEST HELPERS ──────────────────────────────
     function getToken(req, body = null) {
@@ -227,6 +234,15 @@ export default {
         } catch (e) {
           return json({ ok: false, error: e.message }, 500);
         }
+      }
+
+      // Materieel ophalen (ingelogd)
+      if (action === 'materieel') {
+        const token   = getToken(request);
+        const payload = await verifyJWT(token);
+        if (!payload) return json({ ok: false, error: 'Niet ingelogd' }, 401);
+        const materialen = await getMaterialen();
+        return json({ ok: true, materialen });
       }
 
       // Gebruikers ophalen (admin)
@@ -506,6 +522,109 @@ export default {
           const err = await res.text();
           return json({ ok: false, error: err }, 500);
         }
+        return json({ ok: true });
+      } catch (e) {
+        return json({ ok: false, error: e.message }, 500);
+      }
+    }
+
+    // ── MATERIEEL OPSLAAN (admin) ────────────────────────
+    if (data.action === 'materieel_opslaan') {
+      const token   = getToken(request, data);
+      const payload = await verifyJWT(token);
+      if (!payload || payload.role !== 'admin') {
+        return json({ ok: false, error: 'Geen toegang' }, 401);
+      }
+      if (!Array.isArray(data.materialen)) return json({ ok: false, error: 'Ongeldige data' }, 400);
+      const items = data.materialen.slice(0, 5000).map(m => ({
+        id:      sanitize(m.id      || '', 50),
+        type_id: sanitize(m.type_id || '', 50),
+        naam:    sanitize(m.naam    || '', 100),
+        nummer:  m.nummer != null ? sanitize(String(m.nummer), 20) : null,
+        locatie: sanitize(m.locatie || 'zaak', 50),
+      })).filter(m => m.id && m.type_id && m.naam);
+      await saveMaterialen(items);
+      return json({ ok: true });
+    }
+
+    // ── VERPLAATSING UITVOEREN (ingelogd) ────────────────
+    if (data.action === 'verplaatsing_uitvoeren') {
+      const token   = getToken(request, data);
+      const payload = await verifyJWT(token);
+      if (!payload) return json({ ok: false, error: 'Niet ingelogd' }, 401);
+
+      const van  = data.van  || {};
+      const naar = data.naar || {};
+      const naarLocatie = sanitize(naar.werknr || 'zaak', 50);
+
+      // Update locaties in KV
+      const materialen = await getMaterialen();
+      const itemIds    = new Set((Array.isArray(data.item_ids) ? data.item_ids : []).map(id => String(id).slice(0, 50)));
+      const movedItems = materialen.filter(m => itemIds.has(m.id));
+      for (const item of materialen) {
+        if (itemIds.has(item.id)) item.locatie = naarLocatie;
+      }
+      if (itemIds.size > 0) await saveMaterialen(materialen);
+
+      // Bouw Notion details
+      const groepen = {};
+      for (const item of movedItems) {
+        if (!groepen[item.naam]) groepen[item.naam] = { naam: item.naam, nummers: [] };
+        if (item.nummer) groepen[item.naam].nummers.push(item.nummer);
+      }
+      let details = '';
+      for (const g of Object.values(groepen)) {
+        details += `${g.naam}: ${g.nummers.length || 1}`;
+        if (g.nummers.length) details += ` (nr. ${g.nummers.join(', ')})`;
+        details += '\n';
+      }
+      if (Array.isArray(data.bulk_items)) {
+        for (const b of data.bulk_items) {
+          const aantal = parseInt(b.aantal);
+          if (!isNaN(aantal) && aantal > 0) details += `${sanitize(b.naam || '', 100)}: ${aantal}\n`;
+        }
+      }
+      if (Array.isArray(data.foto_urls) && data.foto_urls.length > 0) {
+        details += `\nFoto's (${data.foto_urls.length}):\n`
+          + data.foto_urls.slice(0, 20).map(f => sanitize(f.url || '', 500)).join('\n');
+      }
+
+      const isVanZaak  = (van.werknr  || '').toLowerCase() === 'zaak';
+      const isNaarZaak = (naar.werknr || '').toLowerCase() === 'zaak';
+      const bewegingType = isVanZaak && !isNaarZaak ? 'zaak_klus' : !isVanZaak && isNaarZaak ? 'klus_zaak' : 'klus_klus';
+      const typeLabel    = { zaak_klus: 'Van zaak → Klus', klus_klus: 'Klus → Klus', klus_zaak: 'Klus → Zaak' }[bewegingType];
+
+      const vanNaam  = sanitize(van.naam   || '', 200);
+      const naarNaam = sanitize(naar.naam  || '', 200);
+      const vanNr    = sanitize(van.werknr || '', 50);
+      const naarNr   = sanitize(naar.werknr|| '', 50);
+      const naam     = payload.naam;
+      const datum    = /^\d{4}-\d{2}-\d{2}$/.test(data.datum || '') ? data.datum : null;
+      const naamTitle = `${naarNaam || vanNaam} – ${datum || '?'}`.slice(0, 200);
+
+      const notionBody = {
+        parent: { database_id: env.NOTION_DB_ID },
+        properties: {
+          'Naam':          { title:     [{ text: { content: naamTitle } }] },
+          'Bouwplaats':    { rich_text: [{ text: { content: naarNaam } }] },
+          'Werknr. Van':   { rich_text: [{ text: { content: vanNr  || vanNaam  } }] },
+          'Werknr. Naar':  { rich_text: [{ text: { content: naarNr || naarNaam } }] },
+          'Opslag / Zaak': { rich_text: [{ text: { content: typeLabel } }] },
+          'Ingevuld door': { rich_text: [{ text: { content: naam } }] },
+          'Details':       { rich_text: [{ text: { content: details.slice(0, 2000) } }] },
+          'Opmerkingen':   { rich_text: [{ text: { content: sanitize(data.opmerking || '', 1000) } }] },
+          'Status':        { select:    { name: 'Nieuw' } },
+        },
+      };
+      if (datum) notionBody.properties['Datum'] = { date: { start: datum } };
+
+      try {
+        const res = await fetch('https://api.notion.com/v1/pages', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${env.NOTION_TOKEN}`, 'Notion-Version': '2022-06-28', 'Content-Type': 'application/json' },
+          body: JSON.stringify(notionBody),
+        });
+        if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
         return json({ ok: true });
       } catch (e) {
         return json({ ok: false, error: e.message }, 500);

@@ -326,9 +326,35 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <!-- TAB: MATERIEEL -->
 <div class="main tab-content active" id="tab-materieel">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title-row">
+        <span class="card-icon">➕</span>
+        <div>
+          <div class="card-title">Materieel toevoegen</div>
+          <div class="card-sub">Type, nummer en locatie</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:0 16px 14px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+        <select class="add-klus-input" id="add-mat-type" style="grid-column:1/-1;"></select>
+        <input class="add-klus-input" type="text" id="add-mat-nummer" placeholder="Nummer (bijv. 1)">
+        <select class="add-klus-input" id="add-mat-locatie"><option value="zaak">De Zaak</option></select>
+      </div>
+      <button class="add-klus-btn" style="width:100%;" onclick="voegMaterieelToe()">+ Toevoegen</button>
+    </div>
+  </div>
+
+  <div id="mat-init-wrap" style="display:none;margin-bottom:12px;">
+    <button onclick="initialiseerMaterieel()" style="width:100%;padding:14px;background:var(--surface);border:1.5px dashed var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:700;color:var(--zacht);cursor:pointer;-webkit-appearance:none;">
+      📦 Initialiseer standaard materieel (alles nr. 1 op De Zaak, bouwhekken overgeslagen)
+    </button>
+  </div>
+
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input class="search-input" type="text" id="zoek-mat" placeholder="Zoek op klus of werknummer..." oninput="filterMaterieel()">
+    <input class="search-input" type="text" id="zoek-mat-beheer" placeholder="Zoek op naam, nummer of locatie..." oninput="filterMaterieelBeheer()">
   </div>
   <div id="materieel-content">
     <div class="loading"><div class="spinner"></div> Laden...</div>
@@ -493,7 +519,6 @@ document.addEventListener('DOMContentLoaded', () => { setTheme(localStorage.getI
 
 let alleInzendingen = [];
 let alleKlussen     = [];
-let locatieMap      = {};
 
 /* ── AUTH HELPERS ─────────────────────────────────── */
 function getBeheerToken() {
@@ -628,20 +653,20 @@ function tabSwitch(naam, btn) {
   document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + naam).classList.add('active');
   btn.classList.add('active');
-  if (naam === 'gebruikers') laadGebruikers();
+  if (naam === 'materieel')     laadMaterieel();
+  if (naam === 'gebruikers')    laadGebruikers();
   if (naam === 'verplaatsingen') renderVerplaatsingenBeheer();
 }
 
 /* ── INIT ─────────────────────────────────────────── */
 function init() {
   laadInzendingen();
-  laadKlussen();
+  laadKlussen().then(() => { vulLocatieDropdown(); vulTypeDropdown(); laadMaterieel(); });
 }
 
 /* ── INZENDINGEN ──────────────────────────────────── */
 async function laadInzendingen() {
   document.getElementById('inzendingen-content').innerHTML = '<div class="loading"><div class="spinner"></div> Inzendingen laden...</div>';
-  document.getElementById('materieel-content').innerHTML   = '<div class="loading"><div class="spinner"></div> Materieel berekenen...</div>';
   try {
     const res  = await apiFetch(WORKER + '?action=inzendingen', { headers: authHeaders() });
     if (!res) return;
@@ -652,11 +677,8 @@ async function laadInzendingen() {
     badgeInz.textContent = alleInzendingen.length;
     badgeInz.style.display = alleInzendingen.length ? 'flex' : 'none';
     renderInzendingen();
-    locatieMap = bouwLocatieMap(alleInzendingen);
-    renderMaterieel();
   } catch (e) {
     document.getElementById('inzendingen-content').innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
-    document.getElementById('materieel-content').innerHTML   = `<div class="leeg">❌ ${e.message}</div>`;
   }
 }
 
@@ -796,8 +818,6 @@ async function verwijderInzending(pageId, htmlId, naam) {
     alleInzendingen = alleInzendingen.filter(inz => inz.id.replace(/-/g,'') !== htmlId);
     document.getElementById('badge-inz').textContent = alleInzendingen.length;
     renderInzendingen();
-    locatieMap = bouwLocatieMap(alleInzendingen);
-    renderMaterieel();
     showToast('✓ Inzending verwijderd');
   } catch (e) {
     showToast('❌ Verbindingsfout');
@@ -1145,6 +1165,161 @@ const KLUSSEN_DEFAULT = [
   { naam:'Sodexo, MSD, diversen, Haarlem',                              werknr:'490326' },
   { naam:'Fam. Mujcinovic, Rotterdam, verbouwing woning',               werknr:'4904' },
 ];
+
+/* ── MATERIEEL BEHEER ─────────────────────────────── */
+let alleMaterieelBeheer = [];
+
+function vulTypeDropdown() {
+  const sel = document.getElementById('add-mat-type');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">Type materieel...</option>';
+  for (const [sectie, items] of Object.entries(SECTIES)) {
+    const optg = document.createElement('optgroup');
+    optg.label = sectie;
+    for (const item of items) {
+      const opt = document.createElement('option');
+      opt.value       = item.id + '|' + item.naam;
+      opt.textContent = item.naam;
+      optg.appendChild(opt);
+    }
+    sel.appendChild(optg);
+  }
+}
+
+function vulLocatieDropdown() {
+  const sel = document.getElementById('add-mat-locatie');
+  if (!sel) return;
+  while (sel.options.length > 1) sel.remove(1);
+  for (const k of alleKlussen) {
+    const opt = document.createElement('option');
+    opt.value       = k.werknr;
+    opt.textContent = k.naam + ' (' + k.werknr + ')';
+    sel.appendChild(opt);
+  }
+}
+
+async function laadMaterieel() {
+  const el = document.getElementById('materieel-content');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Materieel laden...</div>';
+  try {
+    const res  = await apiFetch(WORKER + '?action=materieel', { headers: authHeaders() });
+    if (!res) return;
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error);
+    alleMaterieelBeheer = data.materialen;
+    document.getElementById('mat-init-wrap').style.display = alleMaterieelBeheer.length === 0 ? 'block' : 'none';
+    vulLocatieDropdown();
+    renderMaterieelBeheer();
+  } catch (e) {
+    el.innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+  }
+}
+
+function renderMaterieelBeheer(zoek) {
+  const term  = (zoek || document.getElementById('zoek-mat-beheer')?.value || '').toLowerCase();
+  const lijst = alleMaterieelBeheer.filter(m => {
+    if (!term) return true;
+    return m.naam.toLowerCase().includes(term)
+      || (m.nummer && String(m.nummer).includes(term))
+      || m.locatie.toLowerCase().includes(term);
+  });
+  const el = document.getElementById('materieel-content');
+  if (!el) return;
+
+  if (!lijst.length) {
+    el.innerHTML = alleMaterieelBeheer.length === 0
+      ? '<div class="leeg">Nog geen materieel. Gebruik de knop hierboven of voeg items toe.</div>'
+      : '<div class="leeg">Geen items gevonden.</div>';
+    return;
+  }
+
+  const perLocatie = {};
+  for (const m of lijst) {
+    const loc = m.locatie || 'zaak';
+    if (!perLocatie[loc]) perLocatie[loc] = [];
+    perLocatie[loc].push(m);
+  }
+  const locaties = Object.keys(perLocatie).sort((a, b) => a === 'zaak' ? -1 : b === 'zaak' ? 1 : a.localeCompare(b));
+
+  el.innerHTML = locaties.map(loc => {
+    const items   = perLocatie[loc];
+    const klusObj = alleKlussen.find(k => k.werknr === loc);
+    const locNaam = loc === 'zaak' ? '🏢 De Zaak – Depot' : ('🏗️ ' + (klusObj ? klusObj.naam + ' (' + loc + ')' : loc));
+    return `<div class="card" style="margin-bottom:10px;">
+      <div class="card-header" style="padding-bottom:8px;">
+        <div class="card-title-row">
+          <div>
+            <div class="card-title">${locNaam}</div>
+            <div class="card-sub">${items.length} stuk${items.length !== 1 ? 's' : ''}</div>
+          </div>
+        </div>
+      </div>
+      ${items.map(m => `<div class="klus-item">
+        <div class="klus-naam">${m.naam}${m.nummer ? ' <span class="klus-nr">Nr. ' + m.nummer + '</span>' : ''}</div>
+        <div class="klus-acties">
+          <button class="klus-btn klus-btn-del" onclick="verwijderMaterieelItem('${m.id}','${(m.naam + (m.nummer ? ' nr. ' + m.nummer : '')).replace(/'/g,"\\'")}')">🗑</button>
+        </div>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function filterMaterieelBeheer() { renderMaterieelBeheer(); }
+
+function voegMaterieelToe() {
+  const typeVal = document.getElementById('add-mat-type').value;
+  const nummer  = document.getElementById('add-mat-nummer').value.trim();
+  const locatie = document.getElementById('add-mat-locatie').value || 'zaak';
+  if (!typeVal) { showToast('⚠️ Selecteer een type'); return; }
+  const [type_id, naam] = typeVal.split('|');
+  alleMaterieelBeheer.push({ id: crypto.randomUUID(), type_id, naam, nummer: nummer || null, locatie });
+  document.getElementById('add-mat-type').value   = '';
+  document.getElementById('add-mat-nummer').value = '';
+  slaaMaterieelOp(true);
+  renderMaterieelBeheer();
+  showToast('✓ Item toegevoegd');
+}
+
+async function verwijderMaterieelItem(id, label) {
+  const ok = await bevestig('Materieel verwijderen?', `"${label}" wordt verwijderd uit het systeem.`);
+  if (!ok) return;
+  alleMaterieelBeheer = alleMaterieelBeheer.filter(m => m.id !== id);
+  renderMaterieelBeheer();
+  slaaMaterieelOp(true);
+  showToast('✓ Item verwijderd');
+}
+
+async function slaaMaterieelOp(silent = false) {
+  try {
+    const res  = await apiFetch(WORKER, {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ action: 'materieel_opslaan', materialen: alleMaterieelBeheer }),
+    });
+    if (!res) return;
+    const data = await res.json();
+    if (!data.ok) showToast('❌ Opslaan mislukt: ' + data.error);
+    else if (!silent) showToast('✓ Materieel opgeslagen');
+  } catch { showToast('❌ Verbindingsfout'); }
+}
+
+async function initialiseerMaterieel() {
+  const ok = await bevestig('Standaard materieel aanmaken?',
+    'Maakt voor elke categorie (behalve Bouwhekken) 1 item aan met nummer 1, locatie: De Zaak.', '📦');
+  if (!ok) return;
+  const nieuw = [];
+  for (const [sectie, items] of Object.entries(SECTIES)) {
+    if (sectie === 'Bouwhekken') continue;
+    for (const item of items) {
+      nieuw.push({ id: crypto.randomUUID(), type_id: item.id, naam: item.naam, nummer: '1', locatie: 'zaak' });
+    }
+  }
+  alleMaterieelBeheer = nieuw;
+  document.getElementById('mat-init-wrap').style.display = 'none';
+  renderMaterieelBeheer();
+  slaaMaterieelOp();
+}
 
 /* ── GEBRUIKERS ───────────────────────────────────── */
 async function laadGebruikers() {
