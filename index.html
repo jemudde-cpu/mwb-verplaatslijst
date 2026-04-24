@@ -311,9 +311,8 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .ovz-klus-nr{font-size:11px;font-weight:800;color:var(--accent);padding:3px 9px;background:rgba(255,107,0,.12);border-radius:var(--radius-sm);flex-shrink:0;}
 .ovz-klus-teller{font-size:11px;color:var(--zacht);margin-top:2px;}
 .ovz-klus-chevron{color:var(--dim);font-size:14px;transition:transform .25s;flex-shrink:0;}
-.ovz-klus-card.open .ovz-klus-chevron{transform:rotate(90deg);}
-.ovz-klus-body{display:none;border-top:1px solid var(--border);}
-.ovz-klus-card.open .ovz-klus-body{display:block;}
+.ovz-klus-card{cursor:pointer;}
+.ovz-klus-card:active{opacity:.85;}
 .ovz-item-regel{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:12px;}
 .ovz-item-regel:last-child{border-bottom:none;}
 .ovz-item-naam{font-size:13px;font-weight:600;}
@@ -731,6 +730,16 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     <div class="home-sectie-titel" style="margin-bottom:14px;">Mijn verplaatsingen</div>
     <div id="verpl-lijst"><div class="home-spinner"></div></div>
   </div>
+</div>
+
+<!-- OVZ LOCATIE DETAIL VIEW -->
+<div class="view" id="view-ovz-locatie">
+  <div style="position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:14px 16px;">
+    <button onclick="naarOverzicht()" style="background:none;border:none;color:var(--accent);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:6px;">
+      ← Terug
+    </button>
+  </div>
+  <div id="ovz-locatie-inhoud" style="padding:0 0 110px;"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1640,7 +1649,7 @@ async function apiFetch(url, opties = {}) {
 
 /* ── HOME ────────────────────────────────────────── */
 function alleViewsUit() {
-  ['view-home','view-wizard','view-overzicht','view-detail','view-verplaatsingen'].forEach(id =>
+  ['view-home','view-wizard','view-overzicht','view-detail','view-verplaatsingen','view-ovz-locatie'].forEach(id =>
     document.getElementById(id).classList.remove('active')
   );
   ['bn-home','bn-wizard','bn-overzicht','bn-verplaatsingen'].forEach(id =>
@@ -1987,15 +1996,36 @@ function bouwLocatieMap(inzendingen) {
   return locaties;
 }
 
+function bouwLocatieMapFromKV(materialen) {
+  const locaties = {};
+  for (const m of materialen) {
+    const loc = m.locatie || 'zaak';
+    if (!locaties[loc]) {
+      const klusObj = KLUSSEN.find(k => k.werknr === loc);
+      locaties[loc] = { naam: loc === 'zaak' ? 'De Zaak – Depot' : (klusObj ? klusObj.naam : loc), werknr: loc, items: {} };
+    }
+    const typeId = m.type_id;
+    if (!locaties[loc].items[typeId]) locaties[loc].items[typeId] = { naam: m.naam, aantal: 0, nummers: [] };
+    if (m.aantal != null) {
+      locaties[loc].items[typeId].aantal += m.aantal;
+    } else {
+      locaties[loc].items[typeId].aantal += 1;
+      if (m.nummer) locaties[loc].items[typeId].nummers.push(String(m.nummer));
+    }
+  }
+  if (!locaties['zaak']) locaties['zaak'] = { naam: 'De Zaak – Depot', werknr: 'zaak', items: {} };
+  return locaties;
+}
+
 async function ovzLaadData() {
   document.getElementById('ovz-content').innerHTML =
     '<div class="ovz-loading"><div class="spinner"></div><div style="font-size:13px;color:var(--zacht)">Materieel laden...</div></div>';
   try {
-    const res  = await apiFetch(WORKER + '?action=inzendingen', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+    const res  = await apiFetch(WORKER + '?action=materieel', { headers: { 'Authorization': 'Bearer ' + getToken() } });
     if (!res) return;
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
-    ovzLocatieMap = bouwLocatieMap(data.results);
+    ovzLocatieMap = bouwLocatieMapFromKV(data.materialen);
     ovzLaadMoment = new Date();
     ovzGeladen    = true;
     ovzRender();
@@ -2011,8 +2041,11 @@ function ovzRender() {
     ? `<div class="ovz-status-banner"><div class="ovz-status-dot"></div><div class="ovz-status-tekst">Bijgewerkt om ${ovzLaadMoment.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})} · ${Object.keys(ovzLocatieMap).length} locaties</div></div>`
     : '';
 
-  const zoek    = (document.getElementById('ovz-zoek').value || '').toLowerCase();
-  const locKeys = Object.keys(ovzLocatieMap).filter(k => {
+  const zoek = (document.getElementById('ovz-zoek').value || '').toLowerCase();
+  const alle = Object.keys(ovzLocatieMap);
+
+  const zaakKeys = alle.filter(k => k === 'zaak');
+  const klusKeys = alle.filter(k => k !== 'zaak').filter(k => {
     const loc = ovzLocatieMap[k];
     if (zoek && !loc.naam.toLowerCase().includes(zoek) && !loc.werknr.toLowerCase().includes(zoek)) return false;
     if (ovzActiefFilter !== 'alles') {
@@ -2020,52 +2053,106 @@ function ovzRender() {
       if (!Object.keys(loc.items).some(id => ids.includes(id))) return false;
     }
     return true;
-  });
+  }).sort((a, b) => ovzLocatieMap[a].naam.localeCompare(ovzLocatieMap[b].naam));
 
-  if (!locKeys.length) {
-    document.getElementById('ovz-content').innerHTML =
-      '<div class="ovz-leeg"><div class="ovz-leeg-icon">📭</div><div class="ovz-leeg-titel">Niets gevonden</div><div class="ovz-leeg-sub">Probeer een andere zoekterm of filter.</div></div>';
-    return;
-  }
+  let html = '<div class="ovz-sectie-header">🏢 De Zaak – Depot</div>';
+  html += ovzKlusKaart('zaak', true);
 
-  const zaakKeys = locKeys.filter(k => k === 'DE ZAAK' || ovzLocatieMap[k].naam.includes('Zaak') || ovzLocatieMap[k].naam.includes('Depot'));
-  const klusKeys = locKeys.filter(k => !zaakKeys.includes(k));
-  let html = '';
-  if (zaakKeys.length) {
-    html += '<div class="ovz-sectie-header">🏢🏭 De Zaak – Depot</div>';
-    zaakKeys.forEach(k => { html += ovzKlusKaart(k, true); });
-  }
   if (klusKeys.length) {
-    if (zaakKeys.length) html += '<div class="ovz-sectie-header" style="margin-top:20px;">🏗️ Bouwplaatsen</div>';
+    html += '<div class="ovz-sectie-header" style="margin-top:20px;">🏗️ Bouwplaatsen</div>';
     klusKeys.forEach(k => { html += ovzKlusKaart(k, false); });
   }
+
+  if (!klusKeys.length && zoek) {
+    html += '<div class="ovz-leeg"><div class="ovz-leeg-icon">📭</div><div class="ovz-leeg-titel">Niets gevonden</div><div class="ovz-leeg-sub">Probeer een andere zoekterm.</div></div>';
+  }
+
   document.getElementById('ovz-content').innerHTML = html;
   lucide.createIcons();
 }
 
 function ovzKlusKaart(key, isZaak) {
-  const loc   = ovzLocatieMap[key];
-  const items = ovzActiefFilter === 'alles'
+  const loc    = ovzLocatieMap[key];
+  if (!loc) return '';
+  const items  = ovzActiefFilter === 'alles'
     ? Object.entries(loc.items)
     : Object.entries(loc.items).filter(([id]) => (OVZ_FILTER_MAP[ovzActiefFilter] || []).includes(id));
-  if (!items.length) return '';
   const totaal = items.reduce((s,[,v]) => s + v.aantal, 0);
-  const safeId = key.replace(/[^a-z0-9]/gi,'_');
-  const regels = items.map(([,v]) => {
-    const nrs = v.nummers?.length ? `<div class="ovz-item-detail">Nr: ${v.nummers.join(', ')}</div>` : '';
-    return `<div class="ovz-item-regel"><div><div class="ovz-item-naam">${v.naam}</div>${nrs}</div><div class="ovz-item-badge">${v.aantal}×</div></div>`;
-  }).join('');
-  return `<div class="ovz-klus-card ${isZaak ? 'ovz-zaak-card' : ''}" id="ovzkc-${safeId}">
-    <div class="ovz-klus-header" onclick="document.getElementById('ovzkc-${safeId}').classList.toggle('open')">
+  const badge  = !isZaak && loc.werknr ? `<span class="ovz-klus-nr">${loc.werknr}</span>` : '';
+  const leeg   = items.length === 0;
+  return `<div class="ovz-klus-card ${isZaak ? 'ovz-zaak-card' : ''}" onclick="naarOvzLocatie('${key}')">
+    <div class="ovz-klus-header">
       <div class="ovz-klus-info">
-        <div class="ovz-klus-naam">${loc.naam || loc.werknr}</div>
-        <div class="ovz-klus-teller">${items.length} soort${items.length!==1?'en':''} · ${totaal} stuks</div>
+        <div class="ovz-klus-naam">${loc.naam}</div>
+        <div class="ovz-klus-teller">${leeg ? 'Geen materieel geregistreerd' : items.length + ' soort' + (items.length!==1?'en':'') + ' · ' + totaal + ' stuks'}</div>
       </div>
-      ${loc.werknr && loc.werknr !== 'DE ZAAK' ? `<span class="ovz-klus-nr">${loc.werknr}</span>` : ''}
+      ${badge}
       <span class="ovz-klus-chevron">›</span>
     </div>
-    <div class="ovz-klus-body">${regels}</div>
   </div>`;
+}
+
+let ovzHuidigeLocatieKey = null;
+
+function naarOvzLocatie(locKey) {
+  ovzHuidigeLocatieKey = locKey;
+  const loc = ovzLocatieMap[locKey];
+  if (!loc) return;
+  const isZaak = locKey === 'zaak';
+  const items  = Object.entries(loc.items);
+  const totaal = items.reduce((s,[,v]) => s + v.aantal, 0);
+
+  const perSectie = {};
+  for (const [typeId, item] of items) {
+    let sectie = 'Overig';
+    for (const [s, sItems] of Object.entries(SECTIES)) {
+      if (sItems.some(si => si.id === typeId)) { sectie = s; break; }
+    }
+    if (!perSectie[sectie]) perSectie[sectie] = [];
+    perSectie[sectie].push([typeId, item]);
+  }
+
+  let itemsHtml = '';
+  if (!items.length) {
+    itemsHtml = '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon">📦</div><div class="ovz-leeg-titel">Niets hier</div><div class="ovz-leeg-sub">Geen geregistreerd materieel op deze locatie.</div></div>';
+  } else {
+    for (const [sectie, sItems] of Object.entries(perSectie)) {
+      const sOrder = Object.keys(SECTIES);
+      sItems.sort((a, b) => a[1].naam.localeCompare(b[1].naam));
+      itemsHtml += `<div class="mat-kies-sectie-titel" style="margin:16px 16px 6px;">${sectie}</div>
+        <div class="card" style="margin:0 16px 10px;">`;
+      for (const [, v] of sItems) {
+        const nrs = v.nummers?.length
+          ? `<div class="ovz-item-detail">Nr. ${v.nummers.sort((a,b)=>Number(a)-Number(b)).join(', ')}</div>`
+          : '';
+        itemsHtml += `<div class="ovz-item-regel">
+          <div><div class="ovz-item-naam">${v.naam}</div>${nrs}</div>
+          <div class="ovz-item-badge">${v.aantal}×</div>
+        </div>`;
+      }
+      itemsHtml += '</div>';
+    }
+  }
+
+  document.getElementById('ovz-locatie-inhoud').innerHTML = `
+    <div style="padding:20px 16px 0;">
+      <div class="detail-header">
+        <div class="detail-titel">${loc.naam}</div>
+        ${!isZaak && loc.werknr ? `<div style="margin-top:6px;"><span class="ovz-klus-nr" style="font-size:13px;">${loc.werknr}</span></div>` : ''}
+        <div style="font-size:12px;color:var(--zacht);margin-top:6px;">${items.length} soort${items.length!==1?'en':''} · ${totaal} stuks</div>
+      </div>
+    </div>
+    ${itemsHtml}`;
+
+  alleViewsUit();
+  document.getElementById('view-ovz-locatie').classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function naarOverzicht() {
+  alleViewsUit();
+  document.getElementById('view-overzicht').classList.add('active');
+  document.getElementById('bn-overzicht').classList.add('active');
 }
 
 function ovzHerlaad() {
