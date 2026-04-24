@@ -8,7 +8,9 @@
 <script>document.documentElement.setAttribute('data-theme',localStorage.getItem('mwb_theme')||'dark');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
+i[data-lucide]{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;}
 :root {
   --accent:    #ff6b00;
   --groen:     #22c55e;
@@ -237,7 +239,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- LOGIN OVERLAY -->
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
-    <div class="pw-logo">⚙️</div>
+    <div class="pw-logo"><i data-lucide="settings" style="width:28px;height:28px;color:#fff;"></i></div>
 
     <!-- Normaal inloggen (standaard zichtbaar) -->
     <div id="login-form">
@@ -271,26 +273,26 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <header>
   <div class="header-top">
-    <div class="header-logo">⚙️</div>
+    <div class="header-logo"><i data-lucide="settings" style="width:18px;height:18px;color:#fff;"></i></div>
     <div class="header-title">
       Beheer
       <small>Middelwatering Bouw</small>
     </div>
     <div class="header-menu-wrap">
-      <button class="header-menu-btn" id="menu-btn" onclick="toggleMenu()" title="Menu">⋮</button>
+      <button class="header-menu-btn" id="menu-btn" onclick="toggleMenu()" title="Menu"><i data-lucide="more-vertical"></i></button>
       <div class="header-dropdown" id="header-dropdown">
         <button class="dropdown-item" id="theme-item" onclick="toggleTheme()">
-          <span class="dropdown-item-icon" id="theme-icon">☀️</span>
+          <span class="dropdown-item-icon" id="theme-icon"><i data-lucide="sun"></i></span>
           <span id="theme-label">Licht thema</span>
         </button>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="index.html">
-          <span class="dropdown-item-icon">📱</span>
+          <span class="dropdown-item-icon"><i data-lucide="smartphone"></i></span>
           Terug naar app
         </a>
         <div class="dropdown-divider"></div>
         <button class="dropdown-item dropdown-item-rood" onclick="uitloggen()">
-          <span class="dropdown-item-icon">🚪</span>
+          <span class="dropdown-item-icon"><i data-lucide="log-out"></i></span>
           Uitloggen
         </button>
       </div>
@@ -301,25 +303,25 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav">
   <button class="bottom-nav-btn active" id="btn-materieel" onclick="tabSwitch('materieel',this)">
-    <span class="bottom-nav-icon">📍</span>
+    <span class="bottom-nav-icon"><i data-lucide="package"></i></span>
     <span class="bottom-nav-label">Materieel</span>
   </button>
   <button class="bottom-nav-btn" id="btn-inzendingen" onclick="tabSwitch('inzendingen',this)">
-    <span class="bottom-nav-icon">📋</span>
+    <span class="bottom-nav-icon"><i data-lucide="clipboard-list"></i></span>
     <span class="bottom-nav-label">Inzendingen</span>
     <span class="bottom-nav-badge" id="badge-inz" style="display:none">0</span>
   </button>
   <button class="bottom-nav-btn" id="btn-klussen" onclick="tabSwitch('klussen',this)">
-    <span class="bottom-nav-icon">🏗️</span>
+    <span class="bottom-nav-icon"><i data-lucide="hard-hat"></i></span>
     <span class="bottom-nav-label">Klussen</span>
     <span class="bottom-nav-badge" id="badge-kl" style="display:none">0</span>
   </button>
   <button class="bottom-nav-btn" id="btn-verplaatsingen" onclick="tabSwitch('verplaatsingen',this)">
-    <span class="bottom-nav-icon">📋</span>
+    <span class="bottom-nav-icon"><i data-lucide="truck"></i></span>
     <span class="bottom-nav-label">Verplaats.</span>
   </button>
   <button class="bottom-nav-btn" id="btn-gebruikers" onclick="tabSwitch('gebruikers',this)">
-    <span class="bottom-nav-icon">👥</span>
+    <span class="bottom-nav-icon"><i data-lucide="users"></i></span>
     <span class="bottom-nav-label">Gebruikers</span>
   </button>
 </nav>
@@ -329,7 +331,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <span class="card-icon">➕</span>
+        <span class="card-icon"><i data-lucide="plus"></i></span>
         <div>
           <div class="card-title">Materieel toevoegen</div>
           <div class="card-sub">Type, nummer en locatie</div>
@@ -349,12 +351,12 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
   <div id="mat-init-wrap" style="display:none;margin-bottom:12px;">
     <button onclick="initialiseerMaterieel()" style="width:100%;padding:14px;background:var(--surface);border:1.5px dashed var(--border-2);border-radius:var(--radius);font-family:inherit;font-size:13px;font-weight:700;color:var(--zacht);cursor:pointer;-webkit-appearance:none;">
-      📦 Initialiseer standaard materieel (nummers 1–5 per type, hekken 20 stuks)
+      <i data-lucide="package" style="width:15px;height:15px;vertical-align:middle;margin-right:6px;"></i>Initialiseer standaard materieel (nummers 1–5 per type, hekken 20 stuks)
     </button>
   </div>
 
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><i data-lucide="search"></i></span>
     <input class="search-input" type="text" id="zoek-mat-beheer" placeholder="Zoek op naam, nummer of locatie..." oninput="filterMaterieelBeheer()">
   </div>
   <div id="materieel-content">
@@ -365,7 +367,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- TAB: INZENDINGEN -->
 <div class="main tab-content" id="tab-inzendingen">
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><i data-lucide="search"></i></span>
     <input class="search-input" type="text" id="zoek-inz" placeholder="Zoek op naam of klus..." oninput="filterInzendingen()">
   </div>
   <div id="inzendingen-content">
@@ -378,7 +380,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <span class="card-icon">➕</span>
+        <span class="card-icon"><i data-lucide="plus"></i></span>
         <div>
           <div class="card-title">Klus toevoegen</div>
           <div class="card-sub">Naam en werknummer</div>
@@ -395,7 +397,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   </div>
 
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><i data-lucide="search"></i></span>
     <input class="search-input" type="text" id="zoek-klus" placeholder="Zoek op naam of werknummer..." oninput="filterKlussen()">
   </div>
 
@@ -404,7 +406,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <div class="loading"><div class="spinner"></div> Laden...</div>
     </div>
     <div class="card-body" style="padding-top:0;">
-      <button class="opslaan-btn" onclick="slaKlussenOp()">💾 Wijzigingen opslaan</button>
+      <button class="opslaan-btn" onclick="slaKlussenOp()"><i data-lucide="save" style="width:15px;height:15px;vertical-align:middle;margin-right:6px;"></i>Wijzigingen opslaan</button>
     </div>
   </div>
 </div>
@@ -412,7 +414,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- TAB: VERPLAATSINGEN -->
 <div class="main tab-content" id="tab-verplaatsingen">
   <div class="search-wrap">
-    <span class="search-icon">🔍</span>
+    <span class="search-icon"><i data-lucide="search"></i></span>
     <input class="search-input" type="text" id="zoek-verpl" placeholder="Zoek op naam of klus..." oninput="filterVerplaatsingen()">
   </div>
   <div id="verplaatsingen-content">
@@ -425,7 +427,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="card">
     <div class="card-header">
       <div class="card-title-row">
-        <span class="card-icon">➕</span>
+        <span class="card-icon"><i data-lucide="plus"></i></span>
         <div>
           <div class="card-title">Account aanmaken</div>
           <div class="card-sub">Naam, gebruikersnaam, wachtwoord en rol</div>
@@ -451,7 +453,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="card" id="gebruikers-lijst-card">
     <div class="card-header">
       <div class="card-title-row">
-        <span class="card-icon">👥</span>
+        <span class="card-icon"><i data-lucide="users"></i></span>
         <div>
           <div class="card-title">Accounts</div>
           <div class="card-sub" id="gb-teller">Laden...</div>
@@ -468,7 +470,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal-box">
     <div class="modal-body">
-      <div class="modal-icon" id="modal-icon">🗑️</div>
+      <div class="modal-icon" id="modal-icon"><i data-lucide="trash-2" style="width:32px;height:32px;color:var(--rood);"></i></div>
       <div class="modal-titel" id="modal-titel"></div>
       <div class="modal-tekst" id="modal-tekst"></div>
     </div>
@@ -481,7 +483,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-close" onclick="closeLightbox()"><i data-lucide="x" style="width:20px;height:20px;"></i></button>
   <img id="lightbox-img" src="" alt="">
 </div>
 
@@ -496,7 +498,7 @@ function setTheme(t) {
   localStorage.setItem('mwb_theme', t);
   const icon  = document.getElementById('theme-icon');
   const label = document.getElementById('theme-label');
-  if (icon)  icon.textContent  = t === 'light' ? '🌙' : '☀️';
+  if (icon)  { icon.innerHTML = t === 'light' ? '<i data-lucide="moon"></i>' : '<i data-lucide="sun"></i>'; lucide.createIcons({nodes:[icon]}); }
   if (label) label.textContent = t === 'light' ? 'Donker thema' : 'Licht thema';
   document.getElementById('theme-meta').content = t === 'light' ? '#f0f0f0' : '#111111';
 }
@@ -516,7 +518,7 @@ document.addEventListener('click', e => {
     document.getElementById('menu-btn').classList.remove('open');
   }
 });
-document.addEventListener('DOMContentLoaded', () => { setTheme(localStorage.getItem('mwb_theme') || 'dark'); });
+document.addEventListener('DOMContentLoaded', () => { setTheme(localStorage.getItem('mwb_theme') || 'dark'); lucide.createIcons(); });
 
 let alleInzendingen = [];
 let alleKlussen     = [];
@@ -679,7 +681,7 @@ async function laadInzendingen() {
     badgeInz.style.display = alleInzendingen.length ? 'flex' : 'none';
     renderInzendingen();
   } catch (e) {
-    document.getElementById('inzendingen-content').innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+    document.getElementById('inzendingen-content').innerHTML = `<div class="leeg">${e.message}</div>`;
   }
 }
 
@@ -699,6 +701,7 @@ function renderInzendingen(zoek) {
   }
 
   document.getElementById('inzendingen-content').innerHTML = lijst.map(inz => renderInzCard(inz)).join('');
+  lucide.createIcons();
 }
 
 function renderInzCard(inz) {
@@ -715,9 +718,7 @@ function renderInzCard(inz) {
   const id      = inz.id.replace(/-/g,'');
 
   const statusClass = status === 'Verwerkt' ? 'status-verwerkt' : 'status-nieuw';
-  const icon = type.includes('Zaak') && type.includes('Klus') ? '📦'
-             : type.includes('Klus') && type.includes('Klus') ? '🔄'
-             : '🏢🏭';
+  const icon = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
 
   // Foto URLs uit details halen
   const fotoUrls = [];
@@ -741,7 +742,7 @@ function renderInzCard(inz) {
         <div class="inz-meta">${datum} · ${invuld}</div>
       </div>
       <span class="inz-status ${statusClass}">${status}</span>
-      <button class="inz-del-btn" title="Inzending verwijderen" onclick="event.stopPropagation();verwijderInzending('${inz.id}','${id}','${naam.replace(/'/g,"\\'")}')">🗑</button>
+      <button class="inz-del-btn" title="Inzending verwijderen" onclick="event.stopPropagation();verwijderInzending('${inz.id}','${id}','${naam.replace(/'/g,"\\'")}')"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
       <span class="inz-chevron">›</span>
     </div>
     <div class="inz-body">
@@ -755,7 +756,7 @@ function renderInzCard(inz) {
         <button class="inz-status-toggle ${status === 'Verwerkt' ? 'inz-status-toggle-verwerkt' : 'inz-status-toggle-nieuw'}"
           id="status-btn-${id}"
           onclick="wisselStatus('${inz.id}','${id}','${status}')">
-          ${status === 'Verwerkt' ? '↩ Zet op Nieuw' : '✓ Markeer Verwerkt'}
+          ${status === 'Verwerkt' ? ic('undo-2',13) + ' Zet op Nieuw' : ic('check',13) + ' Markeer Verwerkt'}
         </button>
       </div>
     </div>
@@ -782,7 +783,7 @@ async function wisselStatus(pageId, htmlId, huidig) {
     });
     if (!res) return;
     const data = await res.json();
-    if (!data.ok) { showToast('❌ ' + (data.error || 'Mislukt')); return; }
+    if (!data.ok) { showToast(data.error || 'Mislukt', 'err'); return; }
     // Update lokale array en herrender kaart
     const inz = alleInzendingen.find(i => i.id.replace(/-/g,'') === htmlId);
     if (inz && inz.properties?.['Status']?.select) {
@@ -793,9 +794,9 @@ async function wisselStatus(pageId, htmlId, huidig) {
     const wasOpen = kaartEl?.classList.contains('open');
     renderInzendingen();
     if (wasOpen) document.getElementById('inz-' + htmlId)?.classList.add('open');
-    showToast(nieuw === 'Verwerkt' ? '✓ Gemarkeerd als Verwerkt' : '↩ Teruggezet op Nieuw');
+    showToast(nieuw === 'Verwerkt' ? 'Gemarkeerd als Verwerkt' : 'Teruggezet op Nieuw', 'ok');
   } catch {
-    showToast('❌ Verbindingsfout');
+    showToast('Verbindingsfout', 'err');
   } finally {
     if (btn) btn.disabled = false;
   }
@@ -815,13 +816,13 @@ async function verwijderInzending(pageId, htmlId, naam) {
     });
     if (!res) return;
     const data = await res.json();
-    if (!data.ok) { showToast('❌ ' + (data.error || 'Verwijderen mislukt')); return; }
+    if (!data.ok) { showToast(data.error || 'Verwijderen mislukt', 'err'); return; }
     alleInzendingen = alleInzendingen.filter(inz => inz.id.replace(/-/g,'') !== htmlId);
     document.getElementById('badge-inz').textContent = alleInzendingen.length;
     renderInzendingen();
-    showToast('✓ Inzending verwijderd');
+    showToast('Inzending verwijderd', 'ok');
   } catch (e) {
-    showToast('❌ Verbindingsfout');
+    showToast('Verbindingsfout', 'err');
   }
 }
 
@@ -852,16 +853,18 @@ function renderKlussen(zoek) {
     return;
   }
 
-  document.getElementById('klussen-content').innerHTML = lijst.map((k, i) => {
+  const _kl = document.getElementById('klussen-content');
+  _kl.innerHTML = lijst.map((k, i) => {
     const realIdx = alleKlussen.indexOf(k);
     return `<div class="klus-item">
       <div class="klus-naam">${k.naam}</div>
       <span class="klus-nr">${k.werknr}</span>
       <div class="klus-acties">
-        <button class="klus-btn klus-btn-del" title="Verwijderen" onclick="verwijderKlus(${realIdx})">🗑</button>
+        <button class="klus-btn klus-btn-del" title="Verwijderen" onclick="verwijderKlus(${realIdx})"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
       </div>
     </div>`;
   }).join('');
+  lucide.createIcons();
 }
 
 function filterKlussen() {
@@ -871,7 +874,7 @@ function filterKlussen() {
 function voegKlusToe() {
   const naam = document.getElementById('nieuw-klus-naam').value.trim();
   const nr   = document.getElementById('nieuw-klus-nr').value.trim();
-  if (!naam || !nr) { showToast('⚠️ Vul naam en werknummer in'); return; }
+  if (!naam || !nr) { showToast('Vul naam en werknummer in', 'warn'); return; }
   alleKlussen.unshift({ naam, werknr: nr });
   document.getElementById('nieuw-klus-naam').value = '';
   document.getElementById('nieuw-klus-nr').value   = '';
@@ -905,10 +908,10 @@ async function slaKlussenOp(silent = false) {
     });
     if (!res) return;
     const data = await res.json();
-    if (data.ok) { if (!silent) showToast('✓ Klussen opgeslagen'); else showToast('✓ Opgeslagen'); }
-    else showToast('❌ Opslaan mislukt: ' + data.error);
+    if (data.ok) { if (!silent) showToast('Klussen opgeslagen', 'ok'); else showToast('Opgeslagen', 'ok'); }
+    else showToast('Opslaan mislukt: ' + data.error, 'err');
   } catch (e) {
-    showToast('❌ Verbindingsfout – klus niet opgeslagen');
+    showToast('Verbindingsfout – klus niet opgeslagen', 'err');
   }
 }
 
@@ -1035,7 +1038,7 @@ function renderMaterieel(zoek) {
     return `<div class="mat-locatie-card ${isZaak ? 'zaak' : ''}" id="ml-${safeId}">
       <div class="mat-locatie-header" onclick="this.closest('.mat-locatie-card').classList.toggle('open')">
         <div>
-          <div class="mat-locatie-naam">${isZaak ? '🏢🏭 ' : '🏗️ '}${loc.naam || loc.werknr}</div>
+          <div class="mat-locatie-naam">${isZaak ? ic('building-2',14) + ' ' : ic('hard-hat',14) + ' '}${loc.naam || loc.werknr}</div>
           <div class="mat-locatie-teller">${items.length} soorten · ${totaal} stuks</div>
         </div>
         ${loc.werknr && loc.werknr !== 'DE ZAAK' ? `<span class="mat-locatie-nr">${loc.werknr}</span>` : ''}
@@ -1060,9 +1063,12 @@ function closeLightbox() {
 }
 
 /* ── BEVESTIG MODAL ───────────────────────────────── */
-function bevestig(titel, tekst, icon = '🗑️') {
+function bevestig(titel, tekst, iconName = 'trash-2', iconColor = 'var(--rood)') {
   return new Promise(resolve => {
-    document.getElementById('modal-icon').textContent  = icon;
+    const mi = document.getElementById('modal-icon');
+    mi.innerHTML = ic(iconName, 32);
+    mi.style.color = iconColor;
+    lucide.createIcons({nodes:[mi]});
     document.getElementById('modal-titel').textContent = titel;
     document.getElementById('modal-tekst').textContent = tekst;
     const overlay = document.getElementById('modal-overlay');
@@ -1085,9 +1091,15 @@ function prop(page, name) {
   return page?.properties?.[name];
 }
 
-function showToast(msg) {
+function ic(name, px) {
+  return `<i data-lucide="${name}"${px ? ` style="width:${px}px;height:${px}px"` : ''}></i>`;
+}
+
+function showToast(msg, type = 'info') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  const iconName = type === 'ok' ? 'check' : type === 'err' ? 'x-circle' : type === 'warn' ? 'alert-triangle' : null;
+  t.innerHTML = iconName ? `<span style="display:inline-flex;align-items:center;gap:6px;">${ic(iconName, 14)} ${msg}</span>` : msg;
+  lucide.createIcons({nodes:[t]});
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
@@ -1220,7 +1232,7 @@ async function laadMaterieel() {
     vulLocatieDropdown();
     renderMaterieelBeheer();
   } catch (e) {
-    el.innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+    el.innerHTML = `<div class="leeg">${e.message}</div>`;
   }
 }
 
@@ -1253,7 +1265,7 @@ function renderMaterieelBeheer(zoek) {
   el.innerHTML = locaties.map(loc => {
     const items   = perLocatie[loc];
     const klusObj = alleKlussen.find(k => k.werknr === loc);
-    const locNaam = loc === 'zaak' ? '🏢 De Zaak – Depot' : ('🏗️ ' + (klusObj ? klusObj.naam + ' (' + loc + ')' : loc));
+    const locNaam = loc === 'zaak' ? ic('building-2',13) + ' De Zaak – Depot' : ic('hard-hat',13) + ' ' + (klusObj ? klusObj.naam + ' (' + loc + ')' : loc);
     const totaalStuds = items.reduce((s, m) => s + (m.aantal || 1), 0);
     return `<div class="card" style="margin-bottom:10px;">
       <div class="card-header" style="padding-bottom:8px;">
@@ -1270,12 +1282,13 @@ function renderMaterieelBeheer(zoek) {
         return `<div class="klus-item">
         <div class="klus-naam">${m.naam}${badge}</div>
         <div class="klus-acties">
-          <button class="klus-btn klus-btn-del" onclick="verwijderMaterieelItem('${m.id}','${labelEsc}')">🗑</button>
+          <button class="klus-btn klus-btn-del" onclick="verwijderMaterieelItem('${m.id}','${labelEsc}')"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
         </div>
       </div>`;
       }).join('')}
     </div>`;
   }).join('');
+  lucide.createIcons();
 }
 
 function filterMaterieelBeheer() { renderMaterieelBeheer(); }
@@ -1283,7 +1296,7 @@ function filterMaterieelBeheer() { renderMaterieelBeheer(); }
 function voegMaterieelToe() {
   const typeVal = document.getElementById('add-mat-type').value;
   const locatie = document.getElementById('add-mat-locatie').value || 'zaak';
-  if (!typeVal) { showToast('⚠️ Selecteer een type'); return; }
+  if (!typeVal) { showToast('Selecteer een type', 'warn'); return; }
   const [type_id, naam, sectie] = typeVal.split('|');
   const isHekken = sectie === 'Bouwhekken';
   let item;
@@ -1301,7 +1314,7 @@ function voegMaterieelToe() {
   updateAddMatVeld();
   slaaMaterieelOp(true);
   renderMaterieelBeheer();
-  showToast('✓ Item toegevoegd');
+  showToast('Item toegevoegd', 'ok');
 }
 
 async function verwijderMaterieelItem(id, label) {
@@ -1310,7 +1323,7 @@ async function verwijderMaterieelItem(id, label) {
   alleMaterieelBeheer = alleMaterieelBeheer.filter(m => m.id !== id);
   renderMaterieelBeheer();
   slaaMaterieelOp(true);
-  showToast('✓ Item verwijderd');
+  showToast('Item verwijderd', 'ok');
 }
 
 async function slaaMaterieelOp(silent = false) {
@@ -1322,14 +1335,13 @@ async function slaaMaterieelOp(silent = false) {
     });
     if (!res) return;
     const data = await res.json();
-    if (!data.ok) showToast('❌ Opslaan mislukt: ' + data.error);
-    else if (!silent) showToast('✓ Materieel opgeslagen');
-  } catch { showToast('❌ Verbindingsfout'); }
+    if (!data.ok) showToast('Opslaan mislukt: ' + data.error, 'err');
+    else if (!silent) showToast('Materieel opgeslagen', 'ok');
+  } catch { showToast('Verbindingsfout', 'err'); }
 }
 
 async function initialiseerMaterieel() {
-  const ok = await bevestig('Standaard materieel aanmaken?',
-    'Per type nummers 1 t/m 5 op De Zaak. Bouwhekken-categorie: 20 stuks per type, geen nummer.', '📦');
+  const ok = await bevestig('Standaard materieel aanmaken?', 'Per type nummers 1 t/m 5 op De Zaak. Bouwhekken-categorie: 20 stuks per type, geen nummer.', 'package', 'var(--accent)');
   if (!ok) return;
   const nieuw = [];
   for (const [sectie, items] of Object.entries(SECTIES)) {
@@ -1359,7 +1371,7 @@ async function laadGebruikers() {
     if (!data.ok) throw new Error(data.error);
     renderGebruikers(data.gebruikers);
   } catch (e) {
-    document.getElementById('gebruikers-content').innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+    document.getElementById('gebruikers-content').innerHTML = `<div class="leeg">${e.message}</div>`;
   }
 }
 
@@ -1378,9 +1390,10 @@ function renderGebruikers(lijst) {
       </div>
       <span class="gb-role ${u.role === 'admin' ? 'gb-role-admin' : 'gb-role-user'}">${u.role === 'admin' ? 'Beheerder' : 'Medewerker'}</span>
       ${u.gebruikersnaam !== ikzelf
-        ? `<button class="gb-del" title="Verwijderen" onclick="verwijderGebruiker('${u.gebruikersnaam}','${u.naam}')">🗑</button>`
+        ? `<button class="gb-del" title="Verwijderen" onclick="verwijderGebruiker('${u.gebruikersnaam}','${u.naam}')"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>`
         : '<div style="width:30px"></div>'}
     </div>`).join('');
+  lucide.createIcons();
 }
 
 async function voegGebruikerToe() {
@@ -1390,7 +1403,7 @@ async function voegGebruikerToe() {
   const role       = document.getElementById('gb-role').value;
 
   if (!naam || !gebruiker || wachtwoord.length < 6) {
-    showToast('⚠️ Vul alle velden in (wachtwoord min. 6 tekens)'); return;
+    showToast('Vul alle velden in (wachtwoord min. 6 tekens)', 'warn'); return;
   }
   try {
     const res  = await apiFetch(WORKER, {
@@ -1401,16 +1414,16 @@ async function voegGebruikerToe() {
     if (!res) return;
     const data = await res.json();
     if (data.ok) {
-      showToast('✓ Account aangemaakt');
+      showToast('Account aangemaakt', 'ok');
       document.getElementById('gb-naam').value     = '';
       document.getElementById('gb-gebruiker').value = '';
       document.getElementById('gb-ww').value        = '';
       laadGebruikers();
     } else {
-      showToast('❌ ' + (data.error || 'Mislukt'));
+      showToast(data.error || 'Mislukt', 'err');
     }
   } catch (e) {
-    showToast('❌ Verbindingsfout');
+    showToast('Verbindingsfout', 'err');
   }
 }
 
@@ -1418,7 +1431,7 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
   const ok = await bevestig(
     'Account verwijderen?',
     `"${naam}" (${gebruikersnaam}) kan daarna niet meer inloggen.`,
-    '👤'
+    'user', 'var(--accent)'
   );
   if (!ok) return;
   try {
@@ -1429,10 +1442,10 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
     });
     if (!res) return;
     const data = await res.json();
-    if (data.ok) { showToast('✓ Account verwijderd'); laadGebruikers(); }
-    else showToast('❌ ' + (data.error || 'Mislukt'));
+    if (data.ok) { showToast('Account verwijderd', 'ok'); laadGebruikers(); }
+    else showToast(data.error || 'Mislukt', 'err');
   } catch (e) {
-    showToast('❌ Verbindingsfout');
+    showToast('Verbindingsfout', 'err');
   }
 }
 
@@ -1449,7 +1462,7 @@ async function laadVerplaatsingenBeheer() {
       if (!data.ok) throw new Error(data.error);
       alleInzendingen = data.results;
     } catch (e) {
-      el.innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+      el.innerHTML = `<div class="leeg">${e.message}</div>`;
       return;
     }
   }
@@ -1484,7 +1497,7 @@ function renderVerplaatsingenBeheer(zoek) {
     const status = prop(inz,'Status')?.select?.name || 'Nieuw';
     const sc     = status === 'Verwerkt' ? 'status-verwerkt' : 'status-nieuw';
     const type   = prop(inz,'Opslag / Zaak')?.rich_text?.[0]?.plain_text || '';
-    const icon   = type.includes('Zaak') ? '🏢' : '🔄';
+    const icon = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
     return `<div class="inz-card" style="margin-bottom:8px;">
       <div class="inz-header" style="cursor:default;">
         <span class="inz-icon">${icon}</span>
@@ -1497,6 +1510,7 @@ function renderVerplaatsingenBeheer(zoek) {
       </div>
     </div>`;
   }).join('');
+  lucide.createIcons();
 }
 
 function filterVerplaatsingen() {

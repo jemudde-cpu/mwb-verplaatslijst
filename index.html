@@ -333,7 +333,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .ovz-status-tekst{font-size:13px;color:var(--zacht);}
 .ovz-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:60px 20px;}
 .ovz-leeg{text-align:center;padding:48px 20px;}
-.ovz-leeg-icon{font-size:40px;margin-bottom:10px;}
+.ovz-leeg-icon{font-size:40px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;color:var(--zacht);}
 .ovz-leeg-titel{font-size:16px;font-weight:800;margin-bottom:4px;}
 .ovz-leeg-sub{font-size:13px;color:var(--zacht);}
 
@@ -440,7 +440,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- LOGIN OVERLAY -->
 <div class="login-overlay" id="login-overlay">
   <div class="login-box">
-    <div class="login-logo">🏗️</div>
+    <div class="login-logo"><i data-lucide="hard-hat" style="width:28px;height:28px;color:#fff;"></i></div>
     <div class="login-titel">Middelwatering Bouw</div>
     <div class="login-sub">Log in om verplaatsingen te registreren.</div>
     <input class="login-input" type="text" id="login-gebruiker" placeholder="Gebruikersnaam"
@@ -458,7 +458,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- REGISTREREN OVERLAY -->
 <div class="login-overlay verborgen" id="registreer-overlay">
   <div class="login-box">
-    <div class="login-logo">✍️</div>
+    <div class="login-logo"><i data-lucide="pen-line" style="width:28px;height:28px;color:#fff;"></i></div>
     <div class="login-titel">Account aanmaken</div>
     <div class="login-sub">Vul je gegevens in om je aan te melden.</div>
     <input class="login-input" type="text" id="reg-naam" placeholder="Volledige naam"
@@ -478,7 +478,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <header>
   <div class="header-top">
-    <div class="header-logo">🏗️</div>
+    <div class="header-logo"><i data-lucide="hard-hat" style="width:18px;height:18px;color:#fff;"></i></div>
     <div class="header-title">
       Middelwatering Bouw
       <small>Verplaatslijst</small>
@@ -535,7 +535,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <div class="view active" id="view-home">
   <div class="home-wrap">
     <div class="home-welkom-card">
-      <div class="home-welkom-avatar">👷</div>
+      <div class="home-welkom-avatar"><i data-lucide="hard-hat" style="width:28px;height:28px;color:var(--accent);"></i></div>
       <div>
         <div class="home-welkom-groet" id="home-groet">Welkom</div>
         <div class="home-welkom-naam" id="home-naam">—</div>
@@ -572,7 +572,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     <div class="card-title">Waar sta jij nu?</div>
     <div class="card-body" style="padding-top:12px;">
       <button class="loc-zaak-btn" id="van-zaak-btn" onclick="selectLocatieVan('zaak')">
-        <span style="font-size:22px;">🏢</span>
+        <span style="font-size:0;"><i data-lucide="building-2" style="width:22px;height:22px;color:currentColor;"></i></span>
         <div><div>De Zaak – Depot</div><div class="loc-zaak-tekst">Magazijn / depot</div></div>
       </button>
       <div class="locatie-label" style="margin-bottom:8px;">Of zoek een klus:</div>
@@ -580,7 +580,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
         <div class="ac-input-row">
           <span class="ac-search-icon"><i data-lucide="search"></i></span>
           <input class="ac-input" id="ac-input-van" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('van',this.value)" onfocus="acOpen('van')" autocomplete="off">
-          <button class="ac-clear" onclick="acClear('van')">✕</button>
+          <button class="ac-clear" onclick="acClear('van')"><i data-lucide="x" style="width:14px;height:14px"></i></button>
         </div>
         <div class="ac-badge" id="ac-badge-van"></div>
         <div class="ac-dropdown" id="ac-dropdown-van"></div>
@@ -603,7 +603,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="card" style="overflow:visible;">
     <div class="card-body" style="padding-top:12px;">
       <button class="loc-zaak-btn" id="naar-zaak-btn" onclick="selectLocatieNaar('zaak')">
-        <span style="font-size:22px;">🏢</span>
+        <span style="font-size:0;"><i data-lucide="building-2" style="width:22px;height:22px;color:currentColor;"></i></span>
         <div><div>De Zaak – Depot</div><div class="loc-zaak-tekst">Magazijn / depot</div></div>
       </button>
       <div class="locatie-label" style="margin-bottom:8px;">Of zoek een klus:</div>
@@ -611,7 +611,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
         <div class="ac-input-row">
           <span class="ac-search-icon"><i data-lucide="search"></i></span>
           <input class="ac-input" id="ac-input-naar" type="text" placeholder="Typ naam of werknummer..." oninput="acFilter('naar',this.value)" onfocus="acOpen('naar')" autocomplete="off">
-          <button class="ac-clear" onclick="acClear('naar')">✕</button>
+          <button class="ac-clear" onclick="acClear('naar')"><i data-lucide="x" style="width:14px;height:14px"></i></button>
         </div>
         <div class="ac-badge" id="ac-badge-naar"></div>
         <div class="ac-dropdown" id="ac-dropdown-naar"></div>
@@ -665,7 +665,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <button class="foto-btn-camera" onclick="triggerCamera('camera')"><i data-lucide="camera"></i> Camera</button>
       <button class="foto-btn-camera" onclick="triggerCamera('library')" style="background:rgba(255,255,255,.06);border-color:var(--border-2);color:var(--tekst);"><i data-lucide="image"></i> Bibliotheek</button>
     </div>
-    <button class="foto-btn-save" id="foto-save-btn" onclick="fotoOpslaan()" style="display:none;width:100%;margin-top:10px;">Opslaan ✓</button>
+    <button class="foto-btn-save" id="foto-save-btn" onclick="fotoOpslaan()" style="display:none;width:100%;margin-top:10px;">Opslaan</button>
     <input type="file" id="foto-file-input-camera" accept="image/*" capture="environment" onchange="fotoGekozen(event)" style="display:none">
     <input type="file" id="foto-file-input-library" accept="image/*" onchange="fotoGekozen(event)" style="display:none">
   </div>
@@ -678,7 +678,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="sheet-title" id="sheet-title"></div>
   <div class="sheet-sub" id="sheet-sub"></div>
   <div id="sheet-body"></div>
-  <button class="sheet-save" onclick="saveSheet()">Opslaan ✓</button>
+  <button class="sheet-save" onclick="saveSheet()">Opslaan</button>
 </div>
 
 </div><!-- /view-wizard -->
@@ -972,7 +972,7 @@ function updateProgress() {
     ps.classList.remove('active','done');
     if (i < currentStep) ps.classList.add('done');
     if (i === currentStep) ps.classList.add('active');
-    ps.querySelector('.progress-dot').textContent = i < currentStep ? '✓' : i;
+    const dot = ps.querySelector('.progress-dot'); if (i < currentStep) { dot.innerHTML = ic('check',12); lucide.createIcons({nodes:[dot]}); } else dot.textContent = i;
   }
   for (let i = 1; i < TOTAL; i++) {
     document.getElementById('pl-' + i).classList.toggle('done', i < currentStep);
@@ -984,7 +984,7 @@ function updateNav() {
   const next = document.getElementById('btn-next');
   prev.style.display = currentStep > 1 ? '' : 'none';
   if (currentStep === TOTAL) {
-    next.textContent = '✓ Verstuur';
+    next.innerHTML = ic('check',14) + ' Verstuur'; lucide.createIcons({nodes:[next]});
     next.className   = 'btn-nav btn-verstuur';
     next.onclick     = verstuurAlles;
   } else {
@@ -1000,21 +1000,21 @@ function validateStep(n) {
       const wrap = document.getElementById('f-datum');
       wrap && wrap.classList.add('error');
       document.getElementById('datum').addEventListener('input', () => wrap && wrap.classList.remove('error'), { once:true });
-      showToast('⚠️ Vul een datum in');
+      showToast('Vul een datum in', 'warn');
       return false;
     }
-    if (!VAN.type) { showToast('⚠️ Selecteer je huidige locatie'); return false; }
+    if (!VAN.type) { showToast('Selecteer je huidige locatie', 'warn'); return false; }
     return true;
   }
   if (n === 2) {
     if (geselecteerdeItems.size === 0 && Object.keys(geselecteerdeAantallen).length === 0) {
-      showToast('⚠️ Selecteer minstens 1 item om te verplaatsen'); return false;
+      showToast('Selecteer minstens 1 item om te verplaatsen', 'warn'); return false;
     }
     return true;
   }
   if (n === 3) {
-    if (!NAAR.type) { showToast('⚠️ Selecteer de bestemming'); return false; }
-    if (VAN.werknr === NAAR.werknr) { showToast('⚠️ Van en naar locatie zijn hetzelfde'); return false; }
+    if (!NAAR.type) { showToast('Selecteer de bestemming', 'warn'); return false; }
+    if (VAN.werknr === NAAR.werknr) { showToast('Van en naar locatie zijn hetzelfde', 'warn'); return false; }
     return true;
   }
   return true;
@@ -1122,7 +1122,7 @@ async function renderStap2() {
 
   if (!hierItems.length) {
     el.innerHTML = `<div class="info-row" style="margin-top:0;">
-      <span class="ir-icon">ℹ️</span>
+      <span class="ir-icon"><i data-lucide="info" style="width:16px;height:16px"></i></span>
       <span>Geen geregistreerd materieel gevonden op <strong>${VAN.naam}</strong>. Vraag de beheerder om materieel toe te voegen via de beheerpagina.</span>
     </div>`;
     return;
@@ -1200,6 +1200,7 @@ async function renderStap2() {
     html += '</div>';
   }
   el.innerHTML = html;
+  lucide.createIcons();
 }
 
 function toggleTypeExpand(typeId) {
@@ -1314,7 +1315,7 @@ function fotoOpslaan() {
   algemeneFotos.push({ dataUrl: fotoDataUrl, opm });
   renderFotosStap4();
   closeFotoSheet();
-  showToast('📷 Foto opgeslagen');
+  showToast('Foto opgeslagen', 'ok');
 }
 
 function renderFotosStap4() {
@@ -1323,7 +1324,7 @@ function renderFotosStap4() {
   el.innerHTML = algemeneFotos.map((f, i) =>
     `<div class="foto-thumb">
       <img src="${f.dataUrl}" alt="foto">
-      <button class="foto-thumb-del" onclick="verwijderAlgemeneFoto(${i})">✕</button>
+      <button class="foto-thumb-del" onclick="verwijderAlgemeneFoto(${i})"><i data-lucide="x" style="width:14px;height:14px;"></i></button>
     </div>`
   ).join('');
 }
@@ -1477,7 +1478,7 @@ async function verstuurAlles() {
     if (data.ok) {
       localStorage.removeItem('mwb_draft');
       alleMaterialen = [];
-      showToast('✓ Verplaatsing geregistreerd!');
+      showToast('Verplaatsing geregistreerd!', 'ok');
       setTimeout(() => {
         initState();
         goToStep(1);
@@ -1485,11 +1486,11 @@ async function verstuurAlles() {
         laadMijnInzendingen();
       }, 1500);
     } else {
-      showToast('❌ Fout: ' + (data.error || 'onbekend'));
+      showToast('Fout: ' + (data.error || 'onbekend'), 'err');
     }
   } catch (e) {
     hideLoading();
-    showToast('❌ Verbindingsfout. Controleer internet.');
+    showToast('Verbindingsfout. Controleer internet.', 'err');
   }
 }
 
@@ -1528,10 +1529,17 @@ function hideLoading() {
   document.getElementById('loading-overlay').classList.remove('show');
 }
 
+/* ── HELPERS ─────────────────────────────────────── */
+function ic(name, px) {
+  return `<i data-lucide="${name}"${px ? ` style="width:${px}px;height:${px}px"` : ''}></i>`;
+}
+
 /* ── TOAST ───────────────────────────────────────── */
-function showToast(msg) {
+function showToast(msg, type = 'info') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
+  const iconName = type === 'ok' ? 'check' : type === 'err' ? 'x-circle' : type === 'warn' ? 'alert-triangle' : null;
+  t.innerHTML = iconName ? `<span style="display:inline-flex;align-items:center;gap:6px;">${ic(iconName, 14)} ${msg}</span>` : msg;
+  lucide.createIcons({nodes:[t]});
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
@@ -1736,7 +1744,7 @@ async function laadMijnInzendingen() {
       const datum  = inz.properties?.['Datum']?.date?.start || '';
       const status = inz.properties?.['Status']?.select?.name || 'Nieuw';
       const type   = inz.properties?.['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
-      const icon   = type.includes('Zaak') ? '🏢' : '🔄';
+      const icon = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
       const sc     = status === 'Verwerkt' ? 'home-inz-status-verwerkt' : 'home-inz-status-nieuw';
       return `<div class="home-inz-card" onclick="openDetail(${i})">
         <span class="home-inz-icon">${icon}</span>
@@ -1765,7 +1773,7 @@ function renderVerplaatsingenLijst() {
     const datum  = inz.properties?.['Datum']?.date?.start || '';
     const status = inz.properties?.['Status']?.select?.name || 'Nieuw';
     const type   = inz.properties?.['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
-    const icon   = type.includes('Zaak') ? '🏢' : '🔄';
+    const icon = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
     const sc     = status === 'Verwerkt' ? 'home-inz-status-verwerkt' : 'home-inz-status-nieuw';
     return `<div class="home-inz-card" onclick="openDetailVerpl(${i})">
       <span class="home-inz-icon">${icon}</span>
@@ -1853,7 +1861,7 @@ function openDetailInz(inz) {
     <div class="detail-header">
       <div class="detail-titel">${naam}</div>
       <div class="detail-datum">${datum} · ${type}</div>
-      <span class="detail-status ${sc}">${status === 'Verwerkt' ? '✓ Verwerkt' : '● Nieuw'}</span>
+      <span class="detail-status ${sc}">${status === 'Verwerkt' ? '<i data-lucide="check" style="width:11px;height:11px;"></i> Verwerkt' : '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;vertical-align:middle;margin-right:3px;"></span>Nieuw'}</span>
       <div class="detail-route">
         <div class="detail-locatie">
           <div class="detail-locatie-label">Van</div>
@@ -2057,7 +2065,7 @@ async function ovzLaadData() {
     ovzRender();
   } catch (e) {
     document.getElementById('ovz-content').innerHTML =
-      `<div class="ovz-leeg"><div class="ovz-leeg-icon">⚠️</div><div class="ovz-leeg-titel">Ophalen mislukt</div><div class="ovz-leeg-sub">${e.message}</div></div>`;
+      `<div class="ovz-leeg"><div class="ovz-leeg-icon"><i data-lucide="alert-triangle" style="width:36px;height:36px"></i></div><div class="ovz-leeg-titel">Ophalen mislukt</div><div class="ovz-leeg-sub">${e.message}</div></div>`;
   }
 }
 
@@ -2081,16 +2089,16 @@ function ovzRender() {
     return true;
   }).sort((a, b) => ovzLocatieMap[a].naam.localeCompare(ovzLocatieMap[b].naam));
 
-  let html = '<div class="ovz-sectie-header">🏢 De Zaak – Depot</div>';
+  let html = '<div class="ovz-sectie-header"><i data-lucide="building-2" style="width:13px;height:13px;"></i> De Zaak – Depot</div>';
   html += ovzKlusKaart('zaak', true);
 
   if (klusKeys.length) {
-    html += '<div class="ovz-sectie-header" style="margin-top:20px;">🏗️ Bouwplaatsen</div>';
+    html += '<div class="ovz-sectie-header" style="margin-top:20px;">' + ic('hard-hat',14) + ' Bouwplaatsen</div>';
     klusKeys.forEach(k => { html += ovzKlusKaart(k, false); });
   }
 
   if (!klusKeys.length && zoek) {
-    html += '<div class="ovz-leeg"><div class="ovz-leeg-icon">📭</div><div class="ovz-leeg-titel">Niets gevonden</div><div class="ovz-leeg-sub">Probeer een andere zoekterm.</div></div>';
+    html += '<div class="ovz-leeg"><div class="ovz-leeg-icon"><i data-lucide="inbox" style="width:36px;height:36px"></i></div><div class="ovz-leeg-titel">Niets gevonden</div><div class="ovz-leeg-sub">Probeer een andere zoekterm.</div></div>';
   }
 
   document.getElementById('ovz-content').innerHTML = html;
@@ -2150,7 +2158,7 @@ function naarOvzLocatie(locKey) {
 
   let itemsHtml = '';
   if (!rauwe.length) {
-    itemsHtml = '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon">📦</div><div class="ovz-leeg-titel">Niets hier</div><div class="ovz-leeg-sub">Geen geregistreerd materieel op deze locatie.</div></div>';
+    itemsHtml = '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon"><i data-lucide="package" style="width:40px;height:40px"></i></div><div class="ovz-leeg-titel">Niets hier</div><div class="ovz-leeg-sub">Geen geregistreerd materieel op deze locatie.</div></div>';
   } else {
     const secties = sectionOrder.filter(s => perSectie[s]).concat(perSectie['Overig'] ? ['Overig'] : []);
     for (const sectie of secties) {
@@ -2188,6 +2196,7 @@ function naarOvzLocatie(locKey) {
       </div>
     </div>
     ${itemsHtml}`;
+  lucide.createIcons();
 
   alleViewsUit();
   document.getElementById('view-ovz-locatie').classList.add('active');
@@ -2244,7 +2253,7 @@ async function toonItemGeschiedenis(naam, nummer) {
   let html = `<div style="padding:20px 16px 0;"><div class="detail-header"><div class="detail-titel">${titel}</div><div style="font-size:12px;color:var(--zacht);margin-top:4px;">${gevonden.length} verplaatsing${gevonden.length !== 1 ? 'en' : ''}</div></div></div>`;
 
   if (!gevonden.length) {
-    html += '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon">📋</div><div class="ovz-leeg-titel">Geen historie</div><div class="ovz-leeg-sub">Geen geregistreerde verplaatsingen gevonden.</div></div>';
+    html += '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon"><i data-lucide="clipboard-list" style="width:40px;height:40px"></i></div><div class="ovz-leeg-titel">Geen historie</div><div class="ovz-leeg-sub">Geen geregistreerde verplaatsingen gevonden.</div></div>';
   } else {
     html += '<div class="card" style="margin:16px 16px 10px;">';
     for (const g of gevonden) {
@@ -2258,6 +2267,7 @@ async function toonItemGeschiedenis(naam, nummer) {
     html += '</div>';
   }
   el.innerHTML = html;
+  lucide.createIcons();
 }
 
 function naarOverzicht() {
@@ -2326,7 +2336,7 @@ async function slaWachtwoordOp() {
     const data = await res.json();
     if (data.ok) {
       sluitWachtwoord();
-      showToast('✓ Wachtwoord gewijzigd');
+      showToast('Wachtwoord gewijzigd', 'ok');
     } else {
       fout.textContent = data.error || 'Wijzigen mislukt.';
     }
