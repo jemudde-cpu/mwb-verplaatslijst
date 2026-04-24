@@ -1903,10 +1903,11 @@ const OVZ_FILTER_MAP = {
   hekken:       ['bouwhekken','bouwhek_voeten','hekklemmen','hekwielen','hek_schoren','kunststof_rijplaten'],
   aansluitingen:['bouwmeterkast','bouwmeterkast_35a','bouwmeterkast_63a','bouwmeterkast_125a','waterput','waterkraan'],
 };
-let ovzLocatieMap  = {};
+let ovzLocatieMap   = {};
+let ovzRawMateriaal = [];
 let ovzActiefFilter = 'alles';
-let ovzLaadMoment  = null;
-let ovzGeladen     = false;
+let ovzLaadMoment   = null;
+let ovzGeladen      = false;
 
 function prop(page, name) {
   return page?.properties?.[name];
@@ -2031,7 +2032,8 @@ async function ovzLaadData() {
     if (!res) return;
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
-    ovzLocatieMap = bouwLocatieMapFromKV(data.materialen);
+    ovzRawMateriaal = data.materialen;
+    ovzLocatieMap   = bouwLocatieMapFromKV(data.materialen);
     ovzLaadMoment = new Date();
     ovzGeladen    = true;
     ovzRender();
@@ -2104,37 +2106,50 @@ function naarOvzLocatie(locKey) {
   ovzHuidigeLocatieKey = locKey;
   const loc = ovzLocatieMap[locKey];
   if (!loc) return;
-  const isZaak = locKey === 'zaak';
-  const items  = Object.entries(loc.items);
-  const totaal = items.reduce((s,[,v]) => s + v.aantal, 0);
+  const isZaak  = locKey === 'zaak';
+  const rauwe   = ovzRawMateriaal.filter(m => (m.locatie || 'zaak') === locKey);
+  const totaal  = rauwe.reduce((s, m) => s + (m.aantal != null ? m.aantal : 1), 0);
 
+  // Groepeer individuele items per sectie
   const perSectie = {};
-  for (const [typeId, item] of items) {
+  const sectionOrder = Object.keys(SECTIES);
+  for (const m of rauwe) {
     let sectie = 'Overig';
     for (const [s, sItems] of Object.entries(SECTIES)) {
-      if (sItems.some(si => si.id === typeId)) { sectie = s; break; }
+      if (sItems.some(si => si.id === m.type_id)) { sectie = s; break; }
     }
     if (!perSectie[sectie]) perSectie[sectie] = [];
-    perSectie[sectie].push([typeId, item]);
+    perSectie[sectie].push(m);
+  }
+
+  // Sorteer items binnen sectie: op naam dan op nummer (numeriek)
+  for (const lijst of Object.values(perSectie)) {
+    lijst.sort((a, b) => {
+      if (a.naam !== b.naam) return a.naam.localeCompare(b.naam);
+      return (Number(a.nummer) || 0) - (Number(b.nummer) || 0);
+    });
   }
 
   let itemsHtml = '';
-  if (!items.length) {
+  if (!rauwe.length) {
     itemsHtml = '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon">📦</div><div class="ovz-leeg-titel">Niets hier</div><div class="ovz-leeg-sub">Geen geregistreerd materieel op deze locatie.</div></div>';
   } else {
-    for (const [sectie, sItems] of Object.entries(perSectie)) {
-      const sOrder = Object.keys(SECTIES);
-      sItems.sort((a, b) => a[1].naam.localeCompare(b[1].naam));
+    const secties = sectionOrder.filter(s => perSectie[s]).concat(perSectie['Overig'] ? ['Overig'] : []);
+    for (const sectie of secties) {
+      const sItems = perSectie[sectie];
       itemsHtml += `<div class="mat-kies-sectie-titel" style="margin:16px 16px 6px;">${sectie}</div>
         <div class="card" style="margin:0 16px 10px;">`;
-      for (const [, v] of sItems) {
-        const nrs = v.nummers?.length
-          ? `<div class="ovz-item-detail">Nr. ${v.nummers.sort((a,b)=>Number(a)-Number(b)).join(', ')}</div>`
-          : '';
-        itemsHtml += `<div class="ovz-item-regel">
-          <div><div class="ovz-item-naam">${v.naam}</div>${nrs}</div>
-          <div class="ovz-item-badge">${v.aantal}×</div>
-        </div>`;
+      for (const m of sItems) {
+        if (m.aantal != null) {
+          itemsHtml += `<div class="ovz-item-regel">
+            <div class="ovz-item-naam">${m.naam}</div>
+            <div class="ovz-item-badge">${m.aantal} stuks</div>
+          </div>`;
+        } else {
+          itemsHtml += `<div class="ovz-item-regel">
+            <div class="ovz-item-naam">${m.naam}${m.nummer ? ' <span style="color:var(--zacht);font-weight:600;">Nr. ' + m.nummer + '</span>' : ''}</div>
+          </div>`;
+        }
       }
       itemsHtml += '</div>';
     }
@@ -2145,7 +2160,7 @@ function naarOvzLocatie(locKey) {
       <div class="detail-header">
         <div class="detail-titel">${loc.naam}</div>
         ${!isZaak && loc.werknr ? `<div style="margin-top:6px;"><span class="ovz-klus-nr" style="font-size:13px;">${loc.werknr}</span></div>` : ''}
-        <div style="font-size:12px;color:var(--zacht);margin-top:6px;">${items.length} soort${items.length!==1?'en':''} · ${totaal} stuks</div>
+        <div style="font-size:12px;color:var(--zacht);margin-top:6px;">${rauwe.length} item${rauwe.length!==1?'s':''} · ${totaal} stuks</div>
       </div>
     </div>
     ${itemsHtml}`;
