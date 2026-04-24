@@ -1961,13 +1961,18 @@ function bouwLocatieMap(inzendingen) {
       delete locaties[locKey].items[itemId];
   }
 
+  function klusNaamVoor(werknr, fallback) {
+    const k = KLUSSEN.find(k => k.werknr === werknr);
+    return k ? k.naam : (fallback || werknr);
+  }
+
   for (const inz of gesorteerd) {
     const details   = prop(inz, 'Details')?.rich_text?.[0]?.plain_text || '';
     const vanNr     = prop(inz, 'Werknr. Van')?.rich_text?.[0]?.plain_text || '';
     const naarNr    = prop(inz, 'Werknr. Naar')?.rich_text?.[0]?.plain_text || '';
     const naarNaam  = prop(inz, 'Bouwplaats')?.rich_text?.[0]?.plain_text || naarNr;
-    const vanKey    = vanNr  ? ensureLocatie(vanNr, vanNr) : null;
-    const naarKey   = naarNr ? ensureLocatie(naarNaam || naarNr, naarNr) : null;
+    const vanKey    = vanNr  ? ensureLocatie(klusNaamVoor(vanNr, vanNr),          vanNr)  : null;
+    const naarKey   = naarNr ? ensureLocatie(klusNaamVoor(naarNr, naarNaam || naarNr), naarNr) : null;
     if (!vanKey && !naarKey) continue;
     const regelItems = parseDetails(details);
     for (const ri of regelItems) {
