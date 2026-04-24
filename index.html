@@ -167,7 +167,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .defect-stepper .step-count{min-width:24px;font-size:13px;color:rgba(239,68,68,.90);}
 
 /* FOTO KNOP */
-.foto-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface-2);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;color:var(--zacht);cursor:pointer;white-space:nowrap;transition:all .2s;-webkit-appearance:none;margin:0 16px 12px;text-transform:uppercase;letter-spacing:.5px;}
+.foto-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--surface-2);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;color:var(--zacht);cursor:pointer;white-space:nowrap;transition:all .2s;-webkit-appearance:none;margin:16px 16px 12px;text-transform:uppercase;letter-spacing:.5px;}
 .foto-btn:active,.foto-btn.has-foto{background:rgba(255,107,0,.10);border-color:rgba(255,107,0,.40);color:var(--accent);}
 .foto-thumbs{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 12px;}
 .foto-thumb{position:relative;width:64px;height:64px;border-radius:var(--radius-sm);overflow:hidden;border:1.5px solid var(--border-2);}
@@ -693,10 +693,12 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
       <textarea class="foto-opmerking" id="foto-opmerking" rows="2" placeholder="Opmerking bij deze foto (bijv. schade beschrijving)..."></textarea>
     </div>
     <div class="foto-actions">
-      <button class="foto-btn-camera" onclick="triggerCamera()"><i data-lucide="camera"></i> Foto maken / kiezen</button>
-      <button class="foto-btn-save show" id="foto-save-btn" onclick="fotoOpslaan()" style="display:none">Opslaan ✓</button>
+      <button class="foto-btn-camera" onclick="triggerCamera('camera')"><i data-lucide="camera"></i> Camera</button>
+      <button class="foto-btn-camera" onclick="triggerCamera('library')" style="background:rgba(255,255,255,.06);border-color:var(--border-2);color:var(--tekst);"><i data-lucide="image"></i> Bibliotheek</button>
     </div>
-    <input type="file" id="foto-file-input" accept="image/*" capture="environment" onchange="fotoGekozen(event)">
+    <button class="foto-btn-save" id="foto-save-btn" onclick="fotoOpslaan()" style="display:none;width:100%;margin-top:10px;">Opslaan ✓</button>
+    <input type="file" id="foto-file-input-camera" accept="image/*" capture="environment" onchange="fotoGekozen(event)" style="display:none">
+    <input type="file" id="foto-file-input-library" accept="image/*" onchange="fotoGekozen(event)" style="display:none">
   </div>
 </div>
 
@@ -760,6 +762,14 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <div class="detail-wrap" id="detail-inhoud"></div>
 </div>
 
+<!-- VERPLAATSINGEN VIEW -->
+<div class="view" id="view-verplaatsingen">
+  <div class="home-wrap">
+    <div class="home-sectie-titel" style="margin-bottom:14px;">Mijn verplaatsingen</div>
+    <div id="verpl-lijst"><div class="home-spinner"></div></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- BOTTOM NAVIGATION -->
@@ -775,6 +785,10 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   <button class="bn-item" id="bn-overzicht" onclick="naarOverzicht()">
     <span class="bn-icon"><i data-lucide="map-pin"></i></span>
     <span class="bn-label">Overzicht</span>
+  </button>
+  <button class="bn-item" id="bn-verplaatsingen" onclick="naarVerplaatsingen()">
+    <span class="bn-icon"><i data-lucide="history"></i></span>
+    <span class="bn-label">Geschiedenis</span>
   </button>
 </nav>
 
@@ -1001,6 +1015,13 @@ function validateStep(n) {
   }
   if (n === 3) {
     if (!alleItems().some(i => STATE[i.id].aantal > 0)) { showToast('⚠️ Selecteer minstens 1 item'); return false; }
+    const onvolledig = alleItems().filter(item =>
+      item.hasNr && STATE[item.id].aantal > 0 && STATE[item.id].nummers.length < STATE[item.id].aantal
+    );
+    if (onvolledig.length) {
+      showToast('⚠️ Vul nummers in voor: ' + onvolledig.map(i => i.naam).join(', '));
+      return false;
+    }
     return true;
   }
   return true;
@@ -1130,6 +1151,9 @@ function renderItem(item) {
         <input class="nr-input" type="number" id="nr-input-${item.id}" placeholder="Voer nummer in..." inputmode="numeric">
         <button class="nr-add-btn" onclick="voegNummerToe('${item.id}')">+ Toevoegen</button>
       </div>
+      <div style="font-size:11px;font-weight:700;margin:6px 0 4px;${s.nummers.length >= s.aantal ? 'color:var(--groen)' : 'color:var(--rood)'}">
+        ${s.nummers.length >= s.aantal ? '✓' : '⚠️'} ${s.nummers.length} van ${s.aantal} nummer${s.aantal !== 1 ? 's' : ''} ingevuld
+      </div>
     </div>`;
   }
 
@@ -1255,8 +1279,9 @@ function fotoBgClick(e) {
   if (e.target === document.getElementById('foto-overlay')) closeFotoSheet();
 }
 
-function triggerCamera() {
-  document.getElementById('foto-file-input').click();
+function triggerCamera(type = 'camera') {
+  const id = type === 'library' ? 'foto-file-input-library' : 'foto-file-input-camera';
+  document.getElementById(id).click();
 }
 
 function fotoGekozen(e) {
@@ -1265,10 +1290,10 @@ function fotoGekozen(e) {
   const reader = new FileReader();
   reader.onload = ev => {
     fotoDataUrl = ev.target.result;
-    const img   = document.getElementById('foto-preview-img');
-    img.src     = fotoDataUrl;
+    document.getElementById('foto-preview-img').src = fotoDataUrl;
     document.getElementById('foto-preview-area').classList.add('show');
     document.getElementById('foto-save-btn').style.display = 'block';
+    lucide.createIcons();
   };
   reader.readAsDataURL(file);
   e.target.value = '';
@@ -1653,10 +1678,10 @@ async function apiFetch(url, opties = {}) {
 
 /* ── HOME ────────────────────────────────────────── */
 function alleViewsUit() {
-  ['view-home','view-wizard','view-overzicht','view-detail'].forEach(id =>
+  ['view-home','view-wizard','view-overzicht','view-detail','view-verplaatsingen'].forEach(id =>
     document.getElementById(id).classList.remove('active')
   );
-  ['bn-home','bn-wizard','bn-overzicht'].forEach(id =>
+  ['bn-home','bn-wizard','bn-overzicht','bn-verplaatsingen'].forEach(id =>
     document.getElementById(id).classList.remove('active')
   );
   document.getElementById('progress-bar').style.display = 'none';
@@ -1680,6 +1705,19 @@ function naarOverzicht() {
   document.getElementById('view-overzicht').classList.add('active');
   document.getElementById('bn-overzicht').classList.add('active');
   if (!ovzGeladen) ovzLaadData();
+}
+
+function naarVerplaatsingen() {
+  alleViewsUit();
+  document.getElementById('view-verplaatsingen').classList.add('active');
+  document.getElementById('bn-verplaatsingen').classList.add('active');
+  renderVerplaatsingenLijst();
+}
+
+let detailBackView = 'home';
+function detailTerug() {
+  if (detailBackView === 'verplaatsingen') naarVerplaatsingen();
+  else naarHome();
 }
 
 let mijnInzendingen = [];
@@ -1720,8 +1758,43 @@ async function laadMijnInzendingen() {
   }
 }
 
+function renderVerplaatsingenLijst() {
+  const el = document.getElementById('verpl-lijst');
+  if (!el) return;
+  if (!mijnInzendingen.length) {
+    el.innerHTML = '<div class="home-leeg">Nog geen verplaatsingen gevonden.</div>';
+    return;
+  }
+  el.innerHTML = mijnInzendingen.map((inz, i) => {
+    const naam   = inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
+    const bp     = inz.properties?.['Bouwplaats']?.rich_text?.[0]?.plain_text || '';
+    const datum  = inz.properties?.['Datum']?.date?.start || '';
+    const status = inz.properties?.['Status']?.select?.name || 'Nieuw';
+    const type   = inz.properties?.['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
+    const icon   = type.includes('Zaak') ? '🏢' : '🔄';
+    const sc     = status === 'Verwerkt' ? 'home-inz-status-verwerkt' : 'home-inz-status-nieuw';
+    return `<div class="home-inz-card" onclick="openDetailVerpl(${i})">
+      <span class="home-inz-icon">${icon}</span>
+      <div class="home-inz-info">
+        <div class="home-inz-naam">${naam}</div>
+        <div class="home-inz-meta">${datum}${bp ? ' · ' + bp : ''}</div>
+      </div>
+      <span class="home-inz-status ${sc}">${status}</span>
+    </div>`;
+  }).join('');
+}
+
+function openDetailVerpl(index) {
+  detailBackView = 'verplaatsingen';
+  openDetailInz(mijnInzendingen[index]);
+}
+
 function openDetail(index) {
-  const inz     = mijnInzendingen[index];
+  detailBackView = 'home';
+  openDetailInz(mijnInzendingen[index]);
+}
+
+function openDetailInz(inz) {
   if (!inz) return;
   const p       = inz.properties || {};
   const naam    = p['Naam']?.title?.[0]?.plain_text || '—';
@@ -1782,7 +1855,7 @@ function openDetail(index) {
   </div>` : '';
 
   document.getElementById('detail-inhoud').innerHTML = `
-    <button class="detail-back" onclick="naarHome()">← Terug</button>
+    <button class="detail-back" onclick="detailTerug()">← Terug</button>
     <div class="detail-header">
       <div class="detail-titel">${naam}</div>
       <div class="detail-datum">${datum} · ${type}</div>

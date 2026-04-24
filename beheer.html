@@ -314,6 +314,10 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     <span class="bottom-nav-label">Klussen</span>
     <span class="bottom-nav-badge" id="badge-kl" style="display:none">0</span>
   </button>
+  <button class="bottom-nav-btn" id="btn-verplaatsingen" onclick="tabSwitch('verplaatsingen',this)">
+    <span class="bottom-nav-icon">📋</span>
+    <span class="bottom-nav-label">Verplaats.</span>
+  </button>
   <button class="bottom-nav-btn" id="btn-gebruikers" onclick="tabSwitch('gebruikers',this)">
     <span class="bottom-nav-icon">👥</span>
     <span class="bottom-nav-label">Gebruikers</span>
@@ -375,6 +379,17 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     <div class="card-body" style="padding-top:0;">
       <button class="opslaan-btn" onclick="slaKlussenOp()">💾 Wijzigingen opslaan</button>
     </div>
+  </div>
+</div>
+
+<!-- TAB: VERPLAATSINGEN -->
+<div class="main tab-content" id="tab-verplaatsingen">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" type="text" id="zoek-verpl" placeholder="Zoek op naam of klus..." oninput="filterVerplaatsingen()">
+  </div>
+  <div id="verplaatsingen-content">
+    <div class="loading"><div class="spinner"></div> Laden...</div>
   </div>
 </div>
 
@@ -614,6 +629,7 @@ function tabSwitch(naam, btn) {
   document.getElementById('tab-' + naam).classList.add('active');
   btn.classList.add('active');
   if (naam === 'gebruikers') laadGebruikers();
+  if (naam === 'verplaatsingen') renderVerplaatsingenBeheer();
 }
 
 /* ── INIT ─────────────────────────────────────────── */
@@ -1215,6 +1231,54 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
   } catch (e) {
     showToast('❌ Verbindingsfout');
   }
+}
+
+/* ── VERPLAATSINGEN TAB ───────────────────────────── */
+function renderVerplaatsingenBeheer(zoek) {
+  const term = (zoek || document.getElementById('zoek-verpl')?.value || '').toLowerCase();
+  const lijst = alleInzendingen.filter(inz => {
+    if (!term) return true;
+    const naam   = prop(inz,'Naam')?.title?.[0]?.plain_text || '';
+    const bp     = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
+    const invuld = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || '';
+    return naam.toLowerCase().includes(term) || bp.toLowerCase().includes(term) || invuld.toLowerCase().includes(term);
+  });
+
+  const el = document.getElementById('verplaatsingen-content');
+  if (!el) return;
+
+  if (!lijst.length) {
+    el.innerHTML = '<div class="leeg">Geen verplaatsingen gevonden.</div>';
+    return;
+  }
+
+  el.innerHTML = lijst.map(inz => {
+    const naam   = prop(inz,'Naam')?.title?.[0]?.plain_text || '—';
+    const bp     = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
+    const invuld = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || '—';
+    const datum  = prop(inz,'Datum')?.date?.start || '';
+    const vanNr  = prop(inz,'Werknr. Van')?.rich_text?.[0]?.plain_text || '—';
+    const naarNr = prop(inz,'Werknr. Naar')?.rich_text?.[0]?.plain_text || '—';
+    const status = prop(inz,'Status')?.select?.name || 'Nieuw';
+    const sc     = status === 'Verwerkt' ? 'status-verwerkt' : 'status-nieuw';
+    const type   = prop(inz,'Opslag / Zaak')?.rich_text?.[0]?.plain_text || '';
+    const icon   = type.includes('Zaak') ? '🏢' : '🔄';
+    return `<div class="inz-card" style="margin-bottom:8px;">
+      <div class="inz-header" style="cursor:default;">
+        <span class="inz-icon">${icon}</span>
+        <div class="inz-info">
+          <div class="inz-naam">${naam}</div>
+          <div class="inz-meta">${datum} · ${invuld}</div>
+          <div class="inz-meta" style="margin-top:2px;">${vanNr} → ${bp || naarNr}</div>
+        </div>
+        <span class="inz-status ${sc}">${status}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterVerplaatsingen() {
+  renderVerplaatsingenBeheer();
 }
 
 /* ── START ────────────────────────────────────────── */
