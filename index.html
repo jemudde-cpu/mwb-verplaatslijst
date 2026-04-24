@@ -1682,7 +1682,13 @@ function naarVerplaatsingen() {
   alleViewsUit();
   document.getElementById('view-verplaatsingen').classList.add('active');
   document.getElementById('bn-verplaatsingen').classList.add('active');
-  renderVerplaatsingenLijst();
+  const el = document.getElementById('verpl-lijst');
+  if (!mijnInzendingen.length) {
+    el.innerHTML = '<div class="home-spinner"></div>';
+    laadMijnInzendingen().then(() => renderVerplaatsingenLijst());
+  } else {
+    renderVerplaatsingenLijst();
+  }
 }
 
 let detailBackView = 'home';

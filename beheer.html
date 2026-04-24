@@ -656,7 +656,7 @@ function tabSwitch(naam, btn) {
   btn.classList.add('active');
   if (naam === 'materieel')     laadMaterieel();
   if (naam === 'gebruikers')    laadGebruikers();
-  if (naam === 'verplaatsingen') renderVerplaatsingenBeheer();
+  if (naam === 'verplaatsingen') laadVerplaatsingenBeheer();
 }
 
 /* ── INIT ─────────────────────────────────────────── */
@@ -1437,6 +1437,25 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
 }
 
 /* ── VERPLAATSINGEN TAB ───────────────────────────── */
+async function laadVerplaatsingenBeheer() {
+  const el = document.getElementById('verplaatsingen-content');
+  if (!el) return;
+  el.innerHTML = '<div class="loading"><div class="spinner"></div> Laden...</div>';
+  if (!alleInzendingen.length) {
+    try {
+      const res  = await apiFetch(WORKER + '?action=inzendingen', { headers: authHeaders() });
+      if (!res) return;
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error);
+      alleInzendingen = data.results;
+    } catch (e) {
+      el.innerHTML = `<div class="leeg">❌ ${e.message}</div>`;
+      return;
+    }
+  }
+  renderVerplaatsingenBeheer();
+}
+
 function renderVerplaatsingenBeheer(zoek) {
   const term = (zoek || document.getElementById('zoek-verpl')?.value || '').toLowerCase();
   const lijst = alleInzendingen.filter(inz => {
