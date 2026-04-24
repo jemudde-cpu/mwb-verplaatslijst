@@ -313,8 +313,15 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .ovz-klus-chevron{color:var(--dim);font-size:14px;transition:transform .25s;flex-shrink:0;}
 .ovz-klus-card{cursor:pointer;}
 .ovz-klus-card:active{opacity:.85;}
-.ovz-item-regel{display:flex;align-items:flex-start;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:12px;}
+.ovz-item-regel{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);gap:12px;}
 .ovz-item-regel:last-child{border-bottom:none;}
+.ovz-item-klikbaar{cursor:pointer;}
+.ovz-item-klikbaar:active{background:rgba(255,255,255,.04);}
+.gesch-rij{padding:14px 16px;border-bottom:1px solid var(--border);}
+.gesch-rij:last-child{border-bottom:none;}
+.gesch-datum{font-size:11px;color:var(--zacht);margin-bottom:4px;}
+.gesch-route{font-size:13px;font-weight:700;}
+.gesch-medewerker{font-size:11px;color:var(--zacht);margin-top:2px;}
 .ovz-item-naam{font-size:13px;font-weight:600;}
 .ovz-item-detail{font-size:11px;color:var(--zacht);margin-top:2px;line-height:1.4;}
 .ovz-item-badge{font-size:12px;font-weight:800;color:var(--accent);background:rgba(255,107,0,.12);padding:3px 10px;border-radius:var(--radius-sm);white-space:nowrap;flex-shrink:0;}
@@ -740,6 +747,16 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     </button>
   </div>
   <div id="ovz-locatie-inhoud" style="padding:0 0 110px;"></div>
+</div>
+
+<!-- ITEM GESCHIEDENIS VIEW -->
+<div class="view" id="view-item-history">
+  <div style="position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:14px 16px;">
+    <button onclick="naarOvzLocatieTerugVanHistory()" style="background:none;border:none;color:var(--accent);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:6px;">
+      ← Terug
+    </button>
+  </div>
+  <div id="item-history-inhoud" style="padding:0 0 110px;"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1649,7 +1666,7 @@ async function apiFetch(url, opties = {}) {
 
 /* ── HOME ────────────────────────────────────────── */
 function alleViewsUit() {
-  ['view-home','view-wizard','view-overzicht','view-detail','view-verplaatsingen','view-ovz-locatie'].forEach(id =>
+  ['view-home','view-wizard','view-overzicht','view-detail','view-verplaatsingen','view-ovz-locatie','view-item-history'].forEach(id =>
     document.getElementById(id).classList.remove('active')
   );
   ['bn-home','bn-wizard','bn-overzicht','bn-verplaatsingen'].forEach(id =>
@@ -1903,6 +1920,11 @@ const OVZ_FILTER_MAP = {
   hekken:       ['bouwhekken','bouwhek_voeten','hekklemmen','hekwielen','hek_schoren','kunststof_rijplaten'],
   aansluitingen:['bouwmeterkast','bouwmeterkast_35a','bouwmeterkast_63a','bouwmeterkast_125a','waterput','waterkraan'],
 };
+function klusNaamVoor(werknr, fallback) {
+  const k = KLUSSEN.find(k => k.werknr === werknr);
+  return k ? k.naam : (fallback || werknr);
+}
+
 let ovzLocatieMap   = {};
 let ovzRawMateriaal = [];
 let ovzActiefFilter = 'alles';
@@ -1977,10 +1999,6 @@ function bouwLocatieMap(inzendingen) {
       delete locaties[locKey].items[itemId];
   }
 
-  function klusNaamVoor(werknr, fallback) {
-    const k = KLUSSEN.find(k => k.werknr === werknr);
-    return k ? k.naam : (fallback || werknr);
-  }
 
   for (const inz of gesorteerd) {
     const details   = prop(inz, 'Details')?.rich_text?.[0]?.plain_text || '';
@@ -2140,14 +2158,20 @@ function naarOvzLocatie(locKey) {
       itemsHtml += `<div class="mat-kies-sectie-titel" style="margin:16px 16px 6px;">${sectie}</div>
         <div class="card" style="margin:0 16px 10px;">`;
       for (const m of sItems) {
+        const numEsc = (m.nummer || '').replace(/'/g, "\\'");
+        const naamEsc = m.naam.replace(/'/g, "\\'");
         if (m.aantal != null) {
-          itemsHtml += `<div class="ovz-item-regel">
+          itemsHtml += `<div class="ovz-item-regel ovz-item-klikbaar" onclick="toonItemGeschiedenis('${naamEsc}', null)">
             <div class="ovz-item-naam">${m.naam}</div>
-            <div class="ovz-item-badge">${m.aantal} stuks</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="ovz-item-badge">${m.aantal} stuks</div>
+              <span style="color:var(--zacht);font-size:16px;">›</span>
+            </div>
           </div>`;
         } else {
-          itemsHtml += `<div class="ovz-item-regel">
+          itemsHtml += `<div class="ovz-item-regel ovz-item-klikbaar" onclick="toonItemGeschiedenis('${naamEsc}', '${numEsc}')">
             <div class="ovz-item-naam">${m.naam}${m.nummer ? ' <span style="color:var(--zacht);font-weight:600;">Nr. ' + m.nummer + '</span>' : ''}</div>
+            <span style="color:var(--zacht);font-size:16px;">›</span>
           </div>`;
         }
       }
@@ -2168,6 +2192,72 @@ function naarOvzLocatie(locKey) {
   alleViewsUit();
   document.getElementById('view-ovz-locatie').classList.add('active');
   window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function naarOvzLocatieTerugVanHistory() {
+  if (ovzHuidigeLocatieKey) naarOvzLocatie(ovzHuidigeLocatieKey);
+  else naarOverzicht();
+}
+
+let alleInzHistory = [];
+
+async function toonItemGeschiedenis(naam, nummer) {
+  const el = document.getElementById('item-history-inhoud');
+  const titel = nummer ? `${naam} Nr. ${nummer}` : naam;
+  el.innerHTML = `<div style="padding:20px 16px 0;"><div class="detail-header"><div class="detail-titel">${titel}</div><div style="font-size:12px;color:var(--zacht);margin-top:4px;">Verplaatsingshistorie</div></div></div><div class="home-spinner" style="margin:40px auto;"></div>`;
+  alleViewsUit();
+  document.getElementById('view-item-history').classList.add('active');
+  window.scrollTo({ top:0, behavior:'smooth' });
+
+  // Haal inzendingen op als nog niet gecached
+  if (!alleInzHistory.length) {
+    const isAdmin = getTokenPayload()?.rol === 'admin';
+    const action  = isAdmin ? 'inzendingen' : 'mijn_inzendingen';
+    const res = await apiFetch(`${WORKER}?action=${action}`);
+    if (!res) return;
+    const data = await res.json();
+    if (!data.ok) { el.innerHTML += '<div style="padding:16px;color:var(--zacht);">Fout bij laden.</div>'; return; }
+    alleInzHistory = data.results || [];
+  }
+
+  // Filter inzendingen die dit item bevatten
+  const gevonden = [];
+  for (const inz of alleInzHistory) {
+    const details = inz.properties?.['Details']?.rich_text?.[0]?.plain_text || '';
+    const items = parseDetails(details);
+    const match = items.find(it => it.naam === naam);
+    if (!match) continue;
+    if (nummer && !match.nummers.includes(String(nummer))) continue;
+    const datum   = inz.properties?.['Datum']?.date?.start || '';
+    const medewerker = inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
+    const vanNr   = inz.properties?.['Werknr. Van']?.rich_text?.[0]?.plain_text || '—';
+    const naarNr  = inz.properties?.['Werknr. Naar']?.rich_text?.[0]?.plain_text || '—';
+    const naarNaam = inz.properties?.['Bouwplaats']?.rich_text?.[0]?.plain_text || naarNr;
+    const vanLabel  = vanNr  === 'zaak' ? 'De Zaak' : (klusNaamVoor(vanNr, vanNr));
+    const naarLabel = naarNr === 'zaak' ? 'De Zaak' : (klusNaamVoor(naarNr, naarNaam));
+    gevonden.push({ datum, medewerker, vanLabel, naarLabel });
+  }
+
+  // Sorteer aflopend op datum
+  gevonden.sort((a, b) => b.datum.localeCompare(a.datum));
+
+  let html = `<div style="padding:20px 16px 0;"><div class="detail-header"><div class="detail-titel">${titel}</div><div style="font-size:12px;color:var(--zacht);margin-top:4px;">${gevonden.length} verplaatsing${gevonden.length !== 1 ? 'en' : ''}</div></div></div>`;
+
+  if (!gevonden.length) {
+    html += '<div class="ovz-leeg" style="padding:40px 0;"><div class="ovz-leeg-icon">📋</div><div class="ovz-leeg-titel">Geen historie</div><div class="ovz-leeg-sub">Geen geregistreerde verplaatsingen gevonden.</div></div>';
+  } else {
+    html += '<div class="card" style="margin:16px 16px 10px;">';
+    for (const g of gevonden) {
+      const datumStr = g.datum ? new Date(g.datum).toLocaleDateString('nl-NL', { day:'numeric', month:'long', year:'numeric' }) : '—';
+      html += `<div class="gesch-rij">
+        <div class="gesch-datum">${datumStr}</div>
+        <div class="gesch-route">${g.vanLabel} → ${g.naarLabel}</div>
+        <div class="gesch-medewerker">${g.medewerker}</div>
+      </div>`;
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
 }
 
 function naarOverzicht() {
