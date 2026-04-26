@@ -752,7 +752,7 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- ITEM GESCHIEDENIS VIEW -->
 <div class="view" id="view-item-history">
   <div style="position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:14px 16px;">
-    <button onclick="naarOvzLocatieTerugVanHistory()" style="background:none;border:none;color:var(--accent);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:6px;">
+    <button onclick="itemHistoryTerug()" style="background:none;border:none;color:var(--accent);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:6px;">
       ← Terug
     </button>
   </div>
@@ -1722,6 +1722,18 @@ function detailTerug() {
   else naarHome();
 }
 
+let itemHistoryBackView = 'ovz-locatie';
+function itemHistoryTerug() {
+  if (itemHistoryBackView === 'detail') {
+    alleViewsUit();
+    document.getElementById('view-detail').classList.add('active');
+  } else if (itemHistoryBackView === 'ovz-locatie') {
+    naarOvzLocatieTerugVanHistory();
+  } else {
+    naarOverzicht();
+  }
+}
+
 let mijnInzendingen = [];
 
 async function laadMijnInzendingen() {
@@ -1855,15 +1867,22 @@ function openDetailInz(inz) {
   if (itemRegels.length) {
     itemsHtml = `<div class="detail-sectie">
       <div class="detail-sectie-titel">Verplaatst materieel</div>
-      ${itemRegels.map(it => `
-        <div class="detail-item-rij">
+      ${itemRegels.map(it => {
+        const naamEsc = it.naam.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const numArr  = it.nummers ? it.nummers.split(', ').filter(Boolean) : [];
+        const numParam = numArr.length === 1 ? `'${numArr[0]}'` : 'null';
+        return `<div class="detail-item-rij ovz-item-klikbaar" onclick="toonItemGeschiedenis('${naamEsc}', ${numParam}, 'detail')">
           <div>
             <div class="detail-item-naam">${it.naam}</div>
             ${it.nummers ? `<div class="detail-item-nrs">Nr. ${it.nummers}</div>` : ''}
             ${it.opm     ? `<div class="detail-item-nrs">${it.opm}</div>` : ''}
           </div>
-          <div class="detail-item-aantal">×${it.aantal}</div>
-        </div>`).join('')}
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="detail-item-aantal">×${it.aantal}</div>
+            <i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--zacht);flex-shrink:0;"></i>
+          </div>
+        </div>`;
+      }).join('')}
     </div>`;
   }
 
@@ -2228,7 +2247,8 @@ function naarOvzLocatieTerugVanHistory() {
 
 let alleInzHistory = [];
 
-async function toonItemGeschiedenis(naam, nummer) {
+async function toonItemGeschiedenis(naam, nummer, backView = 'ovz-locatie') {
+  itemHistoryBackView = backView;
   const el = document.getElementById('item-history-inhoud');
   const titel = nummer ? `${naam} Nr. ${nummer}` : naam;
   el.innerHTML = `<div style="padding:20px 16px 0;"><div class="detail-header"><div class="detail-titel">${titel}</div><div style="font-size:12px;color:var(--zacht);margin-top:4px;">Verplaatsingshistorie</div></div></div><div class="home-spinner" style="margin:40px auto;"></div>`;
