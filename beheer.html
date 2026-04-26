@@ -200,6 +200,24 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .leeg{text-align:center;padding:40px 20px;color:var(--zacht);font-size:14px;}
 
 
+/* ITEM HISTORY PANEL */
+.ih-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s;}
+.ih-overlay.open{opacity:1;pointer-events:all;}
+.ih-panel{position:fixed;bottom:0;left:0;right:0;z-index:601;background:var(--surface);border-radius:16px 16px 0 0;border-top:1px solid var(--border-2);max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s cubic-bezier(.32,.72,0,1);}
+.ih-panel.open{transform:translateY(0);}
+.ih-handle{width:36px;height:4px;border-radius:2px;background:var(--border-2);margin:10px auto 0;}
+.ih-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);}
+.ih-titel{font-size:16px;font-weight:800;}
+.ih-sub{font-size:12px;color:var(--zacht);margin-top:3px;}
+.ih-close{position:absolute;top:12px;right:14px;width:28px;height:28px;border:none;background:var(--surface-2);border-radius:var(--radius-sm);color:var(--zacht);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
+.ih-rij{display:flex;flex-direction:column;gap:2px;padding:11px 16px;border-bottom:1px solid var(--border);}
+.ih-rij:last-child{border-bottom:none;}
+.ih-datum{font-size:11px;color:var(--zacht);font-weight:600;}
+.ih-route{font-size:13px;font-weight:700;}
+.ih-medewerker{font-size:11px;color:var(--zacht);}
+.inz-item-klikbaar{cursor:pointer;border-radius:var(--radius-sm);padding:6px 8px;margin:2px -8px;display:flex;align-items:center;justify-content:space-between;transition:background .12s;}
+.inz-item-klikbaar:active{background:rgba(255,107,0,.10);}
+
 /* BEVESTIG MODAL */
 .modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,.65);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .18s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
@@ -316,10 +334,6 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
     <span class="bottom-nav-label">Klussen</span>
     <span class="bottom-nav-badge" id="badge-kl" style="display:none">0</span>
   </button>
-  <button class="bottom-nav-btn" id="btn-verplaatsingen" onclick="tabSwitch('verplaatsingen',this)">
-    <span class="bottom-nav-icon"><i data-lucide="truck"></i></span>
-    <span class="bottom-nav-label">Verplaats.</span>
-  </button>
   <button class="bottom-nav-btn" id="btn-gebruikers" onclick="tabSwitch('gebruikers',this)">
     <span class="bottom-nav-icon"><i data-lucide="users"></i></span>
     <span class="bottom-nav-label">Gebruikers</span>
@@ -411,17 +425,6 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
   </div>
 </div>
 
-<!-- TAB: VERPLAATSINGEN -->
-<div class="main tab-content" id="tab-verplaatsingen">
-  <div class="search-wrap">
-    <span class="search-icon"><i data-lucide="search"></i></span>
-    <input class="search-input" type="text" id="zoek-verpl" placeholder="Zoek op naam of klus..." oninput="filterVerplaatsingen()">
-  </div>
-  <div id="verplaatsingen-content">
-    <div class="loading"><div class="spinner"></div> Laden...</div>
-  </div>
-</div>
-
 <!-- TAB: GEBRUIKERS -->
 <div class="main tab-content" id="tab-gebruikers">
   <div class="card">
@@ -467,6 +470,18 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 </div>
 
 <!-- BEVESTIG MODAL -->
+<!-- ITEM HISTORY PANEL -->
+<div class="ih-overlay" id="ih-overlay" onclick="sluitItemHistory()"></div>
+<div class="ih-panel" id="ih-panel">
+  <div class="ih-handle"></div>
+  <div class="ih-header" style="position:relative;">
+    <div class="ih-titel" id="ih-titel">—</div>
+    <div class="ih-sub" id="ih-sub">Verplaatsingshistorie</div>
+    <button class="ih-close" onclick="sluitItemHistory()"><i data-lucide="x" style="width:14px;height:14px;"></i></button>
+  </div>
+  <div id="ih-content" style="padding-bottom:24px;"></div>
+</div>
+
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal-box">
     <div class="modal-body">
@@ -656,9 +671,8 @@ function tabSwitch(naam, btn) {
   document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + naam).classList.add('active');
   btn.classList.add('active');
-  if (naam === 'materieel')     laadMaterieel();
-  if (naam === 'gebruikers')    laadGebruikers();
-  if (naam === 'verplaatsingen') laadVerplaatsingenBeheer();
+  if (naam === 'materieel')  laadMaterieel();
+  if (naam === 'gebruikers') laadGebruikers();
 }
 
 /* ── INIT ─────────────────────────────────────────── */
@@ -732,7 +746,28 @@ function renderInzCard(inz) {
       ).join('')}</div>`
     : '';
 
-  const detailsTekst = details.replace(/\n?Foto's.*$/s, '').trim();
+  const parsedItems = parseDetails(details);
+  const materieelHtml = parsedItems.length
+    ? `<div class="inz-detail-label">Materieel</div>
+       <div style="margin:4px 0 6px;">
+         ${parsedItems.map(it => {
+           const naamEsc = it.naam.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+           const numArr  = it.nummers || [];
+           const numParam = numArr.length === 1 ? `'${numArr[0]}'` : 'null';
+           const nrsLabel = numArr.length ? `<span style="font-size:11px;color:var(--zacht);">Nr. ${numArr.join(', ')}</span>` : '';
+           return `<div class="inz-item-klikbaar" onclick="event.stopPropagation();toonItemHistorieBeheer('${naamEsc}',${numParam})">
+             <div>
+               <div style="font-size:13px;font-weight:600;">${it.naam}</div>
+               ${nrsLabel}
+             </div>
+             <div style="display:flex;align-items:center;gap:6px;">
+               <span style="font-size:12px;color:var(--zacht);">×${it.aantal}</span>
+               <i data-lucide="chevron-right" style="width:13px;height:13px;color:var(--zacht);"></i>
+             </div>
+           </div>`;
+         }).join('')}
+       </div>`
+    : '';
 
   return `<div class="inz-card" id="inz-${id}">
     <div class="inz-header" onclick="toggleInz('${id}')">
@@ -748,7 +783,7 @@ function renderInzCard(inz) {
     <div class="inz-body">
       <div class="inz-detail-label">Route</div>
       <div class="inz-detail-tekst">${type || '—'}\n${vanNr || '—'} → ${bp || naarNr || '—'}</div>
-      ${detailsTekst ? `<div class="inz-detail-label">Materieel</div><div class="inz-detail-tekst">${detailsTekst}</div>` : ''}
+      ${materieelHtml}
       ${opm ? `<div class="inz-detail-label">Opmerking</div><div class="inz-detail-tekst">${opm}</div>` : ''}
       ${fotoHtml}
       <div class="inz-status-row">
@@ -1450,71 +1485,50 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
 }
 
 /* ── VERPLAATSINGEN TAB ───────────────────────────── */
-async function laadVerplaatsingenBeheer() {
-  const el = document.getElementById('verplaatsingen-content');
-  if (!el) return;
-  el.innerHTML = '<div class="loading"><div class="spinner"></div> Laden...</div>';
-  if (!alleInzendingen.length) {
-    try {
-      const res  = await apiFetch(WORKER + '?action=inzendingen', { headers: authHeaders() });
-      if (!res) return;
-      const data = await res.json();
-      if (!data.ok) throw new Error(data.error);
-      alleInzendingen = data.results;
-    } catch (e) {
-      el.innerHTML = `<div class="leeg">${e.message}</div>`;
-      return;
-    }
+function toonItemHistorieBeheer(naam, nummer) {
+  const titel = nummer ? `${naam} Nr. ${nummer}` : naam;
+  document.getElementById('ih-titel').textContent = titel;
+  document.getElementById('ih-sub').textContent   = 'Verplaatsingshistorie laden...';
+  document.getElementById('ih-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  document.getElementById('ih-overlay').classList.add('open');
+  document.getElementById('ih-panel').classList.add('open');
+  lucide.createIcons({nodes:[document.getElementById('ih-panel')]});
+
+  const gevonden = [];
+  for (const inz of alleInzendingen) {
+    const details = prop(inz,'Details')?.rich_text?.[0]?.plain_text || '';
+    const items   = parseDetails(details);
+    const match   = items.find(it => it.naam === naam);
+    if (!match) continue;
+    if (nummer && !match.nummers.includes(String(nummer))) continue;
+    const datum      = prop(inz,'Datum')?.date?.start || '';
+    const medewerker = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || prop(inz,'Naam')?.title?.[0]?.plain_text || '—';
+    const vanNr      = prop(inz,'Werknr. Van')?.rich_text?.[0]?.plain_text || '—';
+    const naarNr     = prop(inz,'Werknr. Naar')?.rich_text?.[0]?.plain_text || '—';
+    const bp         = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || naarNr;
+    gevonden.push({ datum, medewerker, van: vanNr, naar: bp });
   }
-  renderVerplaatsingenBeheer();
-}
+  gevonden.sort((a,b) => b.datum.localeCompare(a.datum));
 
-function renderVerplaatsingenBeheer(zoek) {
-  const term = (zoek || document.getElementById('zoek-verpl')?.value || '').toLowerCase();
-  const lijst = alleInzendingen.filter(inz => {
-    if (!term) return true;
-    const naam   = prop(inz,'Naam')?.title?.[0]?.plain_text || '';
-    const bp     = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
-    const invuld = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || '';
-    return naam.toLowerCase().includes(term) || bp.toLowerCase().includes(term) || invuld.toLowerCase().includes(term);
-  });
+  document.getElementById('ih-sub').textContent = `${gevonden.length} verplaatsing${gevonden.length !== 1 ? 'en' : ''}`;
 
-  const el = document.getElementById('verplaatsingen-content');
-  if (!el) return;
-
-  if (!lijst.length) {
-    el.innerHTML = '<div class="leeg">Geen verplaatsingen gevonden.</div>';
+  if (!gevonden.length) {
+    document.getElementById('ih-content').innerHTML = '<div class="leeg">Geen verplaatsingen gevonden voor dit item.</div>';
     return;
   }
-
-  el.innerHTML = lijst.map(inz => {
-    const naam   = prop(inz,'Naam')?.title?.[0]?.plain_text || '—';
-    const bp     = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
-    const invuld = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || '—';
-    const datum  = prop(inz,'Datum')?.date?.start || '';
-    const vanNr  = prop(inz,'Werknr. Van')?.rich_text?.[0]?.plain_text || '—';
-    const naarNr = prop(inz,'Werknr. Naar')?.rich_text?.[0]?.plain_text || '—';
-    const status = prop(inz,'Status')?.select?.name || 'Nieuw';
-    const sc     = status === 'Verwerkt' ? 'status-verwerkt' : 'status-nieuw';
-    const type   = prop(inz,'Opslag / Zaak')?.rich_text?.[0]?.plain_text || '';
-    const icon = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
-    return `<div class="inz-card" style="margin-bottom:8px;">
-      <div class="inz-header" style="cursor:default;">
-        <span class="inz-icon">${icon}</span>
-        <div class="inz-info">
-          <div class="inz-naam">${naam}</div>
-          <div class="inz-meta">${datum} · ${invuld}</div>
-          <div class="inz-meta" style="margin-top:2px;">${vanNr} → ${bp || naarNr}</div>
-        </div>
-        <span class="inz-status ${sc}">${status}</span>
-      </div>
+  document.getElementById('ih-content').innerHTML = gevonden.map(g => {
+    const datumStr = g.datum ? new Date(g.datum).toLocaleDateString('nl-NL', {day:'numeric',month:'long',year:'numeric'}) : '—';
+    return `<div class="ih-rij">
+      <div class="ih-datum">${datumStr}</div>
+      <div class="ih-route">${g.van} → ${g.naar}</div>
+      <div class="ih-medewerker">${g.medewerker}</div>
     </div>`;
   }).join('');
-  lucide.createIcons();
 }
 
-function filterVerplaatsingen() {
-  renderVerplaatsingenBeheer();
+function sluitItemHistory() {
+  document.getElementById('ih-overlay').classList.remove('open');
+  document.getElementById('ih-panel').classList.remove('open');
 }
 
 /* ── START ────────────────────────────────────────── */
