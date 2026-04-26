@@ -2236,12 +2236,14 @@ async function toonItemGeschiedenis(naam, nummer) {
 
   // Haal inzendingen op als nog niet gecached
   if (!alleInzHistory.length) {
-    const isAdmin = getTokenPayload()?.rol === 'admin';
+    const isAdmin = getTokenPayload()?.role === 'admin';
     const action  = isAdmin ? 'inzendingen' : 'mijn_inzendingen';
-    const res = await apiFetch(`${WORKER}?action=${action}`);
+    const res = await apiFetch(`${WORKER}?action=${action}`, {
+      headers: { 'Authorization': 'Bearer ' + getToken() }
+    });
     if (!res) return;
     const data = await res.json();
-    if (!data.ok) { el.innerHTML += '<div style="padding:16px;color:var(--zacht);">Fout bij laden.</div>'; return; }
+    if (!data.ok) { el.innerHTML = `<div style="padding:20px 16px;color:var(--zacht);">${data.error || 'Fout bij laden.'}</div>`; return; }
     alleInzHistory = data.results || [];
   }
 
