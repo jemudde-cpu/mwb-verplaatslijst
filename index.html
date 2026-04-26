@@ -445,6 +445,24 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .mat-kies-sub{background:rgba(0,0,0,.18);}
 .mat-kies-sub .mat-kies-row{padding-left:36px;}
 
+/* SKELETON LOADER */
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface-2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:8px;padding:14px 16px;display:flex;align-items:center;gap:12px;overflow:hidden;}
+.skel-icon{width:24px;height:24px;border-radius:4px;flex-shrink:0;}
+.skel-line{height:12px;border-radius:4px;margin-bottom:6px;}
+.skel-line-sm{height:10px;border-radius:4px;}
+
+/* FILTER BAR (geschiedenis) */
+.gesch-filter-wrap{display:flex;gap:8px;padding:0 0 14px;overflow-x:auto;scrollbar-width:none;}
+.gesch-filter-wrap::-webkit-scrollbar{display:none;}
+.gesch-filter-btn{flex-shrink:0;padding:7px 14px;border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;background:transparent;border:1px solid var(--border-2);color:var(--zacht);cursor:pointer;transition:all .2s;-webkit-appearance:none;}
+.gesch-filter-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* RETRY KNOP */
+.retry-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:10px 18px;background:transparent;border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:inherit;font-size:12px;font-weight:700;color:var(--tekst);cursor:pointer;-webkit-appearance:none;}
+.retry-btn:active{background:var(--surface-2);}
+
 </style>
 </head>
 <body>
@@ -746,7 +764,13 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <!-- VERPLAATSINGEN VIEW -->
 <div class="view" id="view-verplaatsingen">
   <div class="home-wrap">
-    <div class="home-sectie-titel" style="margin-bottom:14px;">Mijn verplaatsingen</div>
+    <div class="gesch-filter-wrap">
+      <button class="gesch-filter-btn active" onclick="setGeschFilter('alles',this)">Alles</button>
+      <button class="gesch-filter-btn" onclick="setGeschFilter('vandaag',this)">Vandaag</button>
+      <button class="gesch-filter-btn" onclick="setGeschFilter('week',this)">Deze week</button>
+      <button class="gesch-filter-btn" onclick="setGeschFilter('maand',this)">Deze maand</button>
+    </div>
+    <div class="home-sectie-titel" id="gesch-sectie-titel" style="margin-bottom:14px;">Verplaatsingen</div>
     <div id="verpl-lijst"><div class="home-spinner"></div></div>
   </div>
 </div>
@@ -818,6 +842,47 @@ function fmtDatum(d, lang = false) {
       : { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(d + 'T12:00:00').toLocaleDateString('nl-NL', opts);
   } catch { return d; }
+}
+
+/* ── CACHE (localStorage) ────────────────────────── */
+const CACHE_KEY_MAT = 'mwb_mat_v1';
+const CACHE_TTL     = 15 * 60 * 1000;
+function cacheOpslaan(key, data) { try { localStorage.setItem(key, JSON.stringify({ d: data, t: Date.now() })); } catch(_) {} }
+function cacheLaden(key, ttl) {
+  try {
+    const obj = JSON.parse(localStorage.getItem(key) || 'null');
+    if (!obj) return null;
+    if (ttl !== Infinity && Date.now() - obj.t > ttl) return null;
+    return obj.d;
+  } catch(_) { return null; }
+}
+
+/* ── SKELETON HELPERS ────────────────────────────── */
+function skeletonKaarten(n = 3) {
+  return Array(n).fill('').map(() =>
+    `<div class="skel-card">
+      <div class="skel-icon skeleton"></div>
+      <div style="flex:1;min-width:0;">
+        <div class="skel-line skeleton" style="width:65%;"></div>
+        <div class="skel-line-sm skeleton" style="width:40%;"></div>
+      </div>
+      <div class="skeleton" style="width:48px;height:20px;border-radius:4px;flex-shrink:0;"></div>
+    </div>`
+  ).join('');
+}
+function skeletonOvz() {
+  const kaart = (w) =>
+    `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;overflow:hidden;">
+      <div style="flex:1">
+        <div class="skel-line skeleton" style="width:${w}%;height:14px;margin-bottom:8px;"></div>
+        <div class="skel-line-sm skeleton" style="width:${Math.round(w * 0.55)}%;"></div>
+      </div>
+      <div class="skeleton" style="width:40px;height:22px;border-radius:4px;"></div>
+    </div>`;
+  return `<div class="skel-line skeleton" style="width:100px;height:11px;margin-bottom:10px;"></div>
+    ${kaart(60)}
+    <div class="skel-line skeleton" style="width:100px;height:11px;margin:20px 0 10px;"></div>
+    ${kaart(70)}${kaart(55)}${kaart(65)}`;
 }
 
 /* ── THEMA ───────────────────────────────────────── */
@@ -1295,12 +1360,17 @@ function updateStap2Teller() {
 
 async function laadMaterialenApp() {
   materieelLaden = true;
+  const cached = cacheLaden(CACHE_KEY_MAT, CACHE_TTL);
+  if (cached) { alleMaterialen = cached; return; }
   try {
     const res  = await apiFetch(WORKER + '?action=materieel', { headers: { 'Authorization': 'Bearer ' + getToken() } });
     if (!res) return;
     const data = await res.json();
-    if (data.ok) alleMaterialen = data.materialen;
-  } catch (_) {}
+    if (data.ok) { alleMaterialen = data.materialen; cacheOpslaan(CACHE_KEY_MAT, data.materialen); }
+  } catch (_) {
+    const fallback = cacheLaden(CACHE_KEY_MAT, Infinity);
+    if (fallback) alleMaterialen = fallback;
+  }
 }
 
 /* ── FOTO ────────────────────────────────────────── */
@@ -1742,7 +1812,7 @@ function naarVerplaatsingen() {
   document.getElementById('bn-verplaatsingen').classList.add('active');
   const el = document.getElementById('verpl-lijst');
   if (!alleVerplaatsingen.length) {
-    el.innerHTML = '<div class="home-spinner"></div>';
+    el.innerHTML = skeletonKaarten(3);
     laadAlleVerplaatsingen().then(() => renderVerplaatsingenLijst());
   } else {
     renderVerplaatsingenLijst();
@@ -1800,16 +1870,20 @@ async function laadAlleVerplaatsingen() {
       const data2 = await res2.json();
       if (data2.ok) { alleVerplaatsingen = sorteer(data2.results); return; }
     }
-    if (el) el.innerHTML = '<div class="home-leeg">Kon verplaatsingen niet laden.</div>';
+    if (el) el.innerHTML = `<div class="home-leeg">Kon verplaatsingen niet laden.<br><button class="retry-btn" onclick="naarVerplaatsingen()">${ic('refresh-cw',14)} Opnieuw</button></div>`;
+    lucide.createIcons({nodes:[el]});
   } catch (e) {
-    if (el) el.innerHTML = `<div class="home-leeg">${e.name === 'AbortError' ? 'Verbinding te traag.' : 'Kon verplaatsingen niet laden.'}</div>`;
+    if (el) {
+      el.innerHTML = `<div class="home-leeg">${e.name === 'AbortError' ? 'Verbinding te traag.' : 'Kon verplaatsingen niet laden.'}<br><button class="retry-btn" onclick="naarVerplaatsingen()">${ic('refresh-cw',14)} Opnieuw</button></div>`;
+      lucide.createIcons({nodes:[el]});
+    }
   }
 }
 
 async function laadMijnInzendingen() {
   const el = document.getElementById('home-inzendingen');
   if (!el) return;
-  el.innerHTML = '<div class="home-spinner"></div>';
+  el.innerHTML = skeletonKaarten(3);
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15000);
@@ -1824,7 +1898,8 @@ async function laadMijnInzendingen() {
     }
     const data = await res.json();
     if (!data.ok) {
-      el.innerHTML = `<div class="home-leeg">${data.error || 'Kon inzendingen niet laden.'}</div>`;
+      el.innerHTML = `<div class="home-leeg">${data.error || 'Kon inzendingen niet laden.'}<br><button class="retry-btn" onclick="laadMijnInzendingen()">${ic('refresh-cw',14)} Opnieuw</button></div>`;
+      lucide.createIcons({nodes:[el]});
       return;
     }
     const results = (data.results || []).sort((a,b) => {
@@ -1858,18 +1933,44 @@ async function laadMijnInzendingen() {
     }).join('');
     lucide.createIcons({nodes:[el]});
   } catch (e) {
-    el.innerHTML = `<div class="home-leeg">${e.name === 'AbortError' ? 'Verbinding te traag. Probeer opnieuw.' : 'Kon inzendingen niet laden.'}</div>`;
+    el.innerHTML = `<div class="home-leeg">${e.name === 'AbortError' ? 'Verbinding te traag.' : 'Kon inzendingen niet laden.'}<br><button class="retry-btn" onclick="laadMijnInzendingen()">${ic('refresh-cw',14)} Opnieuw</button></div>`;
+    lucide.createIcons({nodes:[el]});
   }
+}
+
+let geschFilter = 'alles';
+function setGeschFilter(filter, btn) {
+  geschFilter = filter;
+  document.querySelectorAll('.gesch-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderVerplaatsingenLijst();
 }
 
 function renderVerplaatsingenLijst() {
   const el = document.getElementById('verpl-lijst');
   if (!el) return;
-  if (!alleVerplaatsingen.length) {
-    el.innerHTML = '<div class="home-leeg">Nog geen verplaatsingen gevonden.</div>';
+
+  // Filter op datum
+  const nu = new Date();
+  const vandaag = nu.toISOString().slice(0, 10);
+  const maandStart = new Date(nu.getFullYear(), nu.getMonth(), 1).toISOString().slice(0, 10);
+  const weekStart  = (() => { const d = new Date(nu); d.setDate(nu.getDate() - ((nu.getDay() + 6) % 7)); return d.toISOString().slice(0, 10); })();
+
+  const geindexeerd = alleVerplaatsingen.map((inz, i) => ({ inz, i }));
+  const gefilterd = geschFilter === 'vandaag' ? geindexeerd.filter(({inz}) => (inz.properties?.['Datum']?.date?.start || '') === vandaag)
+    : geschFilter === 'week'   ? geindexeerd.filter(({inz}) => (inz.properties?.['Datum']?.date?.start || '') >= weekStart)
+    : geschFilter === 'maand'  ? geindexeerd.filter(({inz}) => (inz.properties?.['Datum']?.date?.start || '') >= maandStart)
+    : geindexeerd;
+
+  // Update sectie-titel met teller
+  const titelEl = document.getElementById('gesch-sectie-titel');
+  if (titelEl) titelEl.textContent = `Verplaatsingen (${gefilterd.length})`;
+
+  if (!gefilterd.length) {
+    el.innerHTML = `<div class="home-leeg">${alleVerplaatsingen.length ? 'Geen verplaatsingen in deze periode.' : 'Nog geen verplaatsingen gevonden.'}</div>`;
     return;
   }
-  el.innerHTML = alleVerplaatsingen.map((inz, i) => {
+  el.innerHTML = gefilterd.map(({ inz, i }) => {
     const medewerker = inz.properties?.['Ingevuld door']?.rich_text?.[0]?.plain_text || inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
     const vanNr  = inz.properties?.['Werknr. Van']?.rich_text?.[0]?.plain_text || '';
     const bp     = inz.properties?.['Bouwplaats']?.rich_text?.[0]?.plain_text || '';
@@ -2188,21 +2289,33 @@ function bouwLocatieMapFromKV(materialen) {
 }
 
 async function ovzLaadData() {
-  document.getElementById('ovz-content').innerHTML =
-    '<div class="ovz-loading"><div class="spinner"></div><div style="font-size:13px;color:var(--zacht)">Materieel laden...</div></div>';
+  document.getElementById('ovz-content').innerHTML = skeletonOvz();
   try {
     const res  = await apiFetch(WORKER + '?action=materieel', { headers: { 'Authorization': 'Bearer ' + getToken() } });
     if (!res) return;
     const data = await res.json();
     if (!data.ok) throw new Error(data.error);
+    cacheOpslaan(CACHE_KEY_MAT, data.materialen);
+    alleMaterialen  = data.materialen;
     ovzRawMateriaal = data.materialen;
     ovzLocatieMap   = bouwLocatieMapFromKV(data.materialen);
-    ovzLaadMoment = new Date();
-    ovzGeladen    = true;
+    ovzLaadMoment   = new Date();
+    ovzGeladen      = true;
     ovzRender();
   } catch (e) {
-    document.getElementById('ovz-content').innerHTML =
-      `<div class="ovz-leeg"><div class="ovz-leeg-icon"><i data-lucide="alert-triangle" style="width:36px;height:36px"></i></div><div class="ovz-leeg-titel">Ophalen mislukt</div><div class="ovz-leeg-sub">${e.message}</div></div>`;
+    const cached = cacheLaden(CACHE_KEY_MAT, Infinity);
+    if (cached) {
+      alleMaterialen  = cached;
+      ovzRawMateriaal = cached;
+      ovzLocatieMap   = bouwLocatieMapFromKV(cached);
+      ovzGeladen      = true;
+      ovzRender();
+      showToast('Offline – gecachede data', 'warn');
+    } else {
+      document.getElementById('ovz-content').innerHTML =
+        `<div class="ovz-leeg"><div class="ovz-leeg-icon"><i data-lucide="wifi-off" style="width:36px;height:36px"></i></div><div class="ovz-leeg-titel">Geen verbinding</div><div class="ovz-leeg-sub">${e.message || 'Controleer internet.'}</div><button class="retry-btn" onclick="ovzHerlaad()">${ic('refresh-cw',14)} Opnieuw proberen</button></div>`;
+      lucide.createIcons();
+    }
   }
 }
 
