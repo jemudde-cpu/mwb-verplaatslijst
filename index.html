@@ -1762,22 +1762,35 @@ let alleVerplaatsingen = [];
 
 async function laadAlleVerplaatsingen() {
   const el = document.getElementById('verpl-lijst');
+  const sorteer = arr => (arr || []).sort((a,b) => {
+    const da = a.properties?.['Datum']?.date?.start || '';
+    const db = b.properties?.['Datum']?.date?.start || '';
+    return db.localeCompare(da);
+  });
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 15000);
+    // Probeer eerst het nieuwe alle_verplaatsingen endpoint
     const res = await fetch(WORKER + '?action=alle_verplaatsingen', {
       headers: { 'Authorization': 'Bearer ' + getToken() },
       signal: controller.signal,
     });
     clearTimeout(timer);
-    if (!res.ok) { if (el) el.innerHTML = '<div class="home-leeg">Kon verplaatsingen niet laden.</div>'; return; }
-    const data = await res.json();
-    if (data.ok) alleVerplaatsingen = (data.results || []).sort((a,b) => {
-      const da = a.properties?.['Datum']?.date?.start || '';
-      const db = b.properties?.['Datum']?.date?.start || '';
-      return db.localeCompare(da);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.ok) { alleVerplaatsingen = sorteer(data.results); return; }
+    }
+    // Fallback: admin haalt alle inzendingen op, user haalt eigen op
+    const isAdmin  = getTokenPayload()?.role === 'admin';
+    const action   = isAdmin ? 'inzendingen' : 'mijn_inzendingen';
+    const res2 = await fetch(`${WORKER}?action=${action}`, {
+      headers: { 'Authorization': 'Bearer ' + getToken() },
     });
-    else if (el) el.innerHTML = `<div class="home-leeg">${data.error || 'Kon verplaatsingen niet laden.'}</div>`;
+    if (res2.ok) {
+      const data2 = await res2.json();
+      if (data2.ok) { alleVerplaatsingen = sorteer(data2.results); return; }
+    }
+    if (el) el.innerHTML = '<div class="home-leeg">Kon verplaatsingen niet laden.</div>';
   } catch (e) {
     if (el) el.innerHTML = `<div class="home-leeg">${e.name === 'AbortError' ? 'Verbinding te traag.' : 'Kon verplaatsingen niet laden.'}</div>`;
   }
