@@ -232,6 +232,33 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);z-index:600;background:#1a1a1a;border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:12px 22px;font-size:14px;font-weight:700;color:var(--tekst);box-shadow:0 8px 32px rgba(0,0,0,.50);opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* EXPORT KNOP BAR */
+.export-bar{display:flex;gap:8px;margin-bottom:14px;}
+.export-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--radius-sm);font-family:inherit;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;-webkit-appearance:none;transition:all .2s;border:1.5px solid var(--border-2);background:var(--surface);color:var(--tekst);}
+.export-btn:active{opacity:.75;}
+.export-btn-excel{border-color:rgba(34,197,94,.35);color:var(--groen);background:rgba(34,197,94,.06);}
+.export-btn-pdf{border-color:rgba(255,107,0,.35);color:var(--accent);background:rgba(255,107,0,.06);}
+
+/* PRINT STIJLEN */
+@media print{
+  header,nav,.bottom-nav,.export-bar,.search-wrap,.inz-del-btn,.inz-status-row,.modal-overlay,.lightbox,.toast{display:none!important;}
+  body{background:#fff;color:#000;font-size:11pt;}
+  .tab-content{display:block!important;}
+  .tab-content:not(#tab-inzendingen){display:none!important;}
+  .inz-card{border:1px solid #ccc;margin-bottom:8pt;break-inside:avoid;page-break-inside:avoid;}
+  .inz-header{padding:8pt 10pt;}
+  .inz-body{display:block!important;padding:4pt 10pt 10pt;}
+  .inz-naam{font-size:11pt;font-weight:700;}
+  .inz-meta{font-size:9pt;color:#555;}
+  .inz-status{border:1px solid #aaa;color:#000;}
+  .inz-detail-label{font-size:8pt;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#555;margin-top:6pt;}
+  .inz-detail-tekst{font-size:10pt;}
+  .inz-foto{display:none;}
+  .inz-chevron{display:none;}
+  h1.print-titel{font-size:16pt;font-weight:900;margin-bottom:8pt;}
+  .print-meta{font-size:9pt;color:#555;margin-bottom:14pt;}
+}
+
 /* LIGHT THEME */
 [data-theme="light"]{--tekst:#111111;--zacht:#666666;--dim:#bbbbbb;--border:#e5e5e5;--border-2:#d0d0d0;--surface:#ffffff;--surface-2:#f5f5f5;}
 [data-theme="light"] body{background:#f0f0f0;}
@@ -374,6 +401,14 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 
 <!-- TAB: INZENDINGEN -->
 <div class="main tab-content" id="tab-inzendingen">
+  <div class="export-bar">
+    <button class="export-btn export-btn-excel" onclick="exporteerCSV()">
+      <i data-lucide="table" style="width:14px;height:14px;"></i> Excel (CSV)
+    </button>
+    <button class="export-btn export-btn-pdf" onclick="exporteerPDF()">
+      <i data-lucide="printer" style="width:14px;height:14px;"></i> Afdrukken / PDF
+    </button>
+  </div>
   <div class="search-wrap">
     <span class="search-icon"><i data-lucide="search"></i></span>
     <input class="search-input" type="text" id="zoek-inz" placeholder="Zoek op naam of klus..." oninput="filterInzendingen()">
@@ -1537,6 +1572,61 @@ function sluitItemHistory() {
   document.getElementById('tab-inzendingen').classList.add('active');
   document.getElementById('btn-inzendingen').classList.add('active');
   window.scrollTo({top:0});
+}
+
+/* ── EXPORT ───────────────────────────────────────── */
+function csvEscaped(v) {
+  const s = String(v == null ? '' : v);
+  return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function exporteerCSV() {
+  if (!alleInzendingen.length) { showToast('Geen inzendingen om te exporteren', 'warn'); return; }
+
+  const kolommen = ['Datum', 'Medewerker', 'Van (nr)', 'Naar (nr)', 'Bouwplaats', 'Status', 'Materieel', 'Opmerkingen'];
+  const rijen = alleInzendingen.map(inz => {
+    const datum    = prop(inz,'Datum')?.date?.start || '';
+    const naam     = prop(inz,'Ingevuld door')?.rich_text?.[0]?.plain_text || prop(inz,'Naam')?.title?.[0]?.plain_text || '';
+    const vanNr    = prop(inz,'Werknr. Van')?.rich_text?.[0]?.plain_text || '';
+    const naarNr   = prop(inz,'Werknr. Naar')?.rich_text?.[0]?.plain_text || '';
+    const bp       = prop(inz,'Bouwplaats')?.rich_text?.[0]?.plain_text || '';
+    const status   = prop(inz,'Status')?.select?.name || 'Nieuw';
+    const details  = prop(inz,'Details')?.rich_text?.[0]?.plain_text || '';
+    const opm      = prop(inz,'Opmerkingen')?.rich_text?.[0]?.plain_text || '';
+    const items    = parseDetails(details);
+    const mat      = items.map(it => it.naam + (it.nummers?.length ? ' nr.' + it.nummers.join(',') : '') + ' ×' + it.aantal).join('; ');
+    return [fmtDatum(datum), naam, vanNr, naarNr, bp, status, mat, opm].map(csvEscaped).join(',');
+  });
+
+  const inhoud = '\uFEFF' + kolommen.join(',') + '\r\n' + rijen.join('\r\n');
+  const blob   = new Blob([inhoud], { type: 'text/csv;charset=utf-8;' });
+  const url    = URL.createObjectURL(blob);
+  const a      = document.createElement('a');
+  const datum  = new Date().toISOString().slice(0,10);
+  a.href       = url;
+  a.download   = `mwb-inzendingen-${datum}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`${alleInzendingen.length} inzendingen geëxporteerd`, 'ok');
+}
+
+function exporteerPDF() {
+  if (!alleInzendingen.length) { showToast('Geen inzendingen om af te drukken', 'warn'); return; }
+
+  const datum = new Date().toLocaleDateString('nl-NL', { day:'numeric', month:'long', year:'numeric' });
+  // Zorg dat alle kaarten open zijn voor printen
+  document.querySelectorAll('.inz-card:not(.open)').forEach(c => c.classList.add('open'));
+  // Voeg tijdelijke print-header toe
+  const hdr = document.createElement('div');
+  hdr.id    = '__print-hdr__';
+  hdr.innerHTML = `<h1 class="print-titel">Verplaatsingen – Middelwatering Bouw</h1><div class="print-meta">Geëxporteerd op ${datum} · ${alleInzendingen.length} inzendingen</div>`;
+  document.getElementById('tab-inzendingen').prepend(hdr);
+  window.print();
+  // Ruim op na print
+  setTimeout(() => {
+    hdr.remove();
+    document.querySelectorAll('.inz-card.open').forEach(c => c.classList.remove('open'));
+  }, 1000);
 }
 
 /* ── START ────────────────────────────────────────── */
