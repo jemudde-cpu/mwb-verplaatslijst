@@ -147,16 +147,19 @@ export default {
         const token   = getToken(request);
         const payload = await verifyJWT(token);
         if (!payload) return json({ ok: false, error: 'Niet ingelogd' }, 401);
+        const notionHeaders = {
+          'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+          'Notion-Version': '2022-06-28',
+          'Content-Type':   'application/json',
+        };
         try {
-          const res = await fetch(
+          // Probeer gefilterd op naam; als Notion de property niet kent, val terug op onefilterd
+          let results = null;
+          const filteredRes = await fetch(
             `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
             {
               method: 'POST',
-              headers: {
-                'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
-                'Notion-Version': '2022-06-28',
-                'Content-Type':   'application/json',
-              },
+              headers: notionHeaders,
               body: JSON.stringify({
                 filter: { property: 'Ingevuld door', rich_text: { equals: payload.naam } },
                 sorts:  [{ property: 'Datum', direction: 'descending' }],
@@ -164,9 +167,30 @@ export default {
               }),
             }
           );
-          if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
-          const data = await res.json();
-          return json({ ok: true, results: data.results, has_more: data.has_more });
+          if (filteredRes.ok) {
+            const filteredData = await filteredRes.json();
+            results = filteredData.results;
+          } else {
+            // Fallback: haal recente inzendingen op zonder filter, filter daarna op naam
+            const allRes = await fetch(
+              `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
+              {
+                method: 'POST',
+                headers: notionHeaders,
+                body: JSON.stringify({
+                  sorts:     [{ property: 'Datum', direction: 'descending' }],
+                  page_size: 100,
+                }),
+              }
+            );
+            if (!allRes.ok) { const err = await allRes.text(); return json({ ok: false, error: err }, 500); }
+            const allData = await allRes.json();
+            results = allData.results.filter(p =>
+              p.properties?.['Ingevuld door']?.rich_text?.[0]?.plain_text === payload.naam ||
+              p.properties?.['Naam']?.title?.[0]?.plain_text?.includes(payload.naam)
+            );
+          }
+          return json({ ok: true, results });
         } catch (e) {
           return json({ ok: false, error: e.message }, 500);
         }
