@@ -2294,6 +2294,7 @@ function naarOverzicht() {
   alleViewsUit();
   document.getElementById('view-overzicht').classList.add('active');
   document.getElementById('bn-overzicht').classList.add('active');
+  if (!ovzGeladen) ovzLaadData();
 }
 
 function ovzHerlaad() {
