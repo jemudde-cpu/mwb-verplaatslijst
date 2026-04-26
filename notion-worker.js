@@ -152,45 +152,25 @@ export default {
           'Notion-Version': '2022-06-28',
           'Content-Type':   'application/json',
         };
+        // Haal alle recente inzendingen op (zonder filter/sort die kunnen falen)
+        // en filter daarna client-side op naam
         try {
-          // Probeer gefilterd op naam; als Notion de property niet kent, val terug op onefilterd
-          let results = null;
-          const filteredRes = await fetch(
+          const res = await fetch(
             `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
             {
               method: 'POST',
               headers: notionHeaders,
-              body: JSON.stringify({
-                filter: { property: 'Ingevuld door', rich_text: { equals: payload.naam } },
-                sorts:  [{ property: 'Datum', direction: 'descending' }],
-                page_size: 100,
-              }),
+              body: JSON.stringify({ page_size: 100 }),
             }
           );
-          if (filteredRes.ok) {
-            const filteredData = await filteredRes.json();
-            results = filteredData.results;
-          } else {
-            // Fallback: haal recente inzendingen op zonder filter, filter daarna op naam
-            const allRes = await fetch(
-              `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
-              {
-                method: 'POST',
-                headers: notionHeaders,
-                body: JSON.stringify({
-                  sorts:     [{ property: 'Datum', direction: 'descending' }],
-                  page_size: 100,
-                }),
-              }
-            );
-            if (!allRes.ok) { const err = await allRes.text(); return json({ ok: false, error: err }, 500); }
-            const allData = await allRes.json();
-            results = allData.results.filter(p =>
-              p.properties?.['Ingevuld door']?.rich_text?.[0]?.plain_text === payload.naam ||
-              p.properties?.['Naam']?.title?.[0]?.plain_text?.includes(payload.naam)
-            );
-          }
-          return json({ ok: true, results });
+          if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
+          const data = await res.json();
+          const naam = payload.naam || '';
+          const results = (data.results || []).filter(p => {
+            const ingevoerd = p.properties?.['Ingevuld door']?.rich_text?.[0]?.plain_text || '';
+            return ingevoerd === naam || ingevoerd.toLowerCase() === naam.toLowerCase();
+          });
+          return json({ ok: true, results, naam });
         } catch (e) {
           return json({ ok: false, error: e.message }, 500);
         }
