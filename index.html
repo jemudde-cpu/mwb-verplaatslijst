@@ -1902,8 +1902,10 @@ function openDetailInz(inz) {
 
 function startApp(naam, role) {
   // Wizard stap 1
-  document.getElementById('welkom-naam').textContent = naam;
-  document.getElementById('welkom-rol').textContent  = role === 'admin' ? 'Beheerder' : 'Medewerker';
+  const elWNaam = document.getElementById('welkom-naam');
+  if (elWNaam) elWNaam.textContent = naam;
+  const elWRol = document.getElementById('welkom-rol');
+  if (elWRol) elWRol.textContent = role === 'admin' ? 'Beheerder' : 'Medewerker';
   if (role === 'admin') {
     document.getElementById('header-beheer-link').style.display = '';
     document.getElementById('beheer-divider').style.display = '';
