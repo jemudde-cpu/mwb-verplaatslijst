@@ -1,4 +1,4 @@
-const CACHE = 'mwb-verplaatslijst-v12';
+const CACHE = 'mwb-verplaatslijst-v13';
 
 const BESTANDEN = [
   './index.html',
@@ -22,6 +22,12 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // API-calls nooit cachen — altijd rechtstreeks naar netwerk
+  if (e.request.url.includes('workers.dev') || e.request.url.includes('api.notion')) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
+  // Statische assets: cache-first
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
