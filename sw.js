@@ -1,4 +1,4 @@
-const CACHE = 'mwb-verplaatslijst-v13';
+const CACHE = 'mwb-verplaatslijst-v14';
 
 const BESTANDEN = [
   './index.html',
