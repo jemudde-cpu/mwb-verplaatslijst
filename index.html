@@ -1708,9 +1708,9 @@ function naarVerplaatsingen() {
   document.getElementById('view-verplaatsingen').classList.add('active');
   document.getElementById('bn-verplaatsingen').classList.add('active');
   const el = document.getElementById('verpl-lijst');
-  if (!mijnInzendingen.length) {
+  if (!alleVerplaatsingen.length) {
     el.innerHTML = '<div class="home-spinner"></div>';
-    laadMijnInzendingen().then(() => renderVerplaatsingenLijst());
+    laadAlleVerplaatsingen().then(() => renderVerplaatsingenLijst());
   } else {
     renderVerplaatsingenLijst();
   }
@@ -1734,7 +1734,27 @@ function itemHistoryTerug() {
   }
 }
 
-let mijnInzendingen = [];
+let mijnInzendingen   = [];
+let alleVerplaatsingen = [];
+
+async function laadAlleVerplaatsingen() {
+  const el = document.getElementById('verpl-lijst');
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 15000);
+    const res = await fetch(WORKER + '?action=alle_verplaatsingen', {
+      headers: { 'Authorization': 'Bearer ' + getToken() },
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) { if (el) el.innerHTML = '<div class="home-leeg">Kon verplaatsingen niet laden.</div>'; return; }
+    const data = await res.json();
+    if (data.ok) alleVerplaatsingen = data.results || [];
+    else if (el) el.innerHTML = `<div class="home-leeg">${data.error || 'Kon verplaatsingen niet laden.'}</div>`;
+  } catch (e) {
+    if (el) el.innerHTML = `<div class="home-leeg">${e.name === 'AbortError' ? 'Verbinding te traag.' : 'Kon verplaatsingen niet laden.'}</div>`;
+  }
+}
 
 async function laadMijnInzendingen() {
   const el = document.getElementById('home-inzendingen');
@@ -1791,32 +1811,36 @@ async function laadMijnInzendingen() {
 function renderVerplaatsingenLijst() {
   const el = document.getElementById('verpl-lijst');
   if (!el) return;
-  if (!mijnInzendingen.length) {
+  if (!alleVerplaatsingen.length) {
     el.innerHTML = '<div class="home-leeg">Nog geen verplaatsingen gevonden.</div>';
     return;
   }
-  el.innerHTML = mijnInzendingen.map((inz, i) => {
-    const naam   = inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
+  el.innerHTML = alleVerplaatsingen.map((inz, i) => {
+    const medewerker = inz.properties?.['Ingevuld door']?.rich_text?.[0]?.plain_text || inz.properties?.['Naam']?.title?.[0]?.plain_text || '—';
+    const vanNr  = inz.properties?.['Werknr. Van']?.rich_text?.[0]?.plain_text || '';
     const bp     = inz.properties?.['Bouwplaats']?.rich_text?.[0]?.plain_text || '';
+    const naarNr = inz.properties?.['Werknr. Naar']?.rich_text?.[0]?.plain_text || '';
     const datum  = inz.properties?.['Datum']?.date?.start || '';
     const status = inz.properties?.['Status']?.select?.name || 'Nieuw';
     const type   = inz.properties?.['Opslag / Zaak']?.rich_text?.[0]?.plain_text || '';
-    const icon = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
+    const icon   = type.includes('Zaak') ? ic('building-2',13) : ic('arrow-left-right',13);
+    const route  = vanNr ? vanNr + ' → ' + (bp || naarNr || '?') : (bp || naarNr || '—');
     const sc     = status === 'Verwerkt' ? 'home-inz-status-verwerkt' : 'home-inz-status-nieuw';
     return `<div class="home-inz-card" onclick="openDetailVerpl(${i})">
       <span class="home-inz-icon">${icon}</span>
       <div class="home-inz-info">
-        <div class="home-inz-naam">${naam}</div>
-        <div class="home-inz-meta">${datum}${bp ? ' · ' + bp : ''}</div>
+        <div class="home-inz-naam">${route}</div>
+        <div class="home-inz-meta">${datum}${medewerker ? ' · ' + medewerker : ''}</div>
       </div>
       <span class="home-inz-status ${sc}">${status}</span>
     </div>`;
   }).join('');
+  lucide.createIcons({nodes:[el]});
 }
 
 function openDetailVerpl(index) {
   detailBackView = 'verplaatsingen';
-  openDetailInz(mijnInzendingen[index]);
+  openDetailInz(alleVerplaatsingen[index]);
 }
 
 function openDetail(index) {
@@ -2245,8 +2269,6 @@ function naarOvzLocatieTerugVanHistory() {
   else naarOverzicht();
 }
 
-let alleInzHistory = [];
-
 async function toonItemGeschiedenis(naam, nummer, backView = 'ovz-locatie') {
   itemHistoryBackView = backView;
   const el = document.getElementById('item-history-inhoud');
@@ -2256,22 +2278,18 @@ async function toonItemGeschiedenis(naam, nummer, backView = 'ovz-locatie') {
   document.getElementById('view-item-history').classList.add('active');
   window.scrollTo({ top:0, behavior:'smooth' });
 
-  // Haal inzendingen op als nog niet gecached
-  if (!alleInzHistory.length) {
-    const isAdmin = getTokenPayload()?.role === 'admin';
-    const action  = isAdmin ? 'inzendingen' : 'mijn_inzendingen';
-    const res = await apiFetch(`${WORKER}?action=${action}`, {
-      headers: { 'Authorization': 'Bearer ' + getToken() }
-    });
-    if (!res) return;
-    const data = await res.json();
-    if (!data.ok) { el.innerHTML = `<div style="padding:20px 16px;color:var(--zacht);">${data.error || 'Fout bij laden.'}</div>`; return; }
-    alleInzHistory = data.results || [];
+  // Haal alle verplaatsingen op als nog niet gecached
+  if (!alleVerplaatsingen.length) {
+    await laadAlleVerplaatsingen();
+    if (!alleVerplaatsingen.length) {
+      el.innerHTML = '<div style="padding:20px 16px;color:var(--zacht);">Kon verplaatsingen niet laden.</div>';
+      return;
+    }
   }
 
   // Filter inzendingen die dit item bevatten
   const gevonden = [];
-  for (const inz of alleInzHistory) {
+  for (const inz of alleVerplaatsingen) {
     const details = inz.properties?.['Details']?.rich_text?.[0]?.plain_text || '';
     const items = parseDetails(details);
     const match = items.find(it => it.naam === naam);

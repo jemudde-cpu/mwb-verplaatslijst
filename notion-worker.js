@@ -176,6 +176,32 @@ export default {
         }
       }
 
+      // Alle verplaatsingen (elke ingelogde gebruiker, max 100)
+      if (action === 'alle_verplaatsingen') {
+        const token   = getToken(request);
+        const payload = await verifyJWT(token);
+        if (!payload) return json({ ok: false, error: 'Niet ingelogd' }, 401);
+        try {
+          const res = await fetch(
+            `https://api.notion.com/v1/databases/${env.NOTION_DB_ID}/query`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization':  `Bearer ${env.NOTION_TOKEN}`,
+                'Notion-Version': '2022-06-28',
+                'Content-Type':   'application/json',
+              },
+              body: JSON.stringify({ page_size: 100 }),
+            }
+          );
+          if (!res.ok) { const err = await res.text(); return json({ ok: false, error: err }, 500); }
+          const data = await res.json();
+          return json({ ok: true, results: data.results || [] });
+        } catch (e) {
+          return json({ ok: false, error: e.message }, 500);
+        }
+      }
+
       // Inzendingen (alle ingelogde gebruikers) — met paginering
       if (action === 'inzendingen') {
         const token   = getToken(request);
