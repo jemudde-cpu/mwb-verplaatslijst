@@ -200,16 +200,10 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 .leeg{text-align:center;padding:40px 20px;color:var(--zacht);font-size:14px;}
 
 
-/* ITEM HISTORY PANEL */
-.ih-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s;}
-.ih-overlay.open{opacity:1;pointer-events:all;}
-.ih-panel{position:fixed;bottom:0;left:0;right:0;z-index:601;background:var(--surface);border-radius:16px 16px 0 0;border-top:1px solid var(--border-2);max-height:80vh;overflow-y:auto;transform:translateY(100%);transition:transform .25s cubic-bezier(.32,.72,0,1);}
-.ih-panel.open{transform:translateY(0);}
-.ih-handle{width:36px;height:4px;border-radius:2px;background:var(--border-2);margin:10px auto 0;}
-.ih-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);}
-.ih-titel{font-size:16px;font-weight:800;}
+/* ITEM HISTORY PAGINA */
+.ih-back{background:none;border:none;color:var(--accent);font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:6px;-webkit-appearance:none;}
+.ih-titel{font-size:18px;font-weight:900;}
 .ih-sub{font-size:12px;color:var(--zacht);margin-top:3px;}
-.ih-close{position:absolute;top:12px;right:14px;width:28px;height:28px;border:none;background:var(--surface-2);border-radius:var(--radius-sm);color:var(--zacht);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;}
 .ih-rij{display:flex;flex-direction:column;gap:2px;padding:11px 16px;border-bottom:1px solid var(--border);}
 .ih-rij:last-child{border-bottom:none;}
 .ih-datum{font-size:11px;color:var(--zacht);font-weight:600;}
@@ -470,16 +464,16 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 </div>
 
 <!-- BEVESTIG MODAL -->
-<!-- ITEM HISTORY PANEL -->
-<div class="ih-overlay" id="ih-overlay" onclick="sluitItemHistory()"></div>
-<div class="ih-panel" id="ih-panel">
-  <div class="ih-handle"></div>
-  <div class="ih-header" style="position:relative;">
-    <div class="ih-titel" id="ih-titel">—</div>
-    <div class="ih-sub" id="ih-sub">Verplaatsingshistorie</div>
-    <button class="ih-close" onclick="sluitItemHistory()"><i data-lucide="x" style="width:14px;height:14px;"></i></button>
+<!-- TAB: ITEM HISTORY -->
+<div class="main tab-content" id="tab-item-history" style="padding-top:0;">
+  <div style="position:sticky;top:0;z-index:10;background:#111111;border-bottom:1px solid var(--border);padding:14px 0 12px;">
+    <button class="ih-back" onclick="sluitItemHistory()">← Terug</button>
   </div>
-  <div id="ih-content" style="padding-bottom:24px;"></div>
+  <div style="padding-top:16px;">
+    <div class="ih-titel" id="ih-titel">—</div>
+    <div class="ih-sub" id="ih-sub" style="margin-bottom:16px;">Verplaatsingshistorie</div>
+  </div>
+  <div class="card" style="padding:0;" id="ih-content"></div>
 </div>
 
 <div class="modal-overlay" id="modal-overlay">
@@ -1488,11 +1482,12 @@ async function verwijderGebruiker(gebruikersnaam, naam) {
 function toonItemHistorieBeheer(naam, nummer) {
   const titel = nummer ? `${naam} Nr. ${nummer}` : naam;
   document.getElementById('ih-titel').textContent = titel;
-  document.getElementById('ih-sub').textContent   = 'Verplaatsingshistorie laden...';
+  document.getElementById('ih-sub').textContent   = 'Laden...';
   document.getElementById('ih-content').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  document.getElementById('ih-overlay').classList.add('open');
-  document.getElementById('ih-panel').classList.add('open');
-  lucide.createIcons({nodes:[document.getElementById('ih-panel')]});
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-item-history').classList.add('active');
+  window.scrollTo({top:0});
 
   const gevonden = [];
   for (const inz of alleInzendingen) {
@@ -1527,8 +1522,11 @@ function toonItemHistorieBeheer(naam, nummer) {
 }
 
 function sluitItemHistory() {
-  document.getElementById('ih-overlay').classList.remove('open');
-  document.getElementById('ih-panel').classList.remove('open');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-inzendingen').classList.add('active');
+  document.getElementById('btn-inzendingen').classList.add('active');
+  window.scrollTo({top:0});
 }
 
 /* ── START ────────────────────────────────────────── */
