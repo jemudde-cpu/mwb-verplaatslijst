@@ -501,6 +501,16 @@ header{position:sticky;top:0;z-index:60;background:#111111;border-bottom:2px sol
 <script>
 const WORKER = 'https://mwb-verplaatslijst.je-mudde.workers.dev';
 
+function fmtDatum(d, lang = false) {
+  if (!d) return '—';
+  try {
+    const opts = lang
+      ? { day: 'numeric', month: 'long', year: 'numeric' }
+      : { day: '2-digit', month: '2-digit', year: 'numeric' };
+    return new Date(d + 'T12:00:00').toLocaleDateString('nl-NL', opts);
+  } catch { return d; }
+}
+
 /* ── THEMA ───────────────────────────────────────── */
 function setTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
@@ -768,7 +778,7 @@ function renderInzCard(inz) {
       <span class="inz-icon">${icon}</span>
       <div class="inz-info">
         <div class="inz-naam">${naam}</div>
-        <div class="inz-meta">${datum} · ${invuld}</div>
+        <div class="inz-meta">${fmtDatum(datum)} · ${invuld}</div>
       </div>
       <span class="inz-status ${statusClass}">${status}</span>
       <button class="inz-del-btn" title="Inzending verwijderen" onclick="event.stopPropagation();verwijderInzending('${inz.id}','${id}','${naam.replace(/'/g,"\\'")}')"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
@@ -1512,7 +1522,7 @@ function toonItemHistorieBeheer(naam, nummer) {
     return;
   }
   document.getElementById('ih-content').innerHTML = gevonden.map(g => {
-    const datumStr = g.datum ? new Date(g.datum).toLocaleDateString('nl-NL', {day:'numeric',month:'long',year:'numeric'}) : '—';
+    const datumStr = fmtDatum(g.datum, true);
     return `<div class="ih-rij">
       <div class="ih-datum">${datumStr}</div>
       <div class="ih-route">${g.van} → ${g.naar}</div>
